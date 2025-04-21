@@ -1,0 +1,5 @@
+vendor
+.vscode
+index.html
+.env
+apikey.json

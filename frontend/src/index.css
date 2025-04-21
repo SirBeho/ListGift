@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+
+
+:not(.sidebar *) {
+    @apply duration-300;
+}
+
+
+  
+.link{
+    @apply hidden;
+}
+
+.toggle span,.toggle>div ,.toggle a,.toggle li.block{
+    @apply flex;
+}
+.toggle a{
+    @apply hover:bg-gray-500;
+}
+
+aside:not(.toggle) a{
+    @apply hover:scale-150;
+}
+
+ aside.toggle>ul li:hover img{
+    @apply scale-125;
+} 
+
+ .toggle a:hover{
+    @apply ps-1;
+    @apply ms-2;
+    /* @apply py-2; */
+} 
+
+aside:not(.toggle)  div.despliege{
+    @apply w-56;
+}
+
+aside:not(.toggle)  img.despliege{
+    @apply w-5;
+    @apply p-0;
+}
+
+ aside:not(.toggle)  img.despliege:hover{
+    @apply scale-125;
+    @apply bg-gray-sl;
+}  
+
+
+aside.toggle .submenu li{
+    @apply ps-2;
+   
+}
+aside.toggle .submenu li>a{
+    @apply ps-1;
+   
+}
+aside.toggle .submenu li:hover{
+    @apply ps-1;
+}
