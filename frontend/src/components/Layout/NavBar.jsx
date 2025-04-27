@@ -2,26 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link,useNavigate } from "react-router-dom";
 
-export default function Navbar({sidebarController,user}) {
+export default function Navbar({sidebarController,user,logout}) {
+
+  console.log("usuario:",user);
 
   const [sidebarOpen, setSidebarOpen] = sidebarController;
   const [menuOpen, setMenuOpen] = useState(false);
   const navigatetoUrl = useNavigate();
 
-  function logout(){
-
-        axios.post("http://localhost:8000/api/auth/logout")
-        .then((response) => {
-            
-         console.log(response.data)
-
-        })
-        .catch((error) => {
-          const data = error.response?.data?.errors || error.response?.data || {"error": error["message"] };
-          console.log(data);
-        });
-        navigatetoUrl("/");
-  }
+  
 
      
   return (
@@ -37,7 +26,7 @@ export default function Navbar({sidebarController,user}) {
         <div className="h-8 w-8 overflow-hidden rounded-lg">
           <img id="imagePreviewmenu" className="w-full h-full object-cover" src="./pictures/usuario.jpg" alt="" />
         </div>
-        <span className="block font-semibold text-xs leading-snug">{user.person.name + " "+ user.person.lastname }</span>
+       {/*  <span className="block font-semibold text-xs leading-snug">{user.person.name + " "+ user.person.lastname }</span> */}
         <div id="icon_menu" className={`block w-6 transform transition-transform duration-500 ${menuOpen ? "rotate-180" : ""}`}>
           <img src="./svg/arrow.svg" alt="logo" />
         </div>

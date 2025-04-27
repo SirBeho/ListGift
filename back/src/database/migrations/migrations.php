@@ -2,7 +2,7 @@
 $migrations = [
     "Roles" => "App\Modules\Role\Migration",
     "Users" => "App\Modules\User\Migration",
-    "Listas" => "App\Modules\Lista\Migration",
+    "Listas" => "App\Modules\List\Migration",
     "Items" => "App\Modules\Item\Migration",
 ];
 

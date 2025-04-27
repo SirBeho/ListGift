@@ -7,8 +7,12 @@ use Firebase\JWT\Key;
 
 class VerifyToken
 {
+
+
+       
     public static function handle()
     {
+     
         if (!isset($_COOKIE['token'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Token not provided']);

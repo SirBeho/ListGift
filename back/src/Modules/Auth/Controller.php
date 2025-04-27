@@ -5,28 +5,35 @@ namespace App\Modules\Auth;
 use App\Modules\User\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Firebase\JWT\JWT;
+use App\Modules\Auth\Controller;
+
 
 class Controller
 {
+    
+      
     public function login()
     {
 
         try {
 
-            $user = Model::where('email', $_POST['email'])->first();
+            $user = Model::where('username', $_POST['username'])->first();
+              
             if (!$user) {
                 header("HTTP/1.0 401 Unauthorized");
-                echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);
+                echo json_encode(['status' => 'error', 'message' => 'Invalid Username']);
                 return;
             }
-            $user->load('role');
+
+            
+            //$user->load('role');
             if ($user && password_verify($_POST['password'], $user->password)) {
                 $key = $_ENV['JWT_SECRET'];
 
                 $payload = [
                     'iss' => 'http://localhost',
                     'user' => $user->id,
-                    'role' => $user->role,
+                    //'role' => $user->role,
                     'iat' => time(),
                     'exp' => time() + 60 * 60
                 ];
@@ -38,7 +45,6 @@ class Controller
                     'expires' => time() + 60 * 60,
                     'path' => '/',
                     'domain' => '',
-                    'secure' => true,
                     'httponly' => true,
                     'samesite' => 'none'
                 ]);
@@ -58,14 +64,10 @@ class Controller
     {
         try {
             $user = Model::findOrFail($_REQUEST['auth']['user']);
-            $user->load('role', 'schools');
-
-            if ($user->role->name === 'Student') {
-                $user->load('student.Item', 'student.controller', 'student.recruiter');
-            }
+            
 
             header("HTTP/1.0 200 OK");
-            echo json_encode($user);
+            echo json_encode(['status' => 'success', 'user' => $user]);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Not Found");
             echo json_encode($th->getMessage());

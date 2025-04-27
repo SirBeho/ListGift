@@ -17,9 +17,9 @@ class Model extends Eloquent
 
     protected $fillable = [
         'name',
-        'role_id',
         'username',
         'password',
+        'role_id',
         'status',
     ];
     protected $hidden = [
@@ -28,7 +28,7 @@ class Model extends Eloquent
         'updated_at',
     ];
 
-    public function role(): BelongsTo
+    public function Role(): BelongsTo
     {
         return $this->belongsTo(Role);
     }

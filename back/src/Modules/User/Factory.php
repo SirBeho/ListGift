@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Modules\User;
+use App\Modules\Role\Model as RoleModel;
+
+
 
 use Faker\Factory as FakerFactory;
 
@@ -12,7 +15,7 @@ class Factory
         $users = [];
         for ($i = 0; $i < $count; $i++) {
             $users[] = [
-                'role_id' => 1,
+                'role_id' => RoleModel::where('id', '<>', 1)->inRandomOrder()->value('id'),
                 'name' => $faker->name,
                 'username' => $faker->userName,
                 'password' => password_hash($faker->password, PASSWORD_BCRYPT),

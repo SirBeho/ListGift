@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Validation from "../Layout/Validation";
 import axios from "axios";
 
 export default function Profile() {
-  const validation = Validation();
   const [isEdiding, setIsEdiding] = useState(false);
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
 
@@ -24,7 +22,7 @@ export default function Profile() {
       status: 1,
     },
   });
-
+/*
   useEffect(() => {
     validation
       .ValidationTokenPage()
@@ -37,6 +35,7 @@ export default function Profile() {
         console.error(error);
       });
   }, []);
+*/
 
   useEffect(() => {
     setTimeout(() => {

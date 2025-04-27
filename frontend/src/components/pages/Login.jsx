@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from "../Layout/AuthProvider";
+import axios from "axios"; // Ya lo tienes, lo dejo por claridad
 
 export default function Login() {
-  const navigatetoUrl = useNavigate();
+  const navigate = useNavigate();
+  const { login } = useAuth(); 
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -19,35 +21,32 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    axios
-      .post("http://localhost:8000/api/auth/login", formData)
-      .then((response) => {
-        sessionStorage.setItem("myToken", response.data.access_token);
-        axios.defaults.headers.common["Authorization"] = "Bearer" + response.data.access_token;
-        axios.defaults.headers.post["Content-Type"] = "application/json";
-        navigatetoUrl("/dashboard");
-        setMsj({ msj: "Acceo Autorizado" });
-      })
-      .catch((error) => {
-        const data = error.response?.data?.errors || error.response?.data || { error: error["message"] };
-        console.log(data);
-        setMsj(data);
-
-        setFormData((formData) => ({
-          ...formData,
-          ["password"]: "",
-        }));
-      });
+    const result = await login(formData); 
+    
+    if (result.success) {
+      setMsj({ msj: "Acceso Autorizado" });
+      
+    } else {
+      
+      const errorData = result.message ? { error: result.message } : { error: "Credenciales inválidas" };
+      setMsj(errorData);
+      setFormData((formData) => ({
+        ...formData,
+        ["password"]: "",
+      }));
+    }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setMsj({});
-      sessionStorage.removeItem("msj");
-    }, 10000);
+    if (Object.keys(msj).length > 0) {
+      setTimeout(() => {
+        setMsj({});
+        console.log("borra msj");
+        sessionStorage.removeItem("msj");
+      }, 10000);
+    }
   }, [msj]);
 
   return (
@@ -63,8 +62,8 @@ export default function Login() {
           </div>
           <form className="flex flex-col w-full gap-3 pt-5 sm:pt-3" method="post" onSubmit={handleSubmit}>
             <label className="flex flex-raw border rounded-md h-11 focus-within:border-2 px-2">
-              <img src="./svg/email.svg" alt="" className="pe-2" />
-              <input required type="email" name="email" placeholder="Email" onChange={handleInputChange} className="border-none outline-none w-full" />
+              <img src="./svg/users.svg" alt="" className="pe-2" />
+              <input required type="text" name="username" placeholder="username" onChange={handleInputChange} className="border-none outline-none w-full" />
             </label>
             <label className="flex flex-raw border rounded-md h-11 focus-within:border-2 px-2">
               <img src="./svg/password.svg" alt="" className="pe-2" />

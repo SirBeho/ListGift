@@ -28,7 +28,8 @@
         "migrate:down": "php src/database/migrations/migrate.php down",
         "migrate:refresh": "php src/database/migrations/migrate.php refresh",
         "seed": "php src/database/seed/index.php seed",
-        "seed:refresh": "php src/database/seed/index.php refresh"
+        "seed:refresh": "php src/database/seed/index.php refresh",
+        "migrate:full": "composer run migrate:refresh && composer run seed"
     },
     "authors": [
         {

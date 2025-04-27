@@ -12,7 +12,7 @@ class Model extends Eloquent
 
 
     protected $fillable = [
-        'list',
+        'list_id',
         'name',
         'price',
         'path',
@@ -21,6 +21,13 @@ class Model extends Eloquent
         'description',
         'img_name'
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
+    public function list()
+    {
+        return $this->belongsTo('App\Modules\List\Model', 'list_id');
+    }
 }
 
 

@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Modules\{{ ModelName }};
+
+use Faker\Factory as FakerFactory;
+
+class Factory
+{
+    public static function create(int $count = 5): array
+    {
+        $faker = FakerFactory::create();
+        ${{ ModelVariablePlural }} = [];
+        for ($i = 0; $i < $count; $i++) {
+            ${{ ModelVariablePlural }}[] = [
+                'name' => $faker->word(), // Ejemplo para el campo 'name'
+                // Otros campos de tu modelo usando $faker
+            ];
+        }
+        return ${{ ModelVariablePlural }};
+    }
+}

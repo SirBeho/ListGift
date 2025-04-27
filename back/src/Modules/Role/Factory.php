@@ -14,14 +14,8 @@ class Factory
                 'name' => 'Admin',
             ],
             [
-                'name' => 'Controller',
+                'name' => 'User',
             ],
-            [
-                'name' => 'Recruiter',
-            ],
-            [
-                'name' => 'Student',
-            ]
         ];
 
         return $users;

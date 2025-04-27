@@ -13,7 +13,7 @@ class Migration
         Capsule::schema()->create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('usename');
+            $table->string('username');
             $table->string('password');
             $table->boolean('status')->default(1);
             $table->unsignedBigInteger('role_id')->default(2);
