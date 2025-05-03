@@ -3,19 +3,80 @@
 @tailwind utilities;
 
 
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 
+  .app-content {
+    
+    background: linear-gradient(to bottom, #f3f4f6, #bdcbe9); /* Ejemplo de gradiente suave */
+  }
 
+  @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Opcional: un pequeño desplazamiento hacia abajo al inicio */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+.card-enter {
+  opacity: 0;
+  transform: translateY(20px); /* Opcional: igual al 'from' de la animación */
+}
+
+.card-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeIn 0.5s ease-out forwards; /* Ajusta la duración y la función de temporización */
+}
 
 :not(.sidebar *) {
     @apply duration-300;
 }
 
 
+.interpolate{
+    
+    interpolate-size: allow-keywords;
+   
+}
   
 .link{
     @apply hidden;
 }
+
+.relative > a::before , .open::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0px; /* Ancho inicial de la raya */
+    background-color: white;
+    z-index: 11;
+    transition: width 0.2s ease-in-out; /* Añadimos la transición al width */
+  }
+  
+  .relative > a:hover::before  {
+
+    width: 10px; /* Ancho al hacer hover */
+    
+  }
+
+  .open::before{
+    width: 12px!important;
+
+    
+  }
 
 .toggle span,.toggle>div ,.toggle a,.toggle li.block{
     @apply flex;
@@ -32,11 +93,20 @@ aside:not(.toggle) a{
     @apply scale-125;
 } 
 
- .toggle a:hover{
-    @apply ps-1;
+/* .toggle li:hover{
+    @apply bg-white;
+}
+
+.toggle a:hover{
+    @apply ps-2;
     @apply ms-2;
-    /* @apply py-2; */
-} 
+}  
+ */
+
+ .toggle a:hover{
+    @apply ps-4;
+    @apply ms-0;
+}  
 
 aside:not(.toggle)  div.despliege{
     @apply w-56;

@@ -5,8 +5,8 @@ namespace App\Modules\User;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Modules\School\Model as School;
 use App\Modules\Role\Model as Role;
+use App\Modules\List\Model as Lists;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -30,9 +30,13 @@ class Model extends Eloquent
 
     public function Role(): BelongsTo
     {
-        return $this->belongsTo(Role);
+        return $this->belongsTo(Role::class);
     }
 
+    public function Lists(): HasMany
+    {
+        return $this->hasMany(Lists::class, 'user_id');
+    }
 
   
 }

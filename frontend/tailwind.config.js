@@ -25,6 +25,9 @@ export default {
         'gray-33': '#333',
 
       },
+      perspective: {
+        '500': '500px',
+      },
     }
   },
   //plugins: [require("flowbite/plugin")],

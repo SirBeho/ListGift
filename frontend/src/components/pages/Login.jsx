@@ -5,12 +5,19 @@ import axios from "axios"; // Ya lo tienes, lo dejo por claridad
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth(); 
+  const { user, login } = useAuth(); 
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    // Si hay un usuario logueado y la ruta es "/", redirige a /profile
+    if (user ) {
+        navigate('/profile');
+    }
+}, [navigate, user]);
 
   const handleInputChange = (event) => {
     setMsj({});

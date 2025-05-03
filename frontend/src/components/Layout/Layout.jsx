@@ -4,39 +4,38 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./AuthProvider";
+import { use } from "react";
 
-
-/* axios.interceptors.request.use(
-  (config) => {
-
-    config.headers["Content-Type"] = "application/json";
-    config.headers.Authorization = `Bearer ` + sessionStorage.getItem("myToken");
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-); */
-
-//Layout (childen y user)
 export default function Layout({ children  }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+   
 
-  const [sidebarOpen, setSidebarOpen] = useState(sessionStorage.getItem("sidebarOpen") == "true");
+  const [sidebarOpen, setSidebarOpen] = useState(localStorage.getItem("sidebarOpen") === "true");
 
   useEffect(() => {
-    sessionStorage.setItem("sidebarOpen", sidebarOpen);
+    localStorage.setItem("sidebarOpen", sidebarOpen);
   }, [sidebarOpen]);
 
  
+  
+  useEffect(() => {
+  if (user == null) {
+    navigate("/");
+    
+  }}, [ ]);
+
+  if (user == null) {
+    return null; 
+  }
 
   return (
-    <div className="flex h-full light-theme ">
-       {/* <SideBar sidebarController={[sidebarOpen, setSidebarOpen]} user={user} /> */}
+    <div className="flex h-full light-theme  ">
+       <SideBar sidebarController={[sidebarOpen, setSidebarOpen]} user={user} /> 
  
-      <div className="flex flex-col w-full h-full min-h-screen justify-between bg-gray-200">
-        <div className="">
-           <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} user={user} logout={logout} /> 
+      <div className={`flex flex-col w-full h-full min-h-screen justify-between app-content ${sidebarOpen ? "ml-60" : "ml-14"} transition-all duration-300 ease-out`}>
+        <div className="apsolute">
+           <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} user={user?.name} logout={logout} /> 
 
           {children}
         </div>

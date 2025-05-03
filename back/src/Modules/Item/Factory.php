@@ -7,7 +7,7 @@ use Faker\Factory as FakerFactory;
 
 class Factory
 {
-    public static function create($count = 5)
+    public static function create($count = 25)
     {
         $faker = FakerFactory::create();
         $countries = [];

@@ -3,7 +3,8 @@
 namespace App\Modules\User;
 
 use App\Modules\User\Model;
-use App\Modules\Student\Model as Student;
+use App\Modules\List\Model as ListModel;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Middlewares\RoleAccess;
 use App\Utils\Validator;
@@ -48,6 +49,44 @@ class Controller
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Not Found");
             echo json_encode(['status' => 'error', 'message' => 'User not found']);
+        }
+    }
+
+    
+    public function userlists()
+    {   
+        
+        try {
+            $user = Model::findOrFail($_REQUEST['auth']['user']);
+
+            if (!$user) {
+                header("HTTP/1.0 401 Unauthorized");
+                echo json_encode(['status' => 'error', 'message' => 'Invalid Username']);
+                return;
+            }
+            
+            $listas['My'] = $user->lists()->get()->load('items');
+
+
+
+            if($user->role_id === 1){
+                $listas['All'] = ListModel::all()->load('items', 'user');
+
+            }
+                
+            
+
+            if (!$listas) {
+                header("HTTP/1.0 404 Not Found");
+                echo json_encode(['status' => 'error', 'message' => 'No lists found']);
+                return;
+            }
+
+            header("HTTP/1.0 200 OK");
+            echo json_encode(['status' => 'success', 'lists' => $listas]);
+        } catch (ModelNotFoundException $th) {
+            header("HTTP/1.0 404 Not Found");
+            echo json_encode($th->getMessage());
         }
     }
 

@@ -1,33 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { use } from "react";
+import { useAuth } from "../Layout/AuthProvider";
 
 export default function Profile() {
+  const { user, logout } = useAuth();
   const [isEdiding, setIsEdiding] = useState(false);
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
 
-  const [formData, setFormData] = useState({
-    person_id: "1",
-    email: "--",
-    created_at: "2023-09-11T19:49:57.000000Z",
-    updated_at: "2023-09-11T19:49:57.000000Z",
-    status: 1,
-    person: {
-      id: 1,
-      name: "--",
-      lastname: "--",
-      phone: "--",
-      born: "--",
-      created_at: "--",
-      updated_at: "--",
-      status: 1,
-    },
-  });
+  const [formData, setFormData] = useState(user || {});
 /*
   useEffect(() => {
     validation
       .ValidationTokenPage()
       .then((data) => {
-        data.person.update_by = null;
+        data.update_by = null;
         setFormData(data);
         console.log(data);
       })
@@ -120,29 +107,20 @@ export default function Profile() {
           <form className="flex flex-col text-gray-BD text-sm leading-6" onSubmit={Enviar}>
             <lavel className="flex items-center justify-start border-t border-gray-BD p-4  px-12">
               <h3 className="w-52">NAME</h3>
-              <input value={formData.person.name} onChange={handleInputChange} type="text" name="person.name" placeholder="Name" className="border p-2 h-10 rounded-md " />
-            </lavel>
-
-            <lavel className="flex items-center justify-start border-t border-gray-BD p-4  px-12">
-              <h3 className="w-52">LASTNAME</h3>
-              <input value={formData.person.lastname} onChange={handleInputChange} type="text" name="person.lastname" placeholder="Lastname" className="border p-2 h-10 rounded-md " />
+              <input value={formData.name} onChange={handleInputChange} type="text" name="person.name" placeholder="Name" className="border p-2 h-10 rounded-md " />
             </lavel>
 
             <lavel className="flex items-center justify-start border-t border-gray-BD p-4    px-12">
-              <h3 className="w-52">PHONE</h3>
-              <input value={formData.person.phone} onChange={handleInputChange} type="text" name="person.phone" placeholder="Phone" className="border p-2 h-10 rounded-md " />
+              <h3 className="w-52">USERNAME</h3>
+              <input value={formData.username} onChange={handleInputChange} type="text" name="person.username" placeholder="username" className="border p-2 h-10 rounded-md " />
             </lavel>
 
             <lavel className="flex items-center justify-start border-t border-gray-BD p-4   px-12">
-              <h3 className="w-52">BORN</h3>
-              <input value={formData.person.born} onChange={handleInputChange} type="date" name="person.born" placeholder="born" className="border p-2 h-10 rounded-md " />
+              <h3 className="w-52">STATUS</h3>
+              <input value={formData.STATUS} onChange={handleInputChange} type="text" name="person.STATUS" placeholder="STATUS" className="border p-2 h-10 rounded-md " />
             </lavel>
 
-            <lavel className="flex items-center justify-start border-t border-gray-BD p-4 px-12">
-              <h3 className="w-52">EMAIL</h3>
-              <input value={formData.email} onChange={handleInputChange} type="email" name="email" placeholder="EMAIL" className="border p-2 h-10 rounded-md " />
-            </lavel>
-
+          
             <div className="flex items-center justify-center my-2 gap-3">
               <button type="submit" className={`"flex justify-center items-center w-24 h-8 border border-gray-500 rounded-xl text-gray-500 hover:bg-gray-400 hover:text-white`}>
                 <span>Guardar</span>
@@ -157,28 +135,19 @@ export default function Profile() {
           <form className="flex flex-col text-gray-BD text-sm leading-6">
             <div className="flex items-center justify-start border-t border-gray-BD p-6   px-12">
               <h3 className="w-52">NAME</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.person.name}</h3>
-            </div>
-
-            <div className="flex items-center justify-start border-t border-gray-BD p-6   px-12">
-              <h3 className="w-52">LASTNAME</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.person.lastname}</h3>
+              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.name}</h3>
             </div>
 
             <div className="flex items-center justify-start border-t border-gray-BD p-6 px-12">
-              <h3 className="w-52">PHONE</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.person.phone}</h3>
+              <h3 className="w-52">USERNAME</h3>
+              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.username}</h3>
             </div>
 
             <div className="flex items-center justify-start border-t border-gray-BD p-6   px-12">
-              <h3 className="w-52">BORN</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.person.born}</h3>
+              <h3 className="w-52">STATUS</h3>
+              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.STATUS}</h3>
             </div>
 
-            <div className="flex items-center justify-start border-t border-gray-BD p-6  px-12">
-              <h3 className="w-52">EMAIL</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.email}</h3>
-            </div>
           </form>
         )}
       </div>

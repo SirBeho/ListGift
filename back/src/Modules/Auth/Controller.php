@@ -46,7 +46,7 @@ class Controller
                     'path' => '/',
                     'domain' => '',
                     'httponly' => true,
-                    'samesite' => 'none'
+                    'samesite' => 'lax'
                 ]);
               
                 echo json_encode(['status' => 'success', 'message' => 'Login successful']);
@@ -65,6 +65,9 @@ class Controller
         try {
             $user = Model::findOrFail($_REQUEST['auth']['user']);
             
+            
+
+            $user->load('role','lists');
 
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'user' => $user]);

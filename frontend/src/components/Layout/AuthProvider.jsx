@@ -1,17 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-
-const instance = axios.create({
-  baseURL: 'http://localhost:8000/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
-
-
+import instance from './axiosintance'; 
 
 
 const AuthContext = createContext(null);
@@ -19,33 +9,50 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); 
+
 
   const checkAuthStatus = async () => {
-    console.log("pidiendop datoos")
+    setLoading(true); // Inicia la carga
     try {
-      const response = await instance.get('/auth/profile');
-      console.log(response);
-      if (response.status === 200 && response.data.user) {
-        setUser(response.data.user);
-      } else {
-        setUser(null);
-      }
+        console.log('Checking auth status...');
+        const response = await instance.get('/auth/profile');
+        
+        if (response.status === 200 && response.data.user) {
+            setUser(response.data.user);
+            return true; // Retorna el usuario autenticado
+        } else {
+            setUser(null);
+            navigate('/');
+            return false; // Retorna null si no hay usuario autenticado
+        }
     } catch (error) {
-      console.error('Error checking auth status:', error);
-      setUser(null);
+      console.log(error.status);
+        console.error('Error checking auth status:', error);
+        setUser(null);
+        navigate('/');
+        return false; 
+        
+    } finally {
+      
+        setLoading(false); 
     }
-  };
+};
+
+ 
+
 
   const login = async (credentials) => {
     try {
       const response = await instance.post('/auth/login', credentials);
       
-      if (response.data.status === 'success') {
-        await checkAuthStatus(); 
-        navigate('/profile'); // Redirigir desde el componente Login
-        return { success: true }; // Retorna éxito solo si el backend lo indica
+      if (response.data.status === 'success' &&  await checkAuthStatus() ) {
+       
+        console.log("checkAuthStatus");
+        navigate('/profile'); 
+        return { success: true }; 
       } else {
-        // Manejar errores de login basados en la respuesta del backend
+        
         return { success: false, message: response.data.message || 'Error de autenticación' };
       }
     } catch (error) {
@@ -59,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:8000/api/auth/logout');
+      await instance.post('/auth/logout');
       
       
     } catch (error) {
@@ -70,15 +77,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    //checkAuthStatus();
+    checkAuthStatus();
 
     const intervalId = setInterval(checkAuthStatus, 5 * 60 * 1000);
 
     return () => clearInterval(intervalId);
   }, []);
 
+
+  if (loading) {
+    // Puedes mostrar un indicador de carga aquí
+    return <div>Cargando...</div>;
+}
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ instance, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
