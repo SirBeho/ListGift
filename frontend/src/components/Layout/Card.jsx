@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { EyeIcon } from '@heroicons/react/20/solid';
 
-function Card({ data }) {
+function Card({ data , litt = false }) {
   const cardRef = useRef(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -11,28 +11,25 @@ function Card({ data }) {
   const throttleDelay = 20; // Milisegundos - ajusta este valor
 
   const handleMouseMove = (event) => {
+
     const card = cardRef.current;
 
     if (!card) return;
 
+    const rect = card.getBoundingClientRect(); 
+
+    const relativeX = event.clientX - rect.left; 
+    const relativeY = event.clientY - rect.top; 
+
     const width = card.offsetWidth;
     const height = card.offsetHeight;
 
-    const centerX = card.parentNode.offsetLeft + width / 2;
-    const centerY = card.parentNode.offsetTop + height / 2;
-    const mouseX = event.clientX - centerX;
-    const mouseY = event.clientY - centerY;
-
-    console.log('----------------------------------------')
-    console.log(`offsetLeft: ${card.offsetLeft}, offsetTop: ${card.offsetTop}`);
-    console.log(`Width: ${width}, Height: ${height}`);
-    console.log(`CenterX: ${centerX}, CenterY: ${centerY}`);
-    console.log(`MouseX: ${mouseX}, MouseY: ${mouseY}`);
+    const mouseX = relativeX - width / 2;
+    const mouseY = relativeY - height / 2;
 
     const rotateXAmount = (mouseY / height) * 20;
     const rotateYAmount = (mouseX / width) * -20;
 
-    console.log()
     setRotateX(rotateXAmount);
     setRotateY(rotateYAmount);
 
@@ -114,18 +111,24 @@ function Card({ data }) {
         </div>
       </div>
       <div className="p-4">
+        {litt ? (
+          <h4 className="text-sm font-semibold text-center text-gray-800 mb-1">{data.user.name}</h4>
+        ) : (
+          ''
+        )}  
+        
         <h4 className="text-lg font-semibold text-center text-gray-800 mb-3">{data.name}</h4>
-        <div className="flex justify-center space-x-3">
+        <div className="flex justify-center space-x-3  ">
           <Link
             to={`/contenido/${data.id}?ndata=${data.name}`}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105"
+            className={`bg-blue-500 hover:bg-blue-600 text-white ${litt ? 'py-0 px-2 h-7' :'py-2 px-4 font-bold' }  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105`}
           >
             <ArrowRightIcon className="h-5 w-5 mr-2" aria-hidden="true" />
             Acceder
           </Link>
           <Link
             to={`/data/${data.id}?ndata=${data.name}`}
-            className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center transform transition-transform duration-200 hover:scale-105"
+            className={`bg-yellow-400 hover:bg-yellow-500 text-gray-800  ${litt ? 'py-0 px-2 h-7' :'py-2 px-4 font-bold' }  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center transform transition-transform duration-200 hover:scale-105`}
           >
             <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
             Ver

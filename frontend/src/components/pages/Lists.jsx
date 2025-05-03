@@ -73,18 +73,12 @@ function ListaDeRegalos() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-          {listas.My.length > 0 &&
+          {listas.My.length > 0 ?(
             listas.My.map((lista, index) => (
-              <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 150}ms` }}>
-              <Card
-              
-              data={lista}
-              animationDelay={index * 150} // Pasar el delay como prop
-
-            />
-            </div>
-            ))}
-          {listas.My.length === 0 && (
+              <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 300}ms` }}>
+                <Card data={lista} />
+              </div>
+            ))) : (
             <div className="md:col-span-2 lg:col-span-3 text-center mt-6 p-6 bg-white rounded-md shadow-md">
               <h4 className="text-lg text-gray-600">No hay listas disponibles. ¡Crea una!</h4>
               {/* Aquí podrías añadir un botón para crear una nueva lista */}
@@ -100,17 +94,12 @@ function ListaDeRegalos() {
               </h4>
             </div>
             <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-              {listas.All?.length > 0 &&
+              {listas.All?.length > 0 ? (
                 listas.All.map((lista, index) => (
-                  <div
-                    key={lista.id}
-                    className="card-enter"
-                    style={{ animationDelay: `${index * 150}ms` }}
-                  >
-                    <Card data={lista} />
-                  </div>
-                ))}
-              {listas.All?.length === 0 && (
+                  <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 300}ms` }}>
+                    <Card data={lista} litt={true} />
+                </div>
+                ))) : (
                 <div className="md:col-span-3 lg:col-span-4 text-center mt-6 p-6 bg-white rounded-md shadow-md">
                   <h4 className="text-lg text-gray-600">No hay listas disponibles.</h4>
                 </div>
