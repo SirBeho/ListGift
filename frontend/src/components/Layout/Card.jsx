@@ -12,14 +12,22 @@ function Card({ data }) {
 
   const handleMouseMove = (event) => {
     const card = cardRef.current;
+
     if (!card) return;
 
     const width = card.offsetWidth;
     const height = card.offsetHeight;
-    const centerX = card.offsetLeft + width / 2;
-    const centerY = card.offsetTop + height / 2;
+
+    const centerX = card.parentNode.offsetLeft + width / 2;
+    const centerY = card.parentNode.offsetTop + height / 2;
     const mouseX = event.clientX - centerX;
     const mouseY = event.clientY - centerY;
+
+    console.log('----------------------------------------')
+    console.log(`offsetLeft: ${card.offsetLeft}, offsetTop: ${card.offsetTop}`);
+    console.log(`Width: ${width}, Height: ${height}`);
+    console.log(`CenterX: ${centerX}, CenterY: ${centerY}`);
+    console.log(`MouseX: ${mouseX}, MouseY: ${mouseY}`);
 
     const rotateXAmount = (mouseY / height) * 20;
     const rotateYAmount = (mouseX / width) * -20;
@@ -87,15 +95,15 @@ function Card({ data }) {
   }
 
   return (
-   
+
     <div
       key={data.id}
       ref={cardRef}
-      className="bg-white rounded-md shadow-lg overflow-hidden transition duration-200 ease-in-out transform" // Transición más rápida por defecto
+      className=" bg-white rounded-md shadow-lg overflow-hidden transition duration-200 ease-in-out transform" // Transición más rápida por defecto
       style={{ transformOrigin: 'center' }}
     >
-        <div className={`card ${data.id} card-enter relative`} style={{ animationDelay: `${data.animationDelay}ms` }}>
-       <div className="relative">
+
+      <div className="relative">
         <img
           src="pictures/git.png"
           className="w-full h-48 object-cover rounded-t-md"
@@ -124,7 +132,7 @@ function Card({ data }) {
           </Link>
         </div>
       </div>
-    </div>
+
     </div>
   );
 }

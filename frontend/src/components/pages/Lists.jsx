@@ -75,11 +75,14 @@ function ListaDeRegalos() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
           {listas.My.length > 0 &&
             listas.My.map((lista, index) => (
+              <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 150}ms` }}>
               <Card
-              key={lista.id}
+              
               data={lista}
               animationDelay={index * 150} // Pasar el delay como prop
+
             />
+            </div>
             ))}
           {listas.My.length === 0 && (
             <div className="md:col-span-2 lg:col-span-3 text-center mt-6 p-6 bg-white rounded-md shadow-md">
