@@ -1,119 +1,194 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Layout/AuthProvider";
-import axios from "axios"; // Ya lo tienes, lo dejo por claridad
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    UserIcon,
+    LockClosedIcon,
+    EyeIcon,
+    EyeSlashIcon
+} from "@heroicons/react/24/outline";
+import { FaGoogle, FaFacebookF, FaTwitter, FaGithub } from "react-icons/fa";
+import classNames from 'classnames';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { user, login } = useAuth(); 
-  const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+    const navigate = useNavigate();
+    const { user, login } = useAuth();
+    const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
+    const [formData, setFormData] = useState({ username: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
+    const [redirecting, setRedirecting] = useState(false);
+const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Si hay un usuario logueado y la ruta es "/", redirige a /profile
-    if (user ) {
-        navigate('/profile');
-    }
-}, [navigate, user]);
+    useEffect(() => {
+        if (user) navigate("/profile");
+    }, [navigate, user]);
 
-  const handleInputChange = (event) => {
-    setMsj({});
-    const { name, value } = event.target;
-    setFormData((formData) => ({
-      ...formData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await login(formData); 
-    
-    if (result.success) {
-      setMsj({ msj: "Acceso Autorizado" });
-      
-    } else {
-      
-      const errorData = result.message ? { error: result.message } : { error: "Credenciales inválidas" };
-      setMsj(errorData);
-      setFormData((formData) => ({
-        ...formData,
-        ["password"]: "",
-      }));
-    }
-  };
-
-  useEffect(() => {
-    if (Object.keys(msj).length > 0) {
-      setTimeout(() => {
+    const handleInputChange = (event) => {
         setMsj({});
-        console.log("borra msj");
-        sessionStorage.removeItem("msj");
-      }, 10000);
-    }
-  }, [msj]);
+        const { name, value } = event.target;
+        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
 
-  return (
-    <main className="h-full w-full bg-white">
-      <div className="flex flex-col w-screen h-screen pt-6 px-6 gap-5 items-center">
-        <div className="md:border md:rounded-xl md:w-[27rem] sm:px-8 sm:py-6 sm:mt-14">
-          <div className="flex flex-col gap-4 ">
-            <div>
-              <img src="./svg/devcha.svg" alt="" />
-            </div>
-            <h3 className="text-lg font-semibold">join thousands of learners from around the world</h3>
-            <p className="text-base">Master web development by making real-life projects. There are multiple paths for you to choose</p>
-          </div>
-          <form className="flex flex-col w-full gap-3 pt-5 sm:pt-3" method="post" onSubmit={handleSubmit}>
-            <label className="flex flex-raw border rounded-md h-11 focus-within:border-2 px-2">
-              <img src="./svg/users.svg" alt="" className="pe-2" />
-              <input required type="text" name="username" placeholder="username" onChange={handleInputChange} className="border-none outline-none w-full" />
-            </label>
-            <label className="flex flex-raw border rounded-md h-11 focus-within:border-2 px-2">
-              <img src="./svg/password.svg" alt="" className="pe-2" />
-              <input required type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} className="border-none outline-none w-full" />
-            </label>
-            <h1>
-              {Object.entries(msj).map(([clave, valor], index) => (
-                <span key={index} className={`${clave == "msj" ? "text-green-600" : "text-red-400"} block text-center`}>
-                  <strong>{valor}</strong>
-                </span>
-              ))}
-            </h1>
-            <input type="submit" defaultValue="Start coding now" className="bg-blue-600 font-semibold text-lg rounded-md text-white mt-4 sm:mt-2 h-11 cursor-pointer" />
-          </form>
-          <div className="flex flex-col items-center w-full gap-6 pt-3">
-            <span className="text-[#828282] text-sm font-normal">or continue with these social profile</span>
-            <div className="flex flex-row gap-2 justify-center">
-              <a href="https://www.google.com/" className="border-zinc-500 border rounded-full p-2">
-                <img src="./svg/google.svg" alt="" />
-              </a>
-              <a href="https://www.facebook.com" className="border-zinc-500 border rounded-full p-2">
-                <img src="./svg/facebook.svg" alt="" />
-              </a>
-              <a href="https://www.twiter.com" className="border-zinc-500 border rounded-full p-2">
-                <img src="./svg/twit.svg" alt="" />
-              </a>
-              <a href="https://github.com/myltonxdd/sistmlog_php" className="border-zinc-500 border rounded-full p-2">
-                <img src="./svg/github.svg" alt="" />
-              </a>
-            </div>
-            <span className="text-[#828282] text-sm font-normal ">
-              Adready a member?
-              <Link href="/login" className="text-blue-600">
-                Login
-              </Link>
-            </span>
-          </div>
-        </div>
-        <div className="flex flex-row justify-between font-normal text-sm w-full text-[#BDBDBD] pt-10 sm:pt-0 sm:w-2/6">
-          <div>Benjamin Tavarez</div>
-          <div>devchallenges.io</div>
-        </div>
-      </div>
-    </main>
-  );
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        const result = await login(formData);
+        setLoading(false);
+
+        if (result.success) {
+            setMsj({ msj: "Acceso autorizado" });
+            //setRedirecting(true);
+            // Esperar a que termine la animación antes de navegar
+            /* setTimeout(() => {
+                navigate("/profile");
+            }, 600);  */
+        } else {
+            const errorData = result.message
+                ? { error: result.message }
+                : { error: "Credenciales inválidas" };
+            setMsj(errorData);
+            setFormData((prevFormData) => ({ ...prevFormData, password: "" }));
+        }
+    };
+
+    useEffect(() => {
+        if (Object.keys(msj).length > 0) {
+            setTimeout(() => {
+                setMsj({});
+                sessionStorage.removeItem("msj");
+            }, 5000);
+        }
+    }, [msj]);
+
+    return (
+        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-yellow-100 px-6">
+            <AnimatePresence mode="wait">
+                {!redirecting && (
+                    <motion.div
+                        key="login"
+                        initial={{ x: 100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: -500, opacity: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="bg-white shadow-xl rounded-2xl max-w-md w-full p-8 border-t-pink-500 border-t-8"
+                    >
+                        <motion.div className="text-center mb-6">
+                            <h2 className="text-3xl font-bold text-pink-600">
+                                🎁 Bienvenido a Giftly
+                            </h2>
+                            <p className="text-gray-500">
+                                Ingresa y encuentra el regalo perfecto
+                            </p>
+                        </motion.div>
+
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            {/* Username */}
+                            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition">
+                                <UserIcon className="h-5 w-5 text-pink-400 mr-2" />
+                                <input
+                                    aria-label="Nombre de usuario"
+                                    type="text"
+                                    name="username"
+                                    placeholder="Usuario"
+                                    required
+                                    onChange={handleInputChange}
+                                    className="w-full outline-none"
+                                />
+                            </div>
+
+                            {/* Password */}
+                            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition relative">
+                                <LockClosedIcon className="h-5 w-5 text-pink-400 mr-2" />
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Contraseña"
+                                    required
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    className="w-full outline-none pr-8"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 text-pink-400 hover:text-pink-600"
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showPassword ? (
+                                        <EyeSlashIcon className="h-5 w-5" />
+                                    ) : (
+                                        <EyeIcon className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Mensajes */}
+                            {Object.entries(msj).map(([key, value], i) => (
+                                <p
+                                    key={i}
+                                    className={classNames("text-center", {
+                                        "text-green-600": key === "msj",
+                                        "text-red-500": key === "error",
+                                    })}
+                                >
+                                    {value}
+                                </p>
+                            ))}
+
+                            {/* Submit */}
+                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit"
+                                disabled={loading} className={classNames(
+                                    "w-full py-2 rounded-lg transition duration-300 shadow",
+                                    {
+                                        "bg-pink-300 cursor-not-allowed": loading,
+                                        "bg-pink-500 hover:bg-pink-600 text-white": !loading,
+                                    }
+                                )}
+                            >
+                                {loading ? "Ingresando..." : "Iniciar sesión"}
+                            </motion.button>
+                        </form>
+
+                        {/* Divider */}
+                        <div className="mt-6 text-center text-sm text-gray-500">
+                            O entra con:
+                        </div>
+
+                        {/* Social Icons */}
+                        <div className="mt-4 flex justify-center space-x-4">
+                            <SocialIcon icon={<FaGoogle />} url="https://www.google.com" />
+                            <SocialIcon icon={<FaFacebookF />} url="https://www.facebook.com" />
+                            <SocialIcon icon={<FaTwitter />} url="https://twitter.com" />
+                            <SocialIcon icon={<FaGithub />} url="https://github.com" />
+                        </div>
+
+                        {/* Register Link */}
+                        <div className="mt-6 text-center text-sm text-gray-500">
+                            ¿No tienes cuenta?{" "}
+                            <Link to="/register" className="text-pink-500 hover:underline">
+                                Regístrate
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </main>
+    );
+}
+
+// Social button reusable
+function SocialIcon({ icon, url }) {
+    return (
+        <motion.a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-3 rounded-full border bg-white text-pink-500 hover:bg-pink-100 shadow transition"
+        >
+            {icon}
+        </motion.a>
+    );
 }

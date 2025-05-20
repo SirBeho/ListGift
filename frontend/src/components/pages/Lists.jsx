@@ -3,16 +3,23 @@ import { useAuth } from '../Layout/AuthProvider';
 import { useList } from '../Layout/ListProvider';
 import Card from '../Layout/Card';
 
+
+
 function ListaDeRegalos() {
   const { user } = useAuth();
   const { listas, LoadListas } = useList();
   const [error, setError] = useState(null);
 
+  console.log(listas?.length)
+
   useEffect(() => {
     if (!listas) {
       LoadListas();
     }
+    
   }, [LoadListas, listas]);
+
+  const ListUser = listas?.filter((lista) => lista.user_id === user?.id);
 
   if (error) {
     return (
@@ -73,9 +80,9 @@ function ListaDeRegalos() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-          {listas.My.length > 0 ?(
-            listas.My.map((lista, index) => (
-              <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 300}ms` }}>
+          {ListUser.length > 0 ?(
+            ListUser.map((lista, index) => (
+              <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 500}ms` }}>
                 <Card data={lista} />
               </div>
             ))) : (
@@ -94,9 +101,9 @@ function ListaDeRegalos() {
               </h4>
             </div>
             <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-              {listas.All?.length > 0 ? (
-                listas.All.map((lista, index) => (
-                  <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 300}ms` }}>
+              {listas?.length > 0 ? (
+                listas.map((lista, index) => (
+                  <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 500}ms` }}>
                     <Card data={lista} litt={true} />
                 </div>
                 ))) : (

@@ -19,6 +19,7 @@ $factories =  [
     ],
     "lists" => [
         "class" => "App\Modules\List\Factory",
+        "count" => 8,
     ],
     "items" => [
         "class" => "App\Modules\Item\Factory",

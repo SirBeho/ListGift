@@ -22,7 +22,7 @@
         }
     },
     "scripts": {
-        "start": "php -S localhost:8000",
+        "start": " php -S localhost:8000",
         "migrate": "php src/database/migrations/migrate.php up",
         "migrate:db": "php src/database/migrations/migrate.php db",
         "migrate:down": "php src/database/migrations/migrate.php down",

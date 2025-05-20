@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 
+
+@keyframes pricePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: #198754; }
+  100% { transform: scale(1); color: #007bff; }
+}
+
+.price-animated {
+  animation: pricePulse 1.5s infinite alternate;
+}
+
+
 @keyframes bounce {
     0%, 100% {
       transform: translateY(0);
@@ -28,6 +40,20 @@
   }
 }
 
+.before-submenu-line::before {
+  content: "";
+  position: absolute;
+  left: 10px; /* Ajusta la posición horizontal de la línea */
+  top: 0%;
+  width: 3px; /* Ajusta el ancho de la línea */
+  height: 100%; /* Ajusta la altura de la línea */
+  @apply bg-indigo-500; /* Aplica el color definido en la constante */
+}
+
+.before-submenu-line:hover:before{
+    @apply bg-indigo-400;
+}
+
 .card-enter {
     opacity: 0;
     transform: translateY(20px);
@@ -47,6 +73,7 @@
 .interpolate{
     
     interpolate-size: allow-keywords;
+    @apply duration-300;
    
 }
   
@@ -54,37 +81,17 @@
     @apply hidden;
 }
 
-.relative > a::before , .open::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 0px; /* Ancho inicial de la raya */
-    background-color: white;
-    z-index: 11;
-    transition: width 0.2s ease-in-out; /* Añadimos la transición al width */
-  }
-  
-  .relative > a:hover::before  {
 
-    width: 10px; /* Ancho al hacer hover */
-    
-  }
 
-  .open::before{
-    width: 12px!important;
-
-    
-  }
+ 
 
 .toggle span,.toggle>div ,.toggle a,.toggle li.block{
     @apply flex;
 }
 .toggle a{
-    @apply hover:bg-gray-500;
+    @apply hover:bg-indigo-500;
 }
-
+ 
 aside:not(.toggle) a{
     @apply hover:scale-150;
 }
@@ -104,7 +111,7 @@ aside:not(.toggle) a{
  */
 
  .toggle a:hover{
-    @apply ps-4;
+    @apply ps-2;
     @apply ms-0;
 }  
 

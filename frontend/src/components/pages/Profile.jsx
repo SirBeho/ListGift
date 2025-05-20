@@ -1,28 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { use } from "react";
 import { useAuth } from "../Layout/AuthProvider";
+import { motion } from "framer-motion"; // Animaciones
 
 export default function Profile() {
   const { user, logout } = useAuth();
-  const [isEdiding, setIsEdiding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
-
   const [formData, setFormData] = useState(user || {});
-/*
-  useEffect(() => {
-    validation
-      .ValidationTokenPage()
-      .then((data) => {
-        data.update_by = null;
-        setFormData(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-*/
 
   useEffect(() => {
     setTimeout(() => {
@@ -34,123 +19,117 @@ export default function Profile() {
   const handleInputChange = (event) => {
     setMsj({});
     const { name, value } = event.target;
-    const nameParts = name.split(".");
-    console.log(nameParts.length);
 
-    if (nameParts.length === 1) {
-      setFormData({
-        ...formData,
-        [name]: value,
-        ["person"]: {
-          ...formData["person"],
-          ["update_by"]: formData.person_id,
-        },
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [nameParts[0]]: {
-          ...formData[nameParts[0]],
-          [nameParts[1]]: value,
-          ["update_by"]: formData.person_id,
-        },
-      });
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      update_by: prev.person_id,
+    }));
   };
 
   function Enviar(e) {
     e.preventDefault();
-    if (!formData.person["update_by"]) {
-      setMsj({ error: "No se ah editado nada" });
+    if (!formData.update_by) {
+      setMsj({ error: "No se ha editado nada" });
       return;
     }
 
-    console.log(formData.person);
     axios
-      .put("http://localhost:8000/api/persons/" + formData.person_id, formData.person)
+      .put(`http://localhost:8000/api/persons/${formData.person_id}`, formData)
       .then((response) => {
-        console.log(response.data);
         setMsj(response.data);
-        setIsEdiding(false);
+        setIsEditing(false);
       })
       .catch((error) => {
-        const data = JSON.parse(error.request.response)["errors"] || JSON.parse(error.request.response);
-        setMsj(data);
+        setMsj(JSON.parse(error.request.response).errors);
       });
   }
 
+
   return (
-    <main className="h-full min-h-full flex flex-col items-center   ">
-      <div className="w-fit text-center m-5 ">
-        <h1 className="text-3xl">Personal info</h1>
-        <h3 className="text-base font-light my-4">Basic info, like your name and photo</h3>
+    <motion.main 
+      className="h-full min-h-full flex flex-col items-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-fit text-center m-5">
+        <h1 className="text-4xl font-bold text-gray-800">Perfil Personal</h1>
+        <h3 className="text-lg font-light my-4 text-gray-600">Información básica, como tu nombre y foto</h3>
       </div>
 
-      <div id="cuadro" className="w-full max-w-3xl border-2 pt-8 border-black rounded-xl text-gray-33 bg-white">
+      <div className="w-full max-w-3xl border-2 p-8 rounded-xl shadow-lg bg-white">
         {Object.entries(msj).map(([clave, valor], index) => (
-          <span key={index} className={`text-${clave === "msj" ? "green-600" : "red-400"} block text-center`}>
-            <strong>{valor}</strong>
+          <span key={index} className={`text-${clave === "msj" ? "green-600" : "red-400"} block text-center font-semibold`}>
+            {valor}
           </span>
         ))}
 
-        <div className="px-12 py-4 pt-6 relative flex flex-row justify-between items-center">
+        <div className="px-6 py-4 flex justify-between items-center">
           <div>
-            <h3 className="font-normal text-xl leading-snug text-black">Profile</h3>
-            <p className="text-sm font-normal text-gray-500">Some info may be visible to others people</p>
+            <h3 className="text-2xl font-medium text-black">Perfil</h3>
+            <p className="text-sm text-gray-500">Algunas de estas informaciones pueden ser públicas</p>
           </div>
 
-          <button onClick={() => setIsEdiding(true)} type="submit" className={`${isEdiding ? "hidden" : " flex"}   justify-center items-center w-24 h-8 border border-gray-500 rounded-xl text-gray-500`}>
-            <span>Edit</span>
-          </button>
+          {!isEditing && (
+            <motion.button 
+              onClick={() => setIsEditing(true)}
+              className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600"
+              whileHover={{ scale: 1.1 }}
+            >
+              Editar
+            </motion.button>
+          )}
         </div>
-        {isEdiding ? (
-          <form className="flex flex-col text-gray-BD text-sm leading-6" onSubmit={Enviar}>
-            <lavel className="flex items-center justify-start border-t border-gray-BD p-4  px-12">
-              <h3 className="w-52">NAME</h3>
-              <input value={formData.name} onChange={handleInputChange} type="text" name="person.name" placeholder="Name" className="border p-2 h-10 rounded-md " />
-            </lavel>
 
-            <lavel className="flex items-center justify-start border-t border-gray-BD p-4    px-12">
-              <h3 className="w-52">USERNAME</h3>
-              <input value={formData.username} onChange={handleInputChange} type="text" name="person.username" placeholder="username" className="border p-2 h-10 rounded-md " />
-            </lavel>
-
-            <lavel className="flex items-center justify-start border-t border-gray-BD p-4   px-12">
-              <h3 className="w-52">STATUS</h3>
-              <input value={formData.STATUS} onChange={handleInputChange} type="text" name="person.STATUS" placeholder="STATUS" className="border p-2 h-10 rounded-md " />
-            </lavel>
-
-          
-            <div className="flex items-center justify-center my-2 gap-3">
-              <button type="submit" className={`"flex justify-center items-center w-24 h-8 border border-gray-500 rounded-xl text-gray-500 hover:bg-gray-400 hover:text-white`}>
-                <span>Guardar</span>
-              </button>
-
-              <button onClick={() => setIsEdiding(false)} type="button" className={`"flex justify-center items-center w-24 h-8 border border-gray-500 rounded-xl text-gray-500 hover:bg-red-400 hover:text-white`}>
-                <span>Cancelar</span>
-              </button>
+        {/* Vista de los datos sin necesidad de editar */}
+        {!isEditing ? (
+          <div className="text-gray-700 text-lg">
+            <div className="flex items-center border-t py-4 px-6">
+              <h3 className="w-40 font-medium">Nombre</h3>
+              <span className="text-gray-800">{formData?.name || "No disponible"}</span>
             </div>
-          </form>
+
+            <div className="flex items-center border-t py-4 px-6">
+              <h3 className="w-40 font-medium">Usuario</h3>
+              <span className="text-gray-800">{formData?.username || "No disponible"}</span>
+            </div>
+
+            <div className="flex items-center border-t py-4 px-6">
+              <h3 className="w-40 font-medium">Estado</h3>
+              <span className="text-gray-800">{formData?.STATUS || "No disponible"}</span>
+            </div>
+          </div>
         ) : (
-          <form className="flex flex-col text-gray-BD text-sm leading-6">
-            <div className="flex items-center justify-start border-t border-gray-BD p-6   px-12">
-              <h3 className="w-52">NAME</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.name}</h3>
-            </div>
+          <motion.form 
+            className="flex flex-col text-sm text-gray-700"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            onSubmit={Enviar}
+          >
+            <label className="flex items-center border-t py-3 px-6">
+              <h3 className="w-40 text-lg font-medium">Nombre</h3>
+              <input value={formData?.name || ""} onChange={handleInputChange} type="text" name="name" className="border p-2 rounded-lg w-full" />
+            </label>
 
-            <div className="flex items-center justify-start border-t border-gray-BD p-6 px-12">
-              <h3 className="w-52">USERNAME</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.username}</h3>
-            </div>
+            <label className="flex items-center border-t py-3 px-6">
+              <h3 className="w-40 text-lg font-medium">Usuario</h3>
+              <input value={formData?.username || ""} onChange={handleInputChange} type="text" name="username" className="border p-2 rounded-lg w-full" />
+            </label>
 
-            <div className="flex items-center justify-start border-t border-gray-BD p-6   px-12">
-              <h3 className="w-52">STATUS</h3>
-              <h3 className="text-lg text-gray-33 whitespace-nowrap">{formData.STATUS}</h3>
-            </div>
+            <label className="flex items-center border-t py-3 px-6">
+              <h3 className="w-40 text-lg font-medium">Estado</h3>
+              <input value={formData?.STATUS || ""} onChange={handleInputChange} type="text" name="STATUS" className="border p-2 rounded-lg w-full" />
+            </label>
 
-          </form>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Guardar</button>
+              <button onClick={() => setIsEditing(false)} type="button" className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Cancelar</button>
+            </div>
+          </motion.form>
         )}
       </div>
-    </main>
+    </motion.main>
   );
 }

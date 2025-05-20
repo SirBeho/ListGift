@@ -14,8 +14,8 @@ class Model extends Eloquent
 {
     protected $table = 'lists';
 
-    
-    protected $fillable = ['name', 'user_id'];
+      
+    protected $fillable = ['name', 'user_id', 'description', 'status', 'is_public', 'due_date', 'image', 'color1', 'color2', 'categorys', 'icon'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function user()

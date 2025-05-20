@@ -65,13 +65,12 @@ class Controller
                 return;
             }
             
-            $listas['My'] = $user->lists()->get()->load('items');
-
-
-
+            $listas = [];
             if($user->role_id === 1){
-                $listas['All'] = ListModel::all()->load('items', 'user');
+                $listas = ListModel::all()->load('items', 'user');
 
+            }else{
+                $listas = $user->lists()->get()->load('items');
             }
                 
             

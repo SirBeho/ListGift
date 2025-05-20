@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { PencilSquareIcon } from '@heroicons/react/20/solid';
 import { EyeIcon } from '@heroicons/react/20/solid';
 
-function Card({ data , litt = false }) {
+function Card({ data, litt = false }) {
   const cardRef = useRef(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -16,10 +16,10 @@ function Card({ data , litt = false }) {
 
     if (!card) return;
 
-    const rect = card.getBoundingClientRect(); 
+    const rect = card.getBoundingClientRect();
 
-    const relativeX = event.clientX - rect.left; 
-    const relativeY = event.clientY - rect.top; 
+    const relativeX = event.clientX - rect.left;
+    const relativeY = event.clientY - rect.top;
 
     const width = card.offsetWidth;
     const height = card.offsetHeight;
@@ -100,35 +100,44 @@ function Card({ data , litt = false }) {
       style={{ transformOrigin: 'center' }}
     >
 
-      <div className="relative">
+      <div className="relative"
+      >
         <img
           src="pictures/git.png"
           className="w-full h-48 object-cover rounded-t-md"
           alt={`data ${data.name}`}
         />
+
         <div className="absolute top-2 right-2 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full px-2 py-1 opacity-75 hover:opacity-100 transition-opacity duration-200">
           {data.items ? data.items.length : 0} items
         </div>
       </div>
-      <div className="p-4">
+
+
+
+      <div className="p-4 pt-0"       >
+        <div className='absolute left-0 w-full h-full opacity-5' style={{
+
+          backgroundImage: `linear-gradient(135deg, ${data.color1} 0%, ${data.color2} 100%)`,
+        }}  ></div>
         {litt ? (
-          <h4 className="text-sm font-semibold text-center text-gray-800 mb-1">{data.user.name}</h4>
+          <h4 className="text-sm font-semibold text-center text-gray-800 mb-1">{data.user?.name}</h4>
         ) : (
           ''
-        )}  
-        
+        )}
+
         <h4 className="text-lg font-semibold text-center text-gray-800 mb-3">{data.name}</h4>
         <div className="flex justify-center space-x-3  ">
           <Link
-            to={`/contenido/${data.id}?ndata=${data.name}`}
-            className={`bg-blue-500 hover:bg-blue-600 text-white ${litt ? 'py-0 px-2 h-7' :'py-2 px-4 font-bold' }  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105`}
+            to={`/lists/${data.id}`}
+            className={`bg-blue-500 hover:bg-blue-600 text-white ${litt ? 'py-0 px-2 h-7' : 'py-2 px-4 font-bold'}  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105`}
           >
-            <ArrowRightIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-            Acceder
+            <PencilSquareIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+            Editar
           </Link>
           <Link
             to={`/data/${data.id}?ndata=${data.name}`}
-            className={`bg-yellow-400 hover:bg-yellow-500 text-gray-800  ${litt ? 'py-0 px-2 h-7' :'py-2 px-4 font-bold' }  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center transform transition-transform duration-200 hover:scale-105`}
+            className={`bg-yellow-400 hover:bg-yellow-500 text-gray-800  ${litt ? 'py-0 px-2 h-7' : 'py-2 px-4 font-bold'}  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center transform transition-transform duration-200 hover:scale-105`}
           >
             <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
             Ver
