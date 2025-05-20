@@ -71,7 +71,7 @@ const [loading, setLoading] = useState(false);
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -500, opacity: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="bg-white shadow-xl rounded-2xl max-w-md w-full p-8 border-t-pink-500 border-t-8"
+                        className="bg-white shadow-xl rounded-2xl border-t-pink-500 border-t-8 max-w-md w-full p-8 "
                     >
                         <motion.div className="text-center mb-6">
                             <h2 className="text-3xl font-bold text-pink-600">

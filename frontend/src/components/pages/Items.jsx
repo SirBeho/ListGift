@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useList } from '../Layout/ListProvider';
 import { useParams, useNavigate } from 'react-router-dom';
+import Modal from '../Layout/ModalItem';
+import { Dialog, Transition } from "@headlessui/react";
 import {
   MapPinIcon,
   ArrowTopRightOnSquareIcon,
@@ -17,6 +19,7 @@ import {
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { BeatLoader } from 'react-spinners';
+import ModalItem from '../Layout/ModalItem';
 
 const containerVariants = {
   initial: { opacity: 0 },
@@ -86,7 +89,7 @@ export default function Items() {
     return () => clearTimeout(timer);
   }, [LoadListas, listas, loadingListas]);
 
-  
+
 
   useEffect(() => {
     localStorage.setItem('giftListFilterCategory', filterCategory);
@@ -253,9 +256,9 @@ export default function Items() {
 
 
         <motion.div
-          className="mb-8 rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300 " 
+          className="mb-8 rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300 "
           style={{
-           
+
             backgroundImage: `linear-gradient(135deg, ${ListUser.color1} 0%, ${ListUser.color2} 100%)`,
           }}
           initial={{ opacity: 0, y: -30 }}
@@ -265,9 +268,9 @@ export default function Items() {
 
           {ListUser?.status && (
             <motion.span className={`absolute top-3 right-3 inline-flex items-center h-fit text-xs font-semibold px-2.5 py-0.5 rounded shadow-sm ${ListUser.status.toLowerCase() === 'active' ? 'bg-green-300 text-white' :
-                ListUser.status.toLowerCase() === 'en progreso' ? 'bg-yellow-300 text-gray-800' :
-                  ListUser.status.toLowerCase() === 'cerrado' ? 'bg-gray-300 text-white' :
-                    'bg-blue-300 text-white'
+              ListUser.status.toLowerCase() === 'en progreso' ? 'bg-yellow-300 text-gray-800' :
+                ListUser.status.toLowerCase() === 'cerrado' ? 'bg-gray-300 text-white' :
+                  'bg-blue-300 text-white'
               }`}
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.6 } }}
@@ -276,7 +279,7 @@ export default function Items() {
             </motion.span>
           )}
           {/* Capa de superposición sutil con patrón */}
-          <div className="absolute inset-0 bg-white opacity-10 bg-[url('/pictures/git.png')] bg-repeat-space mix-blend-overlay" style={{ backgroundSize: "25% auto" }}></div>
+          <div className="absolute inset-0 bg-white opacity-10 bg-[url('/pictures/git.png')] bg-repeat-space mix-blend-overlay" style={{ backgroundSize: "auto 100%" }}></div>
 
           <div className="relative p-6 md:p-8 lg:p-10 flex items-center">
 
@@ -289,7 +292,7 @@ export default function Items() {
                 whileHover={{
                   scale: 1.15,
                   borderRadius: '0.5rem',
-                  
+
                 }}
               >
                 <img
@@ -302,44 +305,44 @@ export default function Items() {
 
             {/* Información Principal */}
             <motion.div
-    className="flex-grow" // Añadimos cursor-pointer
-    whileHover={{
-        backgroundColor: 'rgba(255, 255, 255, 0.05)', // Ligeramente más oscuro al hover
-        transition: { duration: 0.2, ease: 'easeOut' },
-    }}
->
-    <motion.h2 className="text-2xl md:text-3xl font-bold text-white "
-        style={{ textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' } }}
-      
-    >
-        {ListUser?.name}
-    </motion.h2>
-    <motion.p className="text-sm md:text-base text-white opacity-80"
-        style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.2, ease: 'easeOut' } }}
-    >
-        {ListUser?.description || 'Una lista de regalos especial.'}
-    </motion.p>
-    <div className="flex items-center mt-2 space-x-28 text-white text-xs">
-        <motion.span className="inline-flex items-center  "
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.4 } }}
-        >
-            <UserIcon className="h-4 w-4 mr-1" />{ListUser?.user?.name || 'Anfitrión'}
-        </motion.span>
-        {ListUser?.due_date && (
-            <motion.span className="inline-flex items-center "
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.5 } }}
+              className="flex-grow" // Añadimos cursor-pointer
+              whileHover={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)', // Ligeramente más oscuro al hover
+                transition: { duration: 0.2, ease: 'easeOut' },
+              }}
             >
-                <CalendarIcon className="h-4 w-4 mr-1" />{new Date(ListUser.due_date).toLocaleDateString()}
-            </motion.span>
-        )}
-    </div>
-</motion.div>
+              <motion.h2 className="text-2xl md:text-3xl font-bold text-white "
+                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0, transition: { duration: 0.6, ease: 'easeOut' } }}
+
+              >
+                {ListUser?.name}
+              </motion.h2>
+              <motion.p className="text-sm md:text-base text-white opacity-80"
+                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.2, ease: 'easeOut' } }}
+              >
+                {ListUser?.description || 'Una lista de regalos especial.'}
+              </motion.p>
+              <div className="flex items-center mt-2 space-x-28 text-white text-xs">
+                <motion.span className="inline-flex items-center  "
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.4 } }}
+                >
+                  <UserIcon className="h-4 w-4 mr-1" />{ListUser?.user?.name || 'Anfitrión'}
+                </motion.span>
+                {ListUser?.due_date && (
+                  <motion.span className="inline-flex items-center "
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1, transition: { duration: 0.4, delay: 0.5 } }}
+                  >
+                    <CalendarIcon className="h-4 w-4 mr-1" />{new Date(ListUser.due_date).toLocaleDateString()}
+                  </motion.span>
+                )}
+              </div>
+            </motion.div>
 
             {/* Botón de Acción (Animado y Flotante) */}
             <motion.button
@@ -436,7 +439,6 @@ export default function Items() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, transition: { delay: 0.1 } }}
                   />
-                  {/* ... (Badge de "Nuevo" si lo mantienes) ... */}
                 </div>
                 <div className="p-6 flex flex-col justify-between h-full">
                   <div>
@@ -450,32 +452,8 @@ export default function Items() {
                     >
                       <CurrencyDollarIcon className="h-5 w-5 mr-2" /> {formatPrice(item.price)}
                     </motion.p>
-                    <motion.p className="text-gray-700 mb-3 flex items-center"
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
-                    >
-                      <MapPinIcon className="h-5 w-5 mr-2 text-gray-500" /> Disponible en: {item.place}
-                    </motion.p>
-                    <motion.p className="text-gray-600 text-sm mb-4 line-clamp-2"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0, transition: { delay: 0.5 } }}
-                    >{item.description}</motion.p>
 
-                    {item.place_link && (
-                      <motion.a
-                        href={item.place_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center py-2 px-4 bg-green-500 text-white rounded-md transition duration-300 ease-in-out hover:bg-green-600 font-semibold text-sm"
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1, transition: { delay: 0.6 } }}
-                      >
-                        Ver en {item.place} <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-2" />
-                      </motion.a>
-                    )}
+
                   </div>
                 </div>
               </motion.div>
@@ -501,34 +479,12 @@ export default function Items() {
 
       {/* Modal de Detalles del Item */}
       {selectedItem && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50"
-          onClick={closeDetails}
-        >
-          <motion.div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1, transition: { type: 'spring', damping: 12, stiffness: 100 } }}
-            exit={{ scale: 0.95, opacity: 0 }}
-          >
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{selectedItem.name}</h2>
-            <img src={`/pictures/rel.gif`} alt={selectedItem.name} className="w-full rounded-md mb-4" />
-            <p className="text-gray-700 mb-3">{selectedItem.description}</p>
-            <p className="text-lg font-bold text-pink-600 mb-3">Precio: {formatPrice(selectedItem.price)}</p>
-            <p className="text-gray-600 mb-3">Disponible en: {selectedItem.place}</p>
-            {selectedItem.place_link && (
-              <a href={selectedItem.place_link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Ver en {selectedItem.place}</a>
-            )}
-            <button onClick={closeDetails} className="mt-6 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">
-              Cerrar
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
-    </motion.div>
+
+<ModalItem show={selectedItem!= null} selectedItem={selectedItem}  onClose={closeDetails} color1={ListUser.color1} color2={ListUser.color2}  />
+        
+     
+  )
+}
+    </motion.div >
   );
 }

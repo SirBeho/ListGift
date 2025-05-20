@@ -104,7 +104,7 @@ export default function SideBar({ sidebarController, user }) {
                   {user.lists && user.lists.length > 0 ? (
                     user.lists.map((item) => (
                       <li key={item.id} className="relative pl-6">
-                        <Link to={`/list/${item.id}`} className={`flex items-center py-2 px-4 rounded-md text-gray-200 hover:bg-indigo-700 ${window.location.pathname === `/list/${item.id}`? "bg-indigo-800": ""} before-submenu-line`}>
+                        <Link to={`/lists/${item.id}`} className={`flex items-center py-2 px-4 rounded-md text-gray-200 hover:bg-indigo-700 ${window.location.pathname === `/list/${item.id}`? "bg-indigo-800": ""} before-submenu-line`}>
                           <LinkIcon className="w-4 h-4 mr-2" />
                           <span className={`${sidebarOpen ? "opacity-100" : "opacity-0" } whitespace-nowrap`}> {item.name} </span>
                         </Link>

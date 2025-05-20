@@ -96,15 +96,16 @@ function Card({ data, litt = false }) {
     <div
       key={data.id}
       ref={cardRef}
-      className=" bg-white rounded-md shadow-lg overflow-hidden transition duration-200 ease-in-out transform" // Transición más rápida por defecto
+      className={`bg-white   rounded-xl shadow-lg overflow-hidden transition duration-200 ease-in-out transform `} // Transición más rápida por defecto
       style={{ transformOrigin: 'center' }}
     >
+     
 
-      <div className="relative"
+      <div className="relative "
       >
         <img
-          src="pictures/git.png"
-          className="w-full h-48 object-cover rounded-t-md"
+          src={data.image? data.image : 'pictures/git.png'}
+          className="w-full h-48 object-cover rounded-t-xl "
           alt={`data ${data.name}`}
         />
 
@@ -116,9 +117,9 @@ function Card({ data, litt = false }) {
 
 
       <div className="p-4 pt-0"       >
-        <div className='absolute left-0 w-full h-full opacity-5' style={{
+        <div className='absolute left-0 w-full h-full opacity-[15%]' style={{
 
-          backgroundImage: `linear-gradient(135deg, ${data.color1} 0%, ${data.color2} 100%)`,
+          backgroundImage: `linear-gradient(100deg, ${data.color1} 0%, ${data.color2} 100%)` ,
         }}  ></div>
         {litt ? (
           <h4 className="text-sm font-semibold text-center text-gray-800 mb-1">{data.user?.name}</h4>
@@ -126,22 +127,18 @@ function Card({ data, litt = false }) {
           ''
         )}
 
+
+
         <h4 className="text-lg font-semibold text-center text-gray-800 mb-3">{data.name}</h4>
         <div className="flex justify-center space-x-3  ">
           <Link
             to={`/lists/${data.id}`}
             className={`bg-blue-500 hover:bg-blue-600 text-white ${litt ? 'py-0 px-2 h-7' : 'py-2 px-4 font-bold'}  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105`}
           >
-            <PencilSquareIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-            Editar
-          </Link>
-          <Link
-            to={`/data/${data.id}?ndata=${data.name}`}
-            className={`bg-yellow-400 hover:bg-yellow-500 text-gray-800  ${litt ? 'py-0 px-2 h-7' : 'py-2 px-4 font-bold'}  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 flex items-center transform transition-transform duration-200 hover:scale-105`}
-          >
-            <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+           <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
             Ver
           </Link>
+          
         </div>
       </div>
 
