@@ -1,0 +1,9 @@
+<?php
+
+use App\Modules\{{ ModelName }}\Controller; // Alias para evitar conflicto si hay otra clase Controller
+
+$router->get('/{{ modelSlugPlural }}', Controller::class . '@index');
+$router->get('/{{ modelSlugPlural }}/{id}', Controller::class . '@show');
+$router->post('/{{ modelSlugPlural }}', Controller::class . '@store');
+$router->put('/{{ modelSlugPlural }}/{id}', Controller::class . '@update');
+$router->delete('/{{ modelSlugPlural }}/{id}', Controller::class . '@destroy');

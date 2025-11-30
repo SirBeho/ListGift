@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@keyframes pricePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: #198754; }
+  100% { transform: scale(1); color: #007bff; }
+}
+
+.price-animated {
+  animation: pricePulse 1.5s infinite alternate;
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .app-content {
+    
+    background: linear-gradient(to bottom, #f3f4f6, #bdcbe9); /* Ejemplo de gradiente suave */
+  }
+
+  @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Opcional: un pequeño desplazamiento hacia abajo al inicio */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.before-submenu-line::before {
+  content: "";
+  position: absolute;
+  left: 10px; /* Ajusta la posición horizontal de la línea */
+  top: 0%;
+  width: 3px; /* Ajusta el ancho de la línea */
+  height: 100%; /* Ajusta la altura de la línea */
+  @apply bg-indigo-500; /* Aplica el color definido en la constante */
+}
+
+.before-submenu-line:hover:before{
+    @apply bg-indigo-400;
+}
+
+.card-enter {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+  }
+  
+  .card-enter.card-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+:not(.sidebar *) {
+    @apply duration-300;
+}
+
+
+.interpolate{
+    
+    interpolate-size: allow-keywords;
+    @apply duration-300;
+   
+}
+  
+.link{
+    @apply hidden;
+}
+
+
+
+ 
+
+.toggle span,.toggle>div ,.toggle a,.toggle li.block{
+    @apply flex;
+}
+.toggle a{
+    @apply hover:bg-indigo-500;
+}
+ 
+aside:not(.toggle) a{
+    @apply hover:scale-150;
+}
+
+ aside.toggle>ul li:hover img{
+    @apply scale-125;
+} 
+
+/* .toggle li:hover{
+    @apply bg-white;
+}
+
+.toggle a:hover{
+    @apply ps-2;
+    @apply ms-2;
+}  
+ */
+
+ .toggle a:hover{
+    @apply ps-2;
+    @apply ms-0;
+}  
+
+aside:not(.toggle)  div.despliege{
+    @apply w-56;
+}
+
+aside:not(.toggle)  img.despliege{
+    @apply w-5;
+    @apply p-0;
+}
+
+ aside:not(.toggle)  img.despliege:hover{
+    @apply scale-125;
+    @apply bg-gray-sl;
+}  
+
+
+aside.toggle .submenu li{
+    @apply ps-2;
+   
+}
+aside.toggle .submenu li>a{
+    @apply ps-1;
+   
+}
+aside.toggle .submenu li:hover{
+    @apply ps-1;
+}
