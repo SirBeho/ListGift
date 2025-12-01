@@ -106,7 +106,7 @@ function ListaDeRegalos() {
               {listas?.length > 0 ? (
                 listas.map((lista, index) => (
                   <div key={lista.id} className={`card ${lista.id} card-enter `} style={{ animationDelay: `${index * 500}ms` }}>
-                    <Card data={lista} litt={true} />
+                    <Card data={lista} litt />
                 </div>
                 ))) : (
                 <div className="md:col-span-3 lg:col-span-4 text-center mt-6 p-6 bg-white rounded-md shadow-md">

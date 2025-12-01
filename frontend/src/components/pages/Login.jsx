@@ -169,7 +169,7 @@ const [loading, setLoading] = useState(false);
                         </div>
 
                         {/* Social Icons */}
-                        <div className="mt-4 flex justify-center space-x-4">
+                        <div className="mt-4 flex justify-center space-x-4 relative z-10">
                             <SocialIcon icon={<FaGoogle />} url="https://www.google.com" />
                             <SocialIcon icon={<FaFacebookF />} url="https://www.facebook.com" />
                             <SocialIcon icon={<FaTwitter />} url="https://twitter.com" />
@@ -177,7 +177,7 @@ const [loading, setLoading] = useState(false);
                         </div>
 
                         {/* Register Link */}
-                        <div className="mt-6 text-center text-sm text-gray-500">
+                        <div className="mt-6 text-center text-sm text-gray-500  relative z-20">
                             ¿No tienes cuenta?{" "}
                             <Link to="/register" className="text-pink-500 hover:underline">
                                 Regístrate

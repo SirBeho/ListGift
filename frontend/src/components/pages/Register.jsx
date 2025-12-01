@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 // Asumo que tu AuthProvider tiene una función 'register'
 import { useAuth } from "../Layout/AuthProvider"; 
@@ -31,13 +31,17 @@ export default function Register() {
         if (user) navigate("/profile");
     }, [navigate, user]);
 
-    const handleInputChange = (event) => {
+    const handleTogglePassword = useCallback(() => {
+        setShowPassword(prevShowPassword => !prevShowPassword);
+      }, []);
+
+    const handleInputChange = useCallback((event) => {
         setMsj({});
         const { name, value } = event.target;
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    };
+    },[setFormData]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit= useCallback(async (e) => {
         e.preventDefault();
         setLoading(true);
         // Llama a la función de registro
@@ -59,7 +63,7 @@ export default function Register() {
             setMsj(errorData);
             setFormData((prevFormData) => ({ ...prevFormData, password: "" }));
         }
-    };
+    }, [register, formData, navigate, setLoading, setMsj, setFormData]);
 
     useEffect(() => {
         if (Object.keys(msj).length > 0) {
@@ -133,7 +137,7 @@ export default function Register() {
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={handleTogglePassword}
                                 className="absolute right-3 text-pink-400 hover:text-pink-600"
                                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                             >
