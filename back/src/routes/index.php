@@ -39,9 +39,7 @@ $router->before('POST|PUT|PATCH', '/.*', function () {
 });
 
 //validate token for all routes except auth/login and auth/register
-$router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register).*', VerifyToken::class . '@handle');
-
-
+$router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register|/dbtest).*', VerifyToken::class . '@handle');
 
 $router->get('/dbtest', function() {
     try {

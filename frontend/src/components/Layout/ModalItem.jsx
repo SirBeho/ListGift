@@ -6,7 +6,7 @@ import { XMarkIcon } from '@heroicons/react/20/solid'; // Icono de cerrar altern
 
 export default function ModalItem({ selectedItem, show = false, onClose = () => { }, color1 = "#ffffff", color2 = "#ffffff" }) {
     const cancelButtonRef = useRef(null);
-console.log(selectedItem)
+    console.log(selectedItem)
     const formatPrice = (price) => {
         return new Intl.NumberFormat('es-DO', {
             style: 'currency',
@@ -35,12 +35,12 @@ console.log(selectedItem)
             {/* Capa de fondo con opacidad */}
             <motion.div
                 className={`fixed  inset-0  z-40`}
-             
+
                 style={{
-                    opacity: 0.2 ,
+                    opacity: 0.2,
                     backgroundImage: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`,
-                  }}
-                
+                }}
+
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.4, transition: { duration: 0.3 } }}
                 exit={{ opacity: 0, transition: { duration: 0.2 } }}
@@ -50,7 +50,7 @@ console.log(selectedItem)
             <div className="relative min-h-full flex justify-center p-4 z-50"> {/* z-index mayor para el contenido */}
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-4 md:px-8 flex flex-col overflow-hidden max-h-[90vh]"
+                    className="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-4 py-2 md:px-7 flex flex-col overflow-hidden max-h-[90vh]"
                     initial={{ scale: 0.85, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0, transition: { type: 'spring', damping: 20, stiffness: 180 } }}
                     exit={{ scale: 0.9, opacity: 0, y: -20, transition: { duration: 0.2 } }}
@@ -67,16 +67,17 @@ console.log(selectedItem)
                         </button>
                     </div>
 
+                    {/* Título */}
+                    <DialogTitle as="h2" className="text-3xl font-bold text-indigo-700 tracking-tight">
+                        {selectedItem.name}
+                    </DialogTitle>
+
                     {/* Contenido Principal */}
-                    <div className="flex flex-col gap-3">
-                        {/* Título */}
-                        <DialogTitle as="h2" className="text-3xl font-bold text-indigo-700 tracking-tight">
-                            {selectedItem.name}
-                        </DialogTitle>
+                    <div className="flex flex-col gap-3 overflow-y-auto">
 
                         {/* Imagen del Item con Animación de Entrada */}
                         <motion.div
-                            className="w-auto max-h-96 rounded-xl overflow-hidden shadow-md bg-indigo-100"
+                            className="w-auto max-h-96 min-h-[20rem] rounded-xl overflow-hidden shadow-md bg-indigo-100"
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
                             exit={{ opacity: 0, y: -20 }}
@@ -109,31 +110,31 @@ console.log(selectedItem)
                                 <MapPinIcon className="h-5 min-w-[1.25rem] w-5 mr-2 text-indigo-500" />
                                 Disponibilidad:
                                 {selectedItem.place_link ? (
-                                <motion.a
-                                    href={selectedItem.place_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="uppercase inline-flex items-center  ml-2 py-1 px-3 bg-indigo-500 text-white rounded-md transition duration-300 ease-in-out hover:bg-indigo-600 font-semibold text-sm shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1, transition: { delay: 0.4 } }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                >
-                                    {selectedItem.place}
-                                    <ArrowTopRightOnSquareIcon className="h-5 w-5 ml-2" />
-                                </motion.a>
-                            ) : (
-                                <span className=" ml-2 uppercase text-indigo-500">{selectedItem.place}</span>
-                            )}
+                                    <motion.a
+                                        href={selectedItem.place_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="uppercase inline-flex items-center  ml-2 py-0.5 px-3 bg-indigo-500 text-white rounded-md transition duration-300 ease-in-out hover:bg-indigo-600 font-semibold text-sm shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1, transition: { delay: 0.4 } }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.97 }}
+                                    >
+                                        {selectedItem.place}
+                                        <ArrowTopRightOnSquareIcon className="h-5 w-5 ml-2" />
+                                    </motion.a>
+                                ) : (
+                                    <span className=" ml-2 uppercase text-indigo-500">{selectedItem.place}</span>
+                                )}
                             </p>
-                            
+
                         </div>
                     </div>
 
                     {/* Botón de Cierre */}
-                    <motion.div className="mt-auto w-full flex items-center justify-center gap-10">
-                    <motion.button
+                    <motion.div className="mt-1 w-full flex items-center justify-center gap-10 self-end ">
+                        <motion.button
                             onClick={onClose}
                             className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition duration-300 ease-in-out shadow-md"
                             initial={{ opacity: 0, y: 20 }}
@@ -142,7 +143,7 @@ console.log(selectedItem)
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                           Regalar
+                            Regalar
                         </motion.button>
 
                         <motion.button
@@ -156,7 +157,7 @@ console.log(selectedItem)
                         >
                             Cerrar Detalles
                         </motion.button>
-                        
+
                     </motion.div>
                 </motion.div>
             </div>
