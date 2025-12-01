@@ -1,14 +1,15 @@
-<?php 
+<?php
 
 namespace App\Config;
+
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-
-class DB {
-
-    public static function initialize() {
-        $capsule = new Capsule;
+class DB
+{
+    public static function initialize()
+    {
+        $capsule = new Capsule();
         try {
             $capsule->addConnection([
                 'driver'    => $_ENV['DB_DRIVER'],
@@ -32,9 +33,10 @@ class DB {
 
     }
 
-    protected static function handleConnectionError(\PDOException $e) {
+    protected static function handleConnectionError(\PDOException $e)
+    {
         $env = $_ENV['ENVIRONMENT'] ?? 'production';
-        
+
         if ($env === 'production') {
             http_response_code(500);
             // Muestra un error genérico y seguro para el usuario
@@ -46,6 +48,3 @@ class DB {
     }
 
 }
-
-
-

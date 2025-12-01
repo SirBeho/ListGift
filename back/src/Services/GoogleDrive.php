@@ -23,7 +23,7 @@ class GoogleDrive
         }
     }
 
-    function upload($file_path, $file_name, $file_type)
+    public function upload($file_path, $file_name, $file_type)
     {
         try {
 
@@ -45,7 +45,7 @@ class GoogleDrive
         }
     }
 
-    function download($file_id)
+    public function download($file_id)
     {
         try {
 
@@ -59,7 +59,7 @@ class GoogleDrive
         }
     }
 
-    function delete($file_id)
+    public function delete($file_id)
     {
         try {
             $this->driveService->files->delete($file_id);

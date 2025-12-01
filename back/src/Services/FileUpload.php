@@ -30,7 +30,7 @@ class FileUpload
 
             // Generate file name using time() and extracted extension
             $file_name = time() . '.' . $fileExtension;
- 
+
             $googleDrive = new GoogleDrive();
             $id =  $googleDrive->upload($file['tmp_name'], $file_name, $file['type']);
             return $id;

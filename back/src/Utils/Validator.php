@@ -2,10 +2,9 @@
 
 namespace App\Utils;
 
-class Validator {
-
-    
-    static function required($data, $fields)
+class Validator
+{
+    public static function required($data, $fields)
     {
         $missing = [];
         foreach ($fields as $field) {

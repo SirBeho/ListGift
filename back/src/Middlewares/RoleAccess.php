@@ -8,7 +8,7 @@ class RoleAccess
     {
         $role = $_REQUEST['auth']['role_name'];
 
-       
+
         if ($role !== 'Admin') {
             header("HTTP/1.0 403 Forbidden");
             echo json_encode([
@@ -21,7 +21,7 @@ class RoleAccess
 
     public static function adminOrOwner($id)
     {
-        
+
         $auth_data = $_REQUEST['auth'] ?? null;
 
         // Si no hay datos de autenticación, el token no fue enviado o es inválido.
@@ -34,7 +34,7 @@ class RoleAccess
         $role =  $auth_data['role_name'];
         $user_id =  intval($auth_data['user']);
 
-        
+
         if ($role !== 'Admin' && $user_id !== intval($id)) {
             header("HTTP/1.0 403 Forbidden");
             echo json_encode([
@@ -45,5 +45,5 @@ class RoleAccess
         }
     }
 
-    
+
 }

@@ -7,25 +7,22 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Firebase\JWT\JWT;
 use App\Modules\Auth\Controller;
 
-
 class Controller
 {
-    
-      
     public function login()
     {
 
         try {
 
             $user = Model::where('username', $_POST['username'])->first();
-              
+
             if (!$user) {
                 header("HTTP/1.0 401 Unauthorized");
                 echo json_encode(['status' => 'error', 'message' => 'Invalid Username']);
                 return;
             }
 
-            
+
             //$user->load('role');
             if ($user && password_verify($_POST['password'], $user->password)) {
                 $key = $_ENV['JWT_SECRET'];
@@ -48,7 +45,7 @@ class Controller
                     'httponly' => true,
                     'samesite' => 'lax'
                 ]);
-              
+
                 echo json_encode(['status' => 'success', 'message' => 'Login successful']);
             } else {
                 header("HTTP/1.0 401 Unauthorized");
@@ -64,10 +61,10 @@ class Controller
     {
         try {
             $user = Model::findOrFail($_REQUEST['auth']['user']);
-            
-            
 
-            $user->load('role','lists');
+
+
+            $user->load('role', 'lists');
 
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'user' => $user]);

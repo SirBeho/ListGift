@@ -49,7 +49,7 @@ function seed($config, $table)
 {
     try {
         if (isset($config["data"]) && is_array($config["data"])) {
-         
+
             foreach ($config["data"] as $item) {
                 $factoryDefinition = $config["class"]::create(1)[0];
                 $mergedItem = array_merge($factoryDefinition, $item);
@@ -60,7 +60,7 @@ function seed($config, $table)
         }
 
         if (!isset($config["data"]) || isset($config["count"])) {
-            $data = isset($config["count"]) ? $config["class"]::create($config["count"]) : $config["class"]::create(); 
+            $data = isset($config["count"]) ? $config["class"]::create($config["count"]) : $config["class"]::create();
             foreach ($data as $item) {
                 Capsule::table($table)->insert($item);
             }

@@ -1,4 +1,5 @@
 <?php
+
 $migrations = [
     "Roles" => "App\Modules\Role\Migration",
     "Users" => "App\Modules\User\Migration",
