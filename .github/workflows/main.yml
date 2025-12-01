@@ -1,0 +1,34 @@
+# Fragmento de un archivo .yml en GitHub Actions
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Descarga el código
+      - uses: actions/checkout@v4
+
+      # --- ETAPA DE CONSTRUCCIÓN ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+
+      - name: Install Dependencies
+        run: cd frontend && npm install 
+      
+      - name: Build Project
+        run: cd frontend && npm run build 
+
+      # 2. Despliegue FTP
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./frontend/dist/
+          server-dir: /htdocs/
