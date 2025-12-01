@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Controller
 {
-
     public function index()
     {
         try {
@@ -32,5 +31,5 @@ class Controller
         }
     }
 
-    
+
 }

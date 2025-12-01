@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Modules\User;
+
 use App\Modules\Role\Model as RoleModel;
-
-
-
 use Faker\Factory as FakerFactory;
 
 class Factory

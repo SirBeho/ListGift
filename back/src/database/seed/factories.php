@@ -3,7 +3,7 @@
 $factories =  [
     "roles" => [
         "class" => "App\Modules\Role\Factory",
-    ], 
+    ],
     "users" => [
         "class" => "App\Modules\User\Factory",
         "count" => 3,

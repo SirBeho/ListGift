@@ -11,14 +11,14 @@ if (!isset($argv[1])) {
 }
 
 $ModelNameRaw = $argv[1];
-$ModelName = ucfirst($ModelNameRaw); 
+$ModelName = ucfirst($ModelNameRaw);
 $moduleDirectory = 'src/modules/' . $ModelName;
 
 $variables = [
     'ModelName' => $ModelName,
-    'ModelVariablePlural' => ucfirst(strtolower(preg_replace('/(?<!^)(?=[A-Z])/', '_', $ModelName)) . 's'), 
+    'ModelVariablePlural' => ucfirst(strtolower(preg_replace('/(?<!^)(?=[A-Z])/', '_', $ModelName)) . 's'),
     'tableName' => strtolower(preg_replace('/(?<!^)(?=[A-Z])/', '_', $ModelName)) . 's',
-    'modelSlugPlural' => strtolower(preg_replace('/(?<!^)(?=[A-Z])/', '-', $ModelName)) . 's', 
+    'modelSlugPlural' => strtolower(preg_replace('/(?<!^)(?=[A-Z])/', '-', $ModelName)) . 's',
 ];
 
 // Crear el directorio del módulo si no existe
@@ -51,7 +51,7 @@ function generateFileContent(string $stubPath, array $replacements): string
 // Generar Controller
 try {
     $controllerStubPath = __DIR__ . '/stubs/controller.stub';
-    $controllerContent = generateFileContent($controllerStubPath,$variables);
+    $controllerContent = generateFileContent($controllerStubPath, $variables);
     file_put_contents($moduleDirectory . '/Controller.php', $controllerContent);
     echo "Controller.php para {$ModelName} creado.\n";
 } catch (Exception $e) {
@@ -68,8 +68,8 @@ try {
     exit("Error al crear el Factory: " . $e->getMessage() . "\n");
 }
 
-// Generar Migration  
-try { 
+// Generar Migration
+try {
     $migrationStubPath = __DIR__ . '/stubs/migration.stub';
     $migrationContent = generateFileContent($migrationStubPath, $variables);
     file_put_contents($moduleDirectory . '/Migration.php', $migrationContent);
@@ -99,5 +99,3 @@ try {
 }
 
 echo "Estructura del módulo {$ModelName} generada.\n";
-
-?>

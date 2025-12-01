@@ -4,7 +4,6 @@ namespace App\Modules\User;
 
 use App\Modules\User\Model;
 use App\Modules\List\Model as ListModel;
-
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Middlewares\RoleAccess;
 use App\Utils\Validator;
@@ -15,16 +14,16 @@ class Controller
     {
         try {
             RoleAccess::adminOrStudent();
-            $role = $_REQUEST['auth']['role_name']; 
+            $role = $_REQUEST['auth']['role_name'];
 
-            if($role === 'Student' && !isset($_GET['r'])){
+            if ($role === 'Student' && !isset($_GET['r'])) {
                 header("HTTP/1.0 400 Bad Request");
                 echo json_encode(['status' => 'error', 'message' => 'Role is required', 'options' => ['r' => '2 or 3']]);
                 return;
             }
 
 
-            if(isset($_GET['r']) && ($_GET['r'] === '2' || $_GET['r'] === '3')){
+            if (isset($_GET['r']) && ($_GET['r'] === '2' || $_GET['r'] === '3')) {
                 $users = Model::where('role_id', $_GET['r'])->get()->load('role');
                 header("HTTP/1.0 200 OK");
                 echo json_encode($users);
@@ -52,15 +51,15 @@ class Controller
         }
     }
 
-    
+
     public function userlists()
-    {   
-        
+    {
+
         try {
 
             $user_id = $_REQUEST['auth']['user'] ?? null;
             $role_name = $_REQUEST['auth']['role_name'] ?? null;
-            
+
             ///$user = Model::findOrFail($_REQUEST['auth']['user']);
 
             if (!$user_id) {
@@ -69,16 +68,16 @@ class Controller
                 return;
             }
 
-        
+
             $listas = [];
-            if($role_name === 'Admin'){
+            if ($role_name === 'Admin') {
                 $listas = ListModel::with('items', 'user')->get();
 
-            }else{
+            } else {
                 $user = Model::with('lists')->findOrFail($user_id);
                 $listas = $user->lists()->with('items')->get();
             }
-                
+
             if (!$listas) {
                 header("HTTP/1.0 404 Not Found");
                 echo json_encode(['status' => 'error', 'message' => 'No lists found']);
@@ -90,11 +89,11 @@ class Controller
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Not Found");
             echo json_encode($th->getMessage());
-        }catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => 'Internal server error.'.$e->getMessage()]);
         }
-        
+
     }
 
     public function store()
@@ -138,13 +137,13 @@ class Controller
 
     public function update($id)
     {
-        
+
         try {
-            
+
             RoleAccess::adminOrOwner($id);
-       
+
             $user = Model::findOrFail($id);
-            
+
             $user->update($_POST);
             $user->save();
             header("HTTP/1.0 200 OK");
@@ -168,7 +167,7 @@ class Controller
         }
     }
 
-    public  function create_user_validation()
+    public function create_user_validation()
     {
         if (Model::where('email', $_POST['email'])->exists()) {
             header("HTTP/1.0 400 Bad Request");

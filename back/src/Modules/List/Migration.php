@@ -1,5 +1,7 @@
 <?php
+
 // user migragtion file
+
 namespace App\Modules\List;
 
 use Illuminate\Database\Capsule\Manager as Capsule;

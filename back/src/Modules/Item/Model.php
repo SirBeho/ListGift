@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Model extends Eloquent
 {
-    
-
     protected $table = 'items';
 
 
@@ -29,6 +27,3 @@ class Model extends Eloquent
         return $this->belongsTo('App\Modules\List\Model', 'list_id');
     }
 }
-
-
-
