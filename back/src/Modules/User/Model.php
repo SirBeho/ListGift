@@ -1,4 +1,5 @@
 <?php
+
 // model class for users utilizing the Eloquent ORM
 
 namespace App\Modules\User;
@@ -38,5 +39,5 @@ class Model extends Eloquent
         return $this->hasMany(Lists::class, 'user_id');
     }
 
-  
+
 }

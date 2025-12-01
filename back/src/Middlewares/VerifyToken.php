@@ -6,15 +6,11 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use App\Modules\User\Model as UserModel;
 
-
 class VerifyToken
 {
-
-
-       
     public static function handle()
     {
-     
+
         if (!isset($_COOKIE['token'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Token not provided']);
@@ -33,8 +29,8 @@ class VerifyToken
             $decoded = JWT::decode($token, new Key($_ENV['JWT_SECRET'], 'HS256'));
             $_REQUEST['auth'] = (array) $decoded;
             $_REQUEST['auth']['role_name'] = UserModel::with('role')->findOrFail($_REQUEST['auth']['user'])->role->name;
-            
-          
+
+
 
         } catch (\Firebase\JWT\ExpiredException $e) {
             http_response_code(401);

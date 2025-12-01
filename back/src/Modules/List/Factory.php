@@ -12,7 +12,7 @@ class Factory
         $Lists = [];
         for ($i = 0; $i < $count; $i++) {
             $Lists[] = [
-                'name' => $faker->word(), 
+                'name' => $faker->word(),
                 'user_id' => $faker->numberBetween(1, 2), // Assuming you have 3 users
                 'description' => $faker->sentence(),
                 'status' => $faker->randomElement(['active', 'inactive']),

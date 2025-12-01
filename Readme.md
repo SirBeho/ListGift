@@ -246,11 +246,9 @@ Las contribuciones son bienvenidas. Por favor, sigue los siguientes pasos:
 
 <p style="margin-top: 0.5rem; font-size: 1rem;">Este proyecto fue desarrollado por <a href="https://github.com/SirBeho" style="color: #3182ce; text-decoration: underline;">Benjamin Tavarez</a> en una iniciativa propia a la falta de un espacio para lista personalizadas de obsequios. Todos los derechos reservados</p>
 
-
 <p style="margin-top: 0.25rem; font-size: 0.875rem;">Si tienes alguna pregunta o comentario sobre este proyecto, no dudes en ponerte en contacto conmigo a través de <a href="mailto:benjamin.tavarez.98@gmail.com" style="color: #3182ce; text-decoration: underline;">benjamin.tavarez.98@gmail.com</a> o en <a href="https://www.linkedin.com/in/benjamin-tavarez-cruceta-052aa623b/" style="color: #3182ce; text-decoration: underline;">LinkedIn</a>.</p>
 </td>         
   </tr>
   </tbody>
 </table>
-
 

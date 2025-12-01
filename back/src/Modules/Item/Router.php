@@ -2,7 +2,6 @@
 
 use App\Modules\Item\Controller;
 
-
 $router->get('/countries', Controller::class . '@index');
 $router->get('/countries/{id}', Controller::class . '@show');
 $router->post('/countries', Controller::class . '@store');

@@ -1,5 +1,7 @@
 <?php
+
 // user migragtion file
+
 namespace App\Modules\Item;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -22,7 +24,7 @@ class Migration
             $table->foreign('list_id')->references('id')->on('lists');
             $table->timestamps();
 
-            
+
         });
     }
 

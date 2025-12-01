@@ -5,7 +5,6 @@ use App\Config\DB;
 use App\Middlewares\VerifyToken;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-
 $router = new Router();
 
 
@@ -14,7 +13,7 @@ DB::initialize();
 
 //$router->setBasePath('/api');
 
-$router->options('/.*', function() {
+$router->options('/.*', function () {
     header('Access-Control-Allow-Origin:' . $_ENV['CORS_ORIGIN']);
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization ');
@@ -41,14 +40,14 @@ $router->before('POST|PUT|PATCH', '/.*', function () {
 //validate token for all routes except auth/login and auth/register
 $router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register|/dbtest).*', VerifyToken::class . '@handle');
 
-$router->get('/dbtest', function() {
+$router->get('/dbtest', function () {
     try {
         // Intenta obtener el primer usuario de tu tabla.
         // Asumo que tu modelo se llama 'User' y está cargado.
         // Si no usas Eloquent, usa una consulta PDO simple.
-        
+
         $user = Capsule::table('users')->first();
-        
+
         if ($user) {
             http_response_code(200);
             echo json_encode(["status" => "success", "message" => "Conexión DB y consulta OK.", "user_id" => $user->id]);
@@ -56,7 +55,7 @@ $router->get('/dbtest', function() {
             http_response_code(200);
             echo json_encode(["status" => "success", "message" => "Conexión DB OK, pero tabla de usuarios VACÍA."]);
         }
-        
+
     } catch (\Throwable $e) {
         // Captura cualquier error, especialmente el de conexión
         http_response_code(500);
