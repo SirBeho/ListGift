@@ -1,0 +1,14 @@
+version = 1
+
+[[analyzers]]
+name = "php"
+
+[[analyzers]]
+name = "javascript"
+
+  [analyzers.meta]
+  plugins = ["react"]
+  environment = ["nodejs"]
+
+[[code_formatters]]
+name = "php-cs-fixer"
