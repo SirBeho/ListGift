@@ -103,7 +103,7 @@ Almacena todos los datos relacionados con los usuarios, listas, ítems y roles, 
   - Implementación de JWT para la autenticación.
 
 - **<span style="display: inline-flex; align-items: center;gap:10px">
-  <img src="image.png" height="20"> Bramus/Router</span>**
+  <img src="./frontend/public/pictures/image.png" height="20"> Bramus/Router</span>**
   - Librería de enrutamiento para PHP.
 
 - **<span style="display: inline-flex; align-items: center;gap:10px">
