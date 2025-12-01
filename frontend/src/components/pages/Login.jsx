@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { FaGoogle, FaFacebookF, FaTwitter, FaGithub } from "react-icons/fa";
 import classNames from 'classnames';
+import Gift3d from './../Layout/Gift3d';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ const [loading, setLoading] = useState(false);
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-yellow-100 px-6">
+            
             <AnimatePresence mode="wait">
                 {!redirecting && (
                     <motion.div
@@ -75,18 +77,24 @@ const [loading, setLoading] = useState(false);
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -500, opacity: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="bg-white shadow-xl rounded-2xl border-t-pink-500 border-t-8 max-w-md w-full p-8 "
+                        className="bg-white shadow-xl rounded-2xl border-t-pink-500 border-t-8 max-w-md w-full p-8 pt-0 overflow-hidden absolute"
                     >
-                        <motion.div className="text-center mb-6">
-                            <h2 className="text-3xl font-bold text-pink-600">
-                                🎁 Bienvenido a Giftly
+                        <div className="absolute h-full mb-9 bg-transparent ">
+
+                            <Gift3d  />
+                        </div>
+                        <motion.div className="text-center mb-6 mt-52 bg-transparent relative z-10">
+                            
+                            <h2 className="text-3xl font-bold text-pink-600 bg-transparent ">
+                                Bienvenido a Giftly
                             </h2>
+                            
                             <p className="text-gray-500">
                                 Ingresa y encuentra el regalo perfecto
                             </p>
                         </motion.div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5">
+                        <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
                             {/* Username */}
                             <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition">
                                 <UserIcon className="h-5 w-5 text-pink-400 mr-2" />

@@ -49,7 +49,7 @@ export default function Register() {
             
             // Redirige al login después de un registro exitoso
             setTimeout(() => {
-                navigate("/login"); 
+                navigate("/"); 
             }, 2000); 
             
         } else {
@@ -179,7 +179,7 @@ export default function Register() {
                     {/* Login Link */}
                     <div className="mt-6 text-center text-sm text-gray-500">
                         ¿Ya tienes cuenta?{" "}
-                        <Link to="/login" className="text-pink-500 hover:underline">
+                        <Link to="/" className="text-pink-500 hover:underline">
                             Inicia sesión
                         </Link>
                     </div>
