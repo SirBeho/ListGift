@@ -1,30 +1,53 @@
-# Fragmento de un archivo .yml en GitHub Actions
+name: CI/CD Frontend & Backend
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy:
+  # 1. JOB DE FILTRADO: Determina qué carpetas han cambiado
+  filter:
     runs-on: ubuntu-latest
+    outputs:
+      # Definimos las salidas que usaremos en los otros jobs
+      frontend: ${{ steps.check.outputs.frontend }}
+      backend: ${{ steps.check.outputs.backend }}
     steps:
-      # 1. Descarga el código
       - uses: actions/checkout@v4
+      - name: Verificar cambios en Frontend/Backend
+        id: check
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'back/**'
 
-      # --- ETAPA DE CONSTRUCCIÓN ---
+  # 2. JOB DE DESPLIEGUE DEL FRONTEND
+  frontend_deploy:
+    needs: filter # Este job depende del job 'filter'
+    runs-on: ubuntu-latest
+    # Se ejecuta SOLO si el job 'filter' marcó la salida 'frontend' como 'true'
+    if: needs.filter.outputs.frontend == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      
+      # --- PASOS DE BUILD ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20' 
 
-      - name: Install Dependencies
-        run: cd frontend && npm install 
-      
-      - name: Build Project
-        run: cd frontend && npm run build 
+      - name: Install Dependencies & Build Frontend
+        run: |
+          cd frontend
+          npm install 
+          npm run build 
+      # ----------------------
 
-      # 2. Despliegue FTP
-      - name: Deploy via FTP
+      - name: Desplegar Frontend por FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -32,3 +55,22 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./frontend/dist/
           server-dir: /htdocs/
+
+
+  # 3. JOB DE DESPLIEGUE DEL BACKEND
+  backend_deploy:
+    needs: filter # Este job depende del job 'filter'
+    runs-on: ubuntu-latest
+    # Se ejecuta SOLO si el job 'filter' marcó la salida 'backend' como 'true'
+    if: needs.filter.outputs.backend == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Desplegar Backend por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./back/ 
+          server-dir: /htdocs/back/
