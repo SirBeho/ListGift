@@ -2,8 +2,11 @@
 
 use App\Config\DB;
 
+
 require __DIR__ . "/migrations.php";
 require "./vendor/autoload.php";
+
+require __DIR__ . "/../../Config/ENV.php";
 
 DB::initialize();
 

@@ -5,6 +5,7 @@ use App\Config\DB;
 
 require  __DIR__ . "/factories.php";
 require "vendor/autoload.php";
+require __DIR__ . "/../../Config/ENV.php";
 
 DB::initialize();
 

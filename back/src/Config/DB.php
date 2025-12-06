@@ -9,6 +9,7 @@ class DB
 {
     public static function initialize()
     {
+       
         $capsule = new Capsule();
         try {
             $capsule->addConnection([

@@ -13,7 +13,8 @@
         "fakerphp/faker": "^1.24",
         "google/apiclient": "^2.0",
         "phpoffice/phpspreadsheet": "^4.0",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.2",
+        "pusher/pusher-php-server": "^7.2"
     },
     "license": "mit",
     "autoload": {
@@ -22,7 +23,8 @@
         }
     },
     "scripts": {
-        "start": " php -S localhost:8000",
+        "start": "php -S localhost:8000",
+        "startl": "php -S localhost:8000 -d display_errors=On -d error_reporting=E_ALL -d error_log=/dev/stderr",
         "migrate": "php src/database/migrations/migrate.php up",
         "migrate:db": "php src/database/migrations/migrate.php db",
         "migrate:down": "php src/database/migrations/migrate.php down",

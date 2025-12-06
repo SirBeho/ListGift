@@ -17,7 +17,10 @@ class Model extends Eloquent
         'place',
         'place_link',
         'description',
-        'img_name'
+        'img_name',
+        'status',
+        'message',
+        'user_id'
     ];
 
     protected $hidden = ['created_at', 'updated_at'];

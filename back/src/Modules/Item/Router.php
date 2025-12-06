@@ -2,8 +2,9 @@
 
 use App\Modules\Item\Controller;
 
-$router->get('/countries', Controller::class . '@index');
-$router->get('/countries/{id}', Controller::class . '@show');
-$router->post('/countries', Controller::class . '@store');
-$router->put('/countries/{id}', Controller::class . '@update');
-$router->delete('/countries/{id}', Controller::class . '@destroy');
+$router->get('/items', Controller::class . '@index');
+$router->get('/items/{id}', Controller::class . '@show');
+$router->post('/items', Controller::class . '@store');
+$router->put('/items/{id}', Controller::class . '@update');
+$router->delete('/items/{id}', Controller::class . '@destroy');
+$router->PATCH('/items/{id}', Controller::class . '@giftItem');

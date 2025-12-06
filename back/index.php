@@ -8,10 +8,12 @@ error_reporting(E_ALL);
 
 require './vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+require 'src/Config/ENV.php';
+
+/* $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $dotenv = Dotenv::createMutable(__DIR__, '.env.local');
-$dotenv->safeLoad();
+$dotenv->safeLoad(); */
 
 require 'src/routes/index.php';

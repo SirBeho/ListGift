@@ -4,6 +4,7 @@ namespace App\Modules\Item;
 
 use App\Middlewares\RoleAccess;
 use App\Modules\Item\Model;
+use App\Services\RealtimeService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Controller
@@ -56,13 +57,39 @@ class Controller
         try {
             RoleAccess::admin();
             $Item = Model::findOrFail($id);
-            $Item->update($_POST);
+            $Item->update($_POST);          
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'message' => 'Item updated successfully']);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
         }
+    }
+
+    public function giftItem($id) 
+    {
+        try {
+            //RoleAccess::admin();
+           
+            //mensaje
+            $mensaje = $_POST['gift_message'] ?? 'You have received a gifted item!';
+            $Item = Model::findOrFail($id);
+            $Item->update(['status' => 2 , 'message' => $mensaje, 'user_id' => $_REQUEST['auth'] ['user']  ]);
+            // Notificar con la opcion de db
+            /*
+            NotificationModel::create([
+                'title' => 'Item Gifted',
+                'payload' => $Item
+            ]); */
+            RealtimeService::PublishPusher($Item);
+
+            header("HTTP/1.0 200 OK");
+            echo json_encode(['status' => 'success', 'message' => 'Item gifted successfully']);
+        } catch (ModelNotFoundException $th) {
+            header("HTTP/1.0 404 Internal Server Error");
+            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+        
     }
 
     public function destroy($id)
