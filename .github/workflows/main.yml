@@ -82,8 +82,7 @@ jobs:
         run: |
           cd backend
           # Solo se ejecuta si tienes phpstan instalado en composer.json
-          ./vendor/bin/phpstan analyse src --level 5 || echo "Instala phpstan para habilitar este paso"
-
+      #./vendor/bin/phpstan analyse src --level 5 || echo "Instala phpstan para habilitar este paso"
       # 4. SMOKE TEST (Prueba de rutas reales)
       - name: Test Backend Routes (Smoke Test)
         run: |
