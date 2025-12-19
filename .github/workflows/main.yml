@@ -77,6 +77,14 @@ jobs:
         run: |
           find backend/src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l
 
+
+          - name: Debug File System (List Files)
+          run: |
+            echo "--- Contenido de la raíz ---"
+            ls -F
+            echo "--- Contenido de backend/src/Config ---"
+            ls -R backend/src/Config || echo "Carpeta Config no encontrada"
+
       - name: Test Backend Routes (Smoke Test)
         run: |
           cd backend

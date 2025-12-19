@@ -7,14 +7,11 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $router = new Router();
 
-$router->get('/health', function() {
+if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === '/health') {
     header('Content-Type: application/json');
-    echo json_encode([
-        "status" => "success",
-        "message" => "PHP y Router funcionando correctamente"
-    ]);
-    exit; // <--- IMPORTANTE: Detiene la ejecución aquí para no intentar cargar la DB
-});
+    echo json_encode(["status" => "success", "message" => "Integridad OK"]);
+    exit; // Aquí se detiene y NUNCA llega a DB::initialize()
+}
 
 DB::initialize();
 
