@@ -105,12 +105,11 @@ jobs:
           local-dir: ./backend/
           server-dir: /htdocs/backend/
           exclude: |
-            vendor/
-            tests/
+            **/vendor/**
+            **/tests/**
             .git*
             .env
             storage/logs/*
-            vendor
 
       - name: Desplegar Vendor (Sincronización Diferencial)
         if: needs.filter.outputs.vendor == 'truee'
