@@ -11,9 +11,10 @@ class VerifyToken
     public static function handle()
     {
 
+        var_dump($_COOKIE['token']);
         if (!isset($_COOKIE['token'])) {
             http_response_code(401);
-            echo json_encode(['error' => 'Token not provided']);
+            echo json_encode(['error' => 'Token not provided2']);
             exit();
         }
 
