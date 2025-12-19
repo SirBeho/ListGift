@@ -77,16 +77,11 @@ jobs:
         run: |
           find backend/src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l
 
-      # 3. ANALIZAR Lógica (Ahora sí tiene el vendor disponible)
-      - name: PHPStan Analysis
-        run: |
-          cd backend
-          # Solo se ejecuta si tienes phpstan instalado en composer.json
-      #./vendor/bin/phpstan analyse src --level 5 || echo "Instala phpstan para habilitar este paso"
-      # 4. SMOKE TEST (Prueba de rutas reales)
       - name: Test Backend Routes (Smoke Test)
         run: |
-          php -S localhost:8000 -t backend/ & 
+          cd backend
+          touch .env
+          php -S localhost:8000 &
           sleep 5 
           RESPONSE=$(curl -s http://localhost:8000/HEALTH)
           echo "Respuesta del backend: $RESPONSE"
