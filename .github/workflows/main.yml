@@ -112,7 +112,7 @@ jobs:
             storage/logs/*
 
       - name: Desplegar Vendor (Sincronización Diferencial)
-        if: needs.filter.outputs.vendor == 'truee'
+        if: needs.filter.outputs.vendor == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_HOST }}
