@@ -39,5 +39,8 @@
             "name": "joregesosa",
             "email": "joregesosa@gmail.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    }
 }

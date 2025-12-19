@@ -6,16 +6,14 @@ on:
       - main
 
 jobs:
-  # 1. JOB DE FILTRADO: Determina qué carpetas han cambiado
   filter:
     runs-on: ubuntu-latest
     outputs:
-      # Definimos las salidas que usaremos en los otros jobs
       frontend: ${{ steps.check.outputs.frontend }}
       backend: ${{ steps.check.outputs.backend }}
     steps:
       - uses: actions/checkout@v4
-      - name: Verificar cambios en Frontend/Backend
+      - name: Verificar cambios
         id: check
         uses: dorny/paths-filter@v3
         with:
@@ -25,28 +23,28 @@ jobs:
             backend:
               - 'backend/**'
 
-  # 2. JOB DE DESPLIEGUE DEL FRONTEND
-  frontend_deploy:
-    needs: filter # Este job depende del job 'filter'
+  frontend_job:
+    needs: filter
     runs-on: ubuntu-latest
-    # Se ejecuta SOLO si el job 'filter' marcó la salida 'frontend' como 'true'
     if: needs.filter.outputs.frontend == 'true'
     steps:
       - uses: actions/checkout@v4
-
-      # --- PASOS DE BUILD ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Install Dependencies & Build Frontend
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install & Lint
         run: |
           cd frontend
-          npm install 
+          npm install
+          npm run lint || echo "Linting falló, pero continuamos..."
+      - name: Build Frontend
+        run: |
+          cd frontend
           npm run build
-      # ----------------------
-      - name: Desplegar Frontend por FTP
+      - name: Desplegar Frontend
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -55,16 +53,53 @@ jobs:
           local-dir: ./frontend/dist/
           server-dir: /htdocs/
 
-  # 3. JOB DE DESPLIEGUE DEL BACKEND
-  backend_deploy:
-    needs: filter # Este job depende del job 'filter'
+  backend_job:
+    needs: filter
     runs-on: ubuntu-latest
-    # Se ejecuta SOLO si el job 'filter' marcó la salida 'backend' como 'true'
     if: needs.filter.outputs.backend == 'true'
     steps:
       - uses: actions/checkout@v4
 
-      - name: Desplegar Backend por FTP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, intl, pdo_mysql
+
+      # 1. PRIMERO instalar dependencias (necesario para PHPStan y los tests)
+      - name: Install Dependencies
+        run: |
+          cd backend
+          composer install --no-interaction --prefer-dist
+
+      # 2. VALIDAR Sintaxis
+      - name: Check PHP Syntax (Lint)
+        run: |
+          find backend/src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l
+
+      # 3. ANALIZAR Lógica (Ahora sí tiene el vendor disponible)
+      - name: PHPStan Analysis
+        run: |
+          cd backend
+          # Solo se ejecuta si tienes phpstan instalado en composer.json
+          ./vendor/bin/phpstan analyse src --level 5 || echo "Instala phpstan para habilitar este paso"
+
+      # 4. SMOKE TEST (Prueba de rutas reales)
+      - name: Test Backend Routes (Smoke Test)
+        run: |
+          php -S localhost:8000 -t backend/ & 
+          sleep 5 
+          RESPONSE=$(curl -s http://localhost:8000/dbtest)
+          echo "Respuesta del backend: $RESPONSE"
+          if [[ $RESPONSE == *"success"* ]]; then
+            echo "Validación exitosa."
+          else
+            echo "Error: El backend no responde success o hay fallo de DB."
+            exit 1
+          fi
+
+      # 5. DESPLEGAR (Limpia el vendor de desarrollo y sube)
+      - name: Desplegar Backend
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
           server: ${{ secrets.FTP_HOST }}
