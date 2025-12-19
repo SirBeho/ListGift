@@ -1,7 +1,0 @@
-vendor
-.vscode
-index.html
-.env
-.env.local
-apikey.json
-vendor.zip

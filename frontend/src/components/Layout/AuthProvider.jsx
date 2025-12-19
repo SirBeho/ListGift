@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = async () => {
         setLoading(true); // Inicia la carga
         try {
-            console.log('Checking auth status...');
+           // console.log('Checking auth status...');
             const response = await instance.get('/auth/profile');
 
             if (response.status === 200 && response.data.user) {

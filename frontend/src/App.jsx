@@ -8,6 +8,7 @@ import Profile from "./components/pages/Profile";
 import Lists from "./components/pages/Lists";
 import Register from "./components/pages/Register";
 import Items from "./components/pages/Items";
+import PusherListener from "./components/Layout/PusherListener";
 import { AuthProvider } from "./components/Layout/AuthProvider"; 
 import { ListProvider } from "./components/Layout/ListProvider";
 import { AnimatePresence } from "framer-motion";
@@ -31,10 +32,18 @@ function AppRoutes() {
 }
 
 function App() {
+  const handleRealtimeUpdate = (data) => {
+    // 🚨 Aquí va la lógica para actualizar un estado global
+    // que controla la visibilidad y contenido del modal global.
+    console.log('Recibido evento en tiempo real:', data);
+    
+    // Ejemplo: setGlobalModal({ show: true, data: data });
+  };
   return (
     <BrowserRouter>
       <AuthProvider>
         <ListProvider>
+          <PusherListener onUpdateItemStatus={handleRealtimeUpdate} />
           <AppRoutes />
         </ListProvider>
       </AuthProvider>
