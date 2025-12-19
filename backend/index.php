@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 require './vendor/autoload.php';
 
-require 'src/Config/ENV.php';
+require './src/Config/ENV.php';
 
 /* $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
