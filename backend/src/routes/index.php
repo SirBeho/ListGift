@@ -8,6 +8,16 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 $router = new Router();
 
 
+
+$router->get('/HEALTH', function() {
+    header('Content-Type: application/json');
+    echo json_encode([
+        "status" => "success",
+        "message" => "PHP y Router funcionando correctamente"
+    ]);
+    exit; // <--- IMPORTANTE: Detiene la ejecución aquí para no intentar cargar la DB
+});
+
 DB::initialize();
 
 

@@ -89,7 +89,7 @@ jobs:
         run: |
           php -S localhost:8000 -t backend/ & 
           sleep 5 
-          RESPONSE=$(curl -s http://localhost:8000/dbtest)
+          RESPONSE=$(curl -s http://localhost:8000/HEALTH)
           echo "Respuesta del backend: $RESPONSE"
           if [[ $RESPONSE == *"success"* ]]; then
             echo "Validación exitosa."
