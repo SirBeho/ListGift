@@ -1,5 +1,5 @@
 <?php
-// D:\PROJECTOS\Personales\ListGist\back\websocket-server.php
+// D:\PROJECTOS\Personales\ListGist\backend\websocket-server.php
 
 require __DIR__ . '/vendor/autoload.php';
 

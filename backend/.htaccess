@@ -1,10 +1,10 @@
-# Este .htaccess está DENTRO de la carpeta /htdocs/back/
+# Este .htaccess está DENTRO de la carpeta /htdocs/backend/
 
 # 1. Enciende el motor de reescritura
 RewriteEngine On
 
 
-# Si el archivo o directorio solicitado NO existe (ej: /back/api/users),
+# Si el archivo o directorio solicitado NO existe (ej: /backend/api/users),
 # lo dirige a index.php (el router de tu API).
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
