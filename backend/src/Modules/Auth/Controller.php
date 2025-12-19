@@ -56,7 +56,7 @@ class Controller
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
         }
     }
-
+                                                                                            
     public function profile()
     {
         try {
