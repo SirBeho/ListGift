@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   filter:
@@ -35,14 +36,10 @@ jobs:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
-      - name: Install & Lint
+      - name: Install & Build
         run: |
           cd frontend
           npm install
-          npm run lint || echo "Linting falló, pero continuamos..."
-      - name: Build Frontend
-        run: |
-          cd frontend
           npm run build
       - name: Desplegar Frontend
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
@@ -66,40 +63,36 @@ jobs:
           php-version: "8.2"
           extensions: mbstring, intl, pdo_mysql
 
-      # 1. PRIMERO instalar dependencias (necesario para PHPStan y los tests)
+      # 1. Caché de Composer para que el Job de GitHub sea rápido
+      - name: Cache Vendor
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+
+      # 2. Instalar dependencias (Si no hay caché o cambió el lock)
       - name: Install Dependencies
         run: |
           cd backend
           composer install --no-interaction --prefer-dist
 
-      # 2. VALIDAR Sintaxis
-      - name: Check PHP Syntax (Lint)
+      # 3. Pruebas y Validaciones
+      - name: Check PHP Syntax & Smoke Test
         run: |
           find backend/src -name "*.php" -print0 | xargs -0 -n1 -P8 php -l
-
-      - name: Debug File System (List Files)
-        run: |
-          echo "--- Contenido de la raíz ---"
-          ls -F
-          echo "--- Contenido de backend/src/Config ---"
-          ls -R backend/src/Config || echo "Carpeta Config no encontrada"
-
-      - name: Test Backend Routes (Smoke Test)
-        run: |
           cd backend
           touch .env
           php -S localhost:8000 &
-          sleep 5 
-          RESPONSE=$(curl -s http://localhost:8000/health)
-          echo "Respuesta del backend: $RESPONSE"
-          if [[ $RESPONSE == *"success"* ]]; then
-            echo "Validación exitosa."
-          else
-            echo "Error: El backend no responde success o hay fallo de DB."
-            exit 1
-          fi
+          sleep 3
+          curl -s http://localhost:8000/health | grep "success"
 
-      # 5. DESPLEGAR (Limpia el vendor de desarrollo y sube)
+      # 4. Limpiar dependencias de desarrollo ANTES de subir
+      - name: Prepare Production Vendor
+        run: |
+          cd backend
+          composer install --no-dev --optimize-autoloader
+
+      # 5. Desplegar Backend (Sincronización Inteligente)
       - name: Desplegar Backend
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
@@ -108,3 +101,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./backend/
           server-dir: /htdocs/backend/
+          # IMPORTANTE: Excluimos lo que no debe tocarse en el hosting
+          exclude: |
+            tests/
+            .git*
+            .env
+            storage/logs/*
