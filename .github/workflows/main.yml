@@ -12,6 +12,7 @@ jobs:
     outputs:
       frontend: ${{ steps.check.outputs.frontend }}
       backend: ${{ steps.check.outputs.backend }}
+      vendor: ${{ steps.check.outputs.vendor }}
     steps:
       - uses: actions/checkout@v4
       - name: Verificar cambios
@@ -23,6 +24,8 @@ jobs:
               - 'frontend/**'
             backend:
               - 'backend/**'
+            vendor:
+              - 'backend/composer.lock'
 
   frontend_job:
     needs: filter
@@ -102,8 +105,19 @@ jobs:
           local-dir: ./backend/
           server-dir: /htdocs/backend/
           exclude: |
+            vendor/
             tests/
             .git*
             .env
             storage/logs/*
             vendor
+
+      - name: Desplegar Vendor (Sincronización Diferencial)
+        if: needs.filter.outputs.vendor == 'truee'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./backend/vendor/
+          server-dir: /htdocs/backend/vendor/
