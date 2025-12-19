@@ -8,7 +8,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 $router = new Router();
 
 
-
 $router->get('/HEALTH', function() {
     header('Content-Type: application/json');
     echo json_encode([
@@ -52,11 +51,7 @@ $router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register|/dbtes
 
 $router->get('/dbtest', function () {
     try {
-        // Intenta obtener el primer usuario de tu tabla.
-        // Asumo que tu modelo se llama 'User' y está cargado.
-        // Si no usas Eloquent, usa una consulta PDO simple.
-
-        $user = Capsule::table('users')->first();
+                $user = Capsule::table('users')->first();
 
         if ($user) {
             http_response_code(200);

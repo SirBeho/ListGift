@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Navbar({sidebarController,user,logout}) {
+export default function Navbar({ sidebarController, user, logout }) {
 
 
   const [sidebarOpen, setSidebarOpen] = sidebarController;
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigatetoUrl = useNavigate();
-
-  
-
-     
   return (
     <nav className=" sticky top-0 left-0 w-full z-20 flex justify-between px-4 min-h-[3rem] bg-white dark:bg-gray-700 shadow-white border-white ">
       <div className="flex gap-5 items-center">
@@ -25,7 +20,7 @@ export default function Navbar({sidebarController,user,logout}) {
         <div className="h-8 w-8 overflow-hidden rounded-lg">
           <img id="imagePreviewmenu" className="w-full h-full object-cover" src="https://avatar.iran.liara.run/public/boy" alt="" />
         </div>
-         <span className="block font-semibold text-xs leading-snug">{user}</span> 
+        <span className="block font-semibold text-xs leading-snug">{user}</span>
         <div id="icon_menu" className={`block w-6 transform transition-transform duration-500 ${menuOpen ? "rotate-180" : ""}`}>
           <img src="/svg/arrow.svg" alt="logo" />
         </div>
