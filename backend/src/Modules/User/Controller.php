@@ -53,12 +53,11 @@ class Controller
 
 
     public function userlists()
-    {
-
+    {   
         try {
 
             $user_id = $_REQUEST['auth']['user'] ?? null;
-            $role_name = $_REQUEST['auth']['role_name'] ?? null;
+            $role_id = $_REQUEST['auth']['user_data']['role_id'] ?? null;
 
             ///$user = Model::findOrFail($_REQUEST['auth']['user']);
 
@@ -68,14 +67,13 @@ class Controller
                 return;
             }
 
-
             $listas = [];
-            if ($role_name === 'Admin') {
+            if ($role_id == '1') {
                 $listas = ListModel::with('items', 'user')->get();
 
             } else {
-                $user = Model::with('lists')->findOrFail($user_id);
-                $listas = $user->lists()->with('items')->get();
+                $user = Model::with('lists.items')->findOrFail($user_id);
+                $listas = $user->lists;
             }
 
             if (!$listas) {

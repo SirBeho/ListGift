@@ -29,4 +29,10 @@ class Model extends Eloquent
         return $this->hasMany(Item::class, 'list_id');
     }
 
+    public static function getOwnerList($list_id)
+    {
+        return self::find($list_id)?->user_id;
+       
+    }   
+
 }

@@ -16,23 +16,40 @@ if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL
 DB::initialize();
 
 
+
+
 //$router->setBasePath('/api');
 
 $router->options('/.*', function () {
-    header('Access-Control-Allow-Origin:' . $_ENV['CORS_ORIGIN']);
+    //$allowedOrigins = explode(',', $_ENV['CORS_ORIGIN'] ?? '');
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+
+   /*  if (in_array($origin, $allowedOrigins)) {
+        header("Access-Control-Allow-Origin: $origin");
+    } */
+
+    header('Access-Control-Allow-Origin:' . $origin);
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization ');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, ngrok-skip-browser-warning');
+   // header('Access-Control-Allow-Headers: Content-Type, Authorization ');
     header('access-control-allow-credentials: true');
     exit;
 });
 
 $router->before('GET|POST|PUT|PATCH|DELETE', '/.*', function () {
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Origin:' . $_ENV['CORS_ORIGIN']);
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    //header('Access-Control-Allow-Origin:' . $_ENV['CORS_ORIGIN']);
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+   /*  $allowedOrigins = explode(',', $_ENV['CORS_ORIGIN'] ?? '');
+    if (in_array($origin, $allowedOrigins)) {
+    } */
+
+    header('Access-Control-Allow-Origin:' . $origin);
     header('access-control-allow-credentials: true');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, ngrok-skip-browser-warning');
 });
+$router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register|health|public|pub).*', VerifyToken::class . '@handle');
 
 $router->before('POST|PUT|PATCH', '/.*', function () {
     if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
@@ -41,13 +58,6 @@ $router->before('POST|PUT|PATCH', '/.*', function () {
         $_POST = $body;
     }
 });
-
-//validate token for all routes except auth/login and auth/register
-$router->before('GET|POST|PUT|DELETE|PATCH', '(?!auth/login|auth/register|dbtest|health).*', VerifyToken::class . '@handle');
-
-
-
-
 
 $router->get('/dbtest', function () {
     try {
@@ -70,11 +80,20 @@ $router->get('/dbtest', function () {
 
 
 
-require 'src/Modules/Auth/Router.php';
+/* require 'src/Modules/Auth/Router.php';
 require 'src/Modules/User/Router.php';
 require 'src/Modules/Role/Router.php';
 require 'src/Modules/List/Router.php';
 require 'src/Modules/Item/Router.php';
+require 'src/Modules/Item/Router.php'; */
 
+
+
+
+$moduleRouters = glob(__DIR__ . '/../Modules/*/Router.php');
+foreach ($moduleRouters as $routerFile) {
+    require_once $routerFile;
+} 
+    
 
 $router->run();

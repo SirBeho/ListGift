@@ -18,7 +18,7 @@ if ($migration) {
 
     $migration = ucfirst($migration);
     if (isset($migrations[$migration])) {
-        executeMigration($migrations[$migration], $action);
+        executeMigration($migration,$migrations[$migration], $action);
     } else {
         echo "Migration $migration not found. \n";
     }
@@ -44,14 +44,14 @@ function runMigrations($action)
         if ($action == "refresh") {
 
             foreach (array_reverse($migrations) as $migration => $class) {
-                executeMigration($class, "down");
+                executeMigration($migration,$class, "down");
             }
 
             $action = "up";
         }
 
         foreach ($migrations as $migration => $class) {
-            executeMigration($class, $action);
+            executeMigration($migration,$class, $action);
         }
     }
 
@@ -93,13 +93,12 @@ function validateMigration($action)
     }
 }
 
-function executeMigration($migration, $action)
+function executeMigration($name,$migration, $action)
 {
-
     switch ($action) {
         case "up":
         case "db":
-            up($migration);
+            up($name,$migration);
             break;
         case "down":
             down($migration);
@@ -112,11 +111,12 @@ function executeMigration($migration, $action)
     }
 }
 
-function up($migration)
-{
+function up($name,$migration)
+{   
+   
     try {
         $migration::createTable();
-        echo "Table created successfully \n";
+        echo "Table {$name} created successfully \n";
     } catch (\Exception $e) {
         echo "Error: " . $e->getMessage();
     }

@@ -27,6 +27,10 @@ function runFactories($action)
 {
     global $factories;
 
+  
+        clearUploads();
+    
+
     foreach ($factories as $table => $config) {
         executeFactory($config, $action, $table);
     }
@@ -79,5 +83,23 @@ function refresh($factory, $table)
         seed($factory, $table);
     } catch (\Exception $e) {
         echo "Error: " . $e->getMessage();
+    }
+}
+
+function clearUploads()
+{
+    // Calculamos la ruta: sube 2 niveles desde donde está este script hacia /public/uploads
+    $dir = __DIR__ . "/../../../public/uploads/";
+
+    if (is_dir($dir)) {
+        $files = glob($dir . 'prod_*'); // Buscamos solo los archivos que empiezan con 'prod_'
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file); // Borrar el archivo físico
+            }
+        }
+        echo "✅ Uploads folder cleaned.\n";
+    } else {
+        echo "⚠️  Uploads directory not found at: $dir\n";
     }
 }

@@ -6,7 +6,7 @@ $factories =  [
     ],
     "users" => [
         "class" => "App\Modules\User\Factory",
-        "count" => 3,
+        "count" => 2,
         "data" => [
             [
                 'name' => 'Benjamin Tavarez',
