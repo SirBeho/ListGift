@@ -6,25 +6,25 @@ use App\Modules\User\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Firebase\JWT\JWT;
 use App\Modules\Auth\Controller;
+use App\Utils\Validator;
 
 class Controller
 {
     public function login()
     {
 
+        $validated = Validator::validate($_POST, [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
         try {
 
-            $user = Model::where('username', $_POST['username'])->first();
+            $user = Model::where('username', $validated['username'])->first();
 
-            if (!$user) {
-                header("HTTP/1.0 401 Unauthorized");
-                echo json_encode(['status' => 'error', 'message' => 'Invalid Username']);
-                return;
-            }
+            if ($user && password_verify($validated['password'], $user->password)) {
 
-
-            //$user->load('role');
-            if ($user && password_verify($_POST['password'], $user->password)) {
+                $user->load('lists');
                 $key = $_ENV['JWT_SECRET'];
 
                 $payload = [
@@ -37,7 +37,8 @@ class Controller
 
                 $jwt = JWT::encode($payload, $key, 'HS256');
 
-                header("HTTP/1.0 200 OK");
+                http_response_code(200);
+                http_response_code(200);
                 setcookie('token', $jwt, [
                     'expires' => time() + 60 * 60,
                     'path' => '/',
@@ -46,17 +47,32 @@ class Controller
                     'samesite' => 'lax'
                 ]);
 
-                echo json_encode(['status' => 'success', 'message' => 'Login successful']);
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => '¡Bienvenido!',
+                    'user' => $user,
+                    'errors' => (object)[]
+                ]);
+                exit;
             } else {
-                header("HTTP/1.0 401 Unauthorized");
-                echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);
+                http_response_code(401);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "El usuario o la contraseña no coinciden",
+                    "errors" => []
+                ]);
+                exit;
             }
         } catch (\Throwable $th) {
-            header("HTTP/1.0 500 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
+            http_response_code(500);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Error interno en el servidor",
+                "errors" => ["server" => [$th->getMessage()]]
+            ]);
         }
     }
-                                                                                            
+
     public function profile()
     {
         try {
@@ -64,7 +80,7 @@ class Controller
 
 
 
-            $user->load('role', 'lists');
+            $user?->load('role', 'lists');
 
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'user' => $user]);
@@ -102,7 +118,14 @@ class Controller
 
     public function logout()
     {
-        setcookie('token', '', time() - 3600, '/', '', false, true);
+        setcookie('token', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'domain' => null,
+            'secure' => true,     // <--- Igual que en el login
+            'httponly' => true,
+            'samesite' => 'None'  // <--- Igual que en el login
+        ]);
         header("HTTP/1.0 200 OK");
         echo json_encode(['status' => 'success', 'message' => 'Logout successful']);
     }

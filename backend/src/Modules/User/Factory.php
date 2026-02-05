@@ -16,7 +16,7 @@ class Factory
                 'role_id' => RoleModel::where('id', '<>', 1)->inRandomOrder()->value('id'),
                 'name' => $faker->name,
                 'username' => $faker->userName,
-                'password' => password_hash($faker->password, PASSWORD_BCRYPT),
+                'password' => password_hash(1234, PASSWORD_BCRYPT),
                 'status' => 1,
             ];
         }

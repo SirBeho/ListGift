@@ -22,6 +22,8 @@ class DB
                 'charset'   => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix'    => '',
+                'timezone'  => '+00:00', // O tu zona horaria local
+                'strict'    => false,
             ]);
 
             $capsule->setAsGlobal();

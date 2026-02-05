@@ -39,5 +39,7 @@ class Model extends Eloquent
         return $this->hasMany(Lists::class, 'user_id');
     }
 
+     
+
 
 }

@@ -5,6 +5,7 @@ $migrations = [
     "Users" => "App\Modules\User\Migration",
     "Listas" => "App\Modules\List\Migration",
     "Items" => "App\Modules\Item\Migration",
+    "Subscriptions" => "App\Modules\Subscription\Migration",
 ];
 
 /*
