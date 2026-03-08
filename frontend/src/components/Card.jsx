@@ -4,7 +4,7 @@ import { PencilSquareIcon } from "@heroicons/react/20/solid";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { ICON_MAP } from "../utils/iconLibrary";
-import { API_BASE_URL } from '../service/axiosInstance';
+import { API_BASE_URL } from '../service/AxiosInstance';
 
 
 function Card({ data, litt = false }) {
