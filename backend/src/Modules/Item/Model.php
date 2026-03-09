@@ -19,6 +19,8 @@ class Model extends Eloquent
         'description',
         'img_name',
         'status',
+        'giver_name',
+        'giver_phone',
         'message',
         'user_id'
     ];

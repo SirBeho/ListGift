@@ -96,23 +96,33 @@ class Controller
     }
 
     public function giftItem($id) 
-    {
+    {   
+        error_log(print_r($_POST, true));
         try {
             //RoleAccess::admin();
            
             //mensaje
             $mensaje = $_POST['gift_message'] ?? 'You have received a gifted item!';
+            $nombre  = $_POST['giver_name'] ?? 'Anonymous';
+            $telefono = $_POST['giver_phone'] ?? 'Unknown';
+
             $Item = Model::findOrFail($id);
-            $Item->update(['status' => 2 , 'message' => $mensaje, 'user_id' => $_REQUEST['auth'] ['user']  ]);
+            $Item->update([
+                'status' => 2 , 
+                'message' => $mensaje, 
+                'user_id' => $_REQUEST['auth']['user'] ?? null, // Si no viene el user_id, lo dejamos como null
+                'giver_name' => $nombre,
+                'giver_phone' => $telefono
+            ]);
 
             $Item->load('list');
 
-            error_log("/lists/".$Item->list_id."?highlight=".$Item->id);
+            //error_log("/lists/".$Item->list_id."?highlight=".$Item->id);
             try {
                 SubController::sendPush(
                     $Item->list->user_id,
-                    "🎁 ¡Nuevo regalo de tu lista!", 
-                    "Has recibido un nuevo regalo" ,
+                    $_POST['giver_name'] ? '🎁 ¡Regalo de ' . $_POST['giver_name'] : '🎁 ¡Nuevo regalo de tu lista!',
+                    "Te han regalado: " . $Item->name,
                     "/lists/".$Item->list_id."?highlight=".$Item->id
                 );
             } catch (\Exception $pushError) {
@@ -120,9 +130,16 @@ class Controller
                 // Solo lo anotamos en el log para debuggear.
                 error_log("⚠️ Falló el envío Push pero el ítem se guardó: " . $pushError->getMessage());
             }   
- 
+            
+        try{
             //RealtimeService::PublishPusher($Item);
            NotificationWS::enviarWhatsApp($Item);
+        } catch (\Exception $wsError) {
+
+            // Si falla el WS, NO matamos el proceso.
+            // Solo lo anotamos en el log para debuggear.
+            error_log("⚠️ Falló el envío WS pero el ítem se guardó: " . $wsError->getMessage());
+        }
             
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'message' => 'Item gifted successfully']);

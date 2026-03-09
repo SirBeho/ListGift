@@ -23,6 +23,8 @@ class Migration
             $table->string('img_name');
             $table->integer('status')->default(0);
             $table->unsignedBigInteger('user_id')->default(0)->nullable();
+            $table->string('giver_name');
+            $table->string('giver_phone');    
             $table->string('message')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('list_id')->references('id')->on('lists');
