@@ -108,7 +108,7 @@ class Controller
 
             $Item = Model::findOrFail($id);
             $Item->update([
-                'status' => 2 , 
+                'status' => 1 , 
                 'message' => $mensaje, 
                 'user_id' => $_REQUEST['auth']['user'] ?? null, // Si no viene el user_id, lo dejamos como null
                 'giver_name' => $nombre,
@@ -142,7 +142,7 @@ class Controller
         }
             
             header("HTTP/1.0 200 OK");
-            echo json_encode(['status' => 'success', 'message' => 'Item gifted successfully']);
+            echo json_encode(['status' => 'success', 'message' => 'Regalo realizado con éxito']);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
