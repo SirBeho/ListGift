@@ -22,7 +22,6 @@ export default function Navbar({ sidebarController }) {
 
   const handleSupcribe = async () => {
     const response = await subscribeUser();
-    console.log(response)
     setApiRes(response);
   };
 

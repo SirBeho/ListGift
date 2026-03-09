@@ -14,7 +14,7 @@ function Person() {
     instance
       .get("/api/persons/")
       .then((response) => {
-        console.log(response.data);
+
         setDatos(response.data);
       })
       .catch((error) => {

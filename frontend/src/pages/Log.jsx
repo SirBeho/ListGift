@@ -10,7 +10,6 @@ function Log() {
     instance
       .get("/api/logs")
       .then((response) => {
-        console.log(response.data);
         setDatos(response.data);
       })
       .catch((error) => {

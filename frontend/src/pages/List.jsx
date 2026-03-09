@@ -85,17 +85,24 @@ const progressBarVariants = {
   animate: { width: '100%', transition: { duration: 4, ease: 'easeInOut' } },
 };
 
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('es-DO', {
+    style: 'currency',
+    currency: 'DOP',
+    minimumFractionDigits: 2,
+  }).format(price);
+};
+
 export default function List() {
   const { user } = useAuth();
-  const { listas, LoadListas, publicLists, LoadPublicListas, loading: loadingListas } = useList();
+  const { listas, LoadListas, publicLists, LoadPublicListas } = useList();
   const { id } = useParams();
   const navigate = useNavigate();
   const timerRef = useRef(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState(() => localStorage.getItem('giftListFilterCategory') || 'all');
+  const [filterCategory] = useState(() => localStorage.getItem('giftListFilterCategory') || 'all');
   const [sortOption, setSortOption] = useState(() => localStorage.getItem('giftListSortOption') || 'default');
-  const [loadingItems, setLoadingItems] = useState(true);
   const { search } = useLocation();
   const [highlightedId, setHighlightedId] = useState(null);
   const [apiRes, setApiRes] = useState(null);
@@ -103,30 +110,21 @@ export default function List() {
   // --- NUEVOS ESTADOS PARA GESTIÓN DE ITEMS ---
   const [isOpen, setIsOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null); // Para saber si editamos o creamos
+  const ListShow = [...(listas || []), ...(publicLists || [])].find((lista) => lista.id.toString() === id);
+
+  const isOwner = ListShow?.user_id === user?.id || user?.id == 1; // Helper para saber si es dueño
 
   useEffect(() => {
-    if (!listas && !loadingListas) LoadListas();
-    if (!publicLists && !loadingListas) LoadPublicListas();
-    const timer = setTimeout(() => setLoadingItems(false), 150);
-    return () => clearTimeout(timer);
-  }, [LoadListas, listas, publicLists, LoadPublicListas, loadingListas]);
-
-  const ListUser = [...(listas || []), ...(publicLists || [])].find((lista) => lista.id.toString() === id);
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('es-DO', {
-      style: 'currency',
-      currency: 'DOP',
-      minimumFractionDigits: 2,
-    }).format(price);
-  };
+    if (!listas) LoadListas();
+    if (!publicLists) LoadPublicListas();
+  }, [LoadListas, listas, publicLists, LoadPublicListas]);
 
   useEffect(() => {
-    if (!ListUser && id !== undefined) {
-      timerRef.current = setTimeout(() => navigate('/'), 4000);
+    if (listas !== null && !ListShow && id !== undefined) {
+      timerRef.current = setTimeout(() => navigate('/', { replace: true }), 4000);
     }
     return () => clearTimeout(timerRef.current);
-  }, [ListUser, id, navigate]);
+  }, [listas, ListShow, id, navigate]);
 
   const handleSearch = (event) => setSearchTerm(event.target.value);
   const handleSort = (option) => setSortOption(option);
@@ -147,8 +145,10 @@ export default function List() {
   };
 
   const filteredAndSortedItems = useCallback(() => {
-    if (!ListUser?.items) return [];
-    let items = [...ListUser.items];
+    if (!ListShow?.items) return [];
+
+    let items = [...ListShow.items];
+
     if (searchTerm) {
       items = items.filter(item =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -162,12 +162,14 @@ export default function List() {
       case 'price-desc': items.sort((a, b) => b.price - a.price); break;
       default: break;
     }
-    return items;
-  }, [ListUser?.items, searchTerm, filterCategory, sortOption]);
+    //agregar isOwner a cada item para usarlo en el modal de detalles
+    return items.map(item => ({ ...item, isOwner }));
+
+  }, [ListShow?.items, searchTerm, filterCategory, sortOption]);
 
   // Highlight Effect
   useEffect(() => {
-    if (!loadingListas && !loadingItems && ListUser?.items) {
+    if (ListShow?.items) {
       const params = new URLSearchParams(search);
       const highlight = params.get('highlight') || params.get('gifted');
 
@@ -175,15 +177,15 @@ export default function List() {
         const idToFind = parseInt(highlight);
         setHighlightedId(idToFind);
 
-        const itemToOpen = ListUser.items.find(item => item.id === idToFind);
+        const itemToOpen = ListShow.items.find(item => item.id === idToFind);
 
         if (itemToOpen) {
-          setSelectedItem({ ...itemToOpen, isNewGift: true });
+          setSelectedItem({ ...itemToOpen, isNewGift: true, isOwner });
           confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ec4899', '#8b5cf6', '#ffffff'] });
         }
       }
     }
-  }, [loadingListas, loadingItems, ListUser?.items, search]);
+  }, [ListShow?.items, search]);
 
   // Timer para apagar highlight al cerrar modal
   useEffect(() => {
@@ -198,12 +200,13 @@ export default function List() {
     }
   }, [selectedItem, highlightedId]);
 
+
   const itemsToRender = filteredAndSortedItems();
-  const isOwner = ListUser?.user_id === user?.id || user?.id == 1; // Helper para saber si es dueño
 
-  if (loadingListas || loadingItems) return <div className="flex justify-center items-center h-screen bg-gray-100"><BeatLoader color="#ec4899" size={24} /></div>;
+  if (!listas && !publicLists) return <div className="flex justify-center items-center h-screen bg-gray-100"><BeatLoader color="#ec4899" size={24} /></div>
 
-  if (!ListUser && id !== undefined) {
+
+  if (!ListShow || id == undefined) {
     return (
       <motion.div variants={notFoundVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-pink-50 via-rose-100 to-purple-100">
         <motion.div className="bg-white shadow-xl rounded-3xl max-w-md w-full p-10 text-center border-t-8 border-pink-500">
@@ -234,17 +237,17 @@ export default function List() {
 
         {/* Header Lista */}
         <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
-          <motion.div className="mb-8 rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300" style={{ backgroundImage: `linear-gradient(135deg, ${ListUser.color1} 0%, ${ListUser.color2} 100%)` }} initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}>
-            {ListUser?.status && (
-              <motion.span className={`absolute top-3 right-3 inline-flex items-center h-fit text-xs font-semibold px-2.5 py-0.5 rounded shadow-sm ${ListUser.status.toLowerCase() === 'active' ? 'bg-green-300 text-white' : 'bg-blue-300 text-white'}`}>{ListUser.status}</motion.span>
+          <motion.div className="mb-8 rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300" style={{ backgroundImage: `linear-gradient(135deg, ${ListShow.color1} 0%, ${ListShow.color2} 100%)` }} initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}>
+            {ListShow?.status && (
+              <motion.span className={`absolute top-3 right-3 inline-flex items-center h-fit text-xs font-semibold px-2.5 py-0.5 rounded shadow-sm ${ListShow.status.toLowerCase() === 'active' ? 'bg-green-300 text-white' : 'bg-blue-300 text-white'}`}>{ListShow.status}</motion.span>
             )}
             <div className="absolute inset-0 bg-white opacity-10 bg-[url('/pictures/git.png')] bg-repeat-space mix-blend-overlay" style={{ backgroundSize: "auto 100%" }}></div>
 
             <div className="relative p-6 md:p-8 lg:p-10 flex items-center">
-              {ListUser?.image && <img src={ListUser.image ? `${API_BASE_URL}/uploads/${ListUser.image}` : `${API_BASE_URL}/pictures/git.png`} alt="" className="w-24 h-24 rounded-full border-2 border-white mr-6 object-cover shadow-md" />}
+              {ListShow?.image && <img src={ListShow.image ? `${API_BASE_URL}/uploads/${ListShow.image}` : `${API_BASE_URL}/pictures/git.png`} alt="" className="w-24 h-24 rounded-full border-2 border-white mr-6 object-cover shadow-md" />}
               <div className="flex-grow text-white">
-                <h2 className="text-3xl font-bold">{ListUser?.name}</h2>
-                <p className="opacity-90">{ListUser?.description}</p>
+                <h2 className="text-3xl font-bold">{ListShow?.name}</h2>
+                <p className="opacity-90">{ListShow?.description}</p>
               </div>
               {/* BOTÓN FLOTANTE: ABRIR CREAR */}
               {isOwner && (
@@ -294,7 +297,7 @@ export default function List() {
                     style={{ willChange: "transform, box-shadow, border-color" }}
                   >
                     {/* BOTÓN EDITAR (SOLO PARA EL DUEÑO) */}
-                    {isOwner && (
+                    {isOwner && !isGifted && (
                       <button
                         onClick={(e) => handleOpenEdit(e, item)}
                         className="absolute top-3 left-3 z-20 bg-white/90 text-indigo-600 p-1.5 rounded-full shadow-sm hover:bg-white hover:text-indigo-800 hover:scale-110 transition-all border border-indigo-100"
@@ -333,7 +336,7 @@ export default function List() {
           </AnimatePresence>
         </div>
 
-        {selectedItem && <ModalItem show={selectedItem != null} selectedItem={selectedItem} onClose={closeDetails} color1={ListUser.color1} color2={ListUser.color2} />}
+        {selectedItem && <ModalItem show={selectedItem != null} selectedItem={selectedItem} refreshItems={LoadListas} setApiRes={setApiRes} onClose={() => setSelectedItem(false)} color1={ListShow.color1} color2={ListShow.color2} />}
       </motion.div>
     </div>
   );

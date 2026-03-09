@@ -11,8 +11,7 @@ export const ListProvider = ({ children }) => {
   const [listas, setListas] = useState(null);
 
   const LoadListas = async () => {
-
-
+    console.log('cargando')
     try {
       await instance.get('/users/lists')
         .then((response) => {
@@ -36,7 +35,6 @@ export const ListProvider = ({ children }) => {
     try {
       await instance.get('/pub/lists')
         .then((response) => {
-          console.log(response.data)
           if (response.status === 200 && response.data.lists) {
             setPublicLists(response.data.lists);
             return true; // Retorna las listas

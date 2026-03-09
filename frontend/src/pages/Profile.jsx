@@ -28,8 +28,7 @@ export default function Profile() {
   };
 
   function Enviar(e) {
-    console.log(user)
-    console.log(formData)
+
     e.preventDefault();
 
     //comparar un objeto con otro para ver si hay cambios
@@ -41,7 +40,7 @@ export default function Profile() {
     instance.put(`/users/${user.id}`, formData)
       .then((response) => {
 
-        console.log(response)
+
         setMsj(response.data || {});
         setIsEditing(false);
         if (response.data.status != 'success') {
@@ -54,7 +53,7 @@ export default function Profile() {
         setMsj(JSON.parse(error.request.response).errors || [error.request.response])
 
       });
-    console.log('fin')
+
   }
 
 

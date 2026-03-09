@@ -5,7 +5,7 @@ namespace App\Modules\Auth;
 use App\Modules\User\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Firebase\JWT\JWT;
-use App\Modules\Auth\Controller;
+
 use App\Utils\Validator;
 
 class Controller
@@ -43,6 +43,7 @@ class Controller
                     'expires' => time() + 60 * 60,
                     'path' => '/',
                     'domain' => '',
+                    'secure' => false,   
                     'httponly' => true,
                     'samesite' => 'lax'
                 ]);
@@ -117,14 +118,14 @@ class Controller
     }
 
     public function logout()
-    {
+    {   
         setcookie('token', '', [
             'expires' => time() - 3600,
             'path' => '/',
-            'domain' => null,
-            'secure' => true,     // <--- Igual que en el login
+            'domain' => '',
+            'secure' => false,     // <--- Igual que en el login
             'httponly' => true,
-            'samesite' => 'None'  // <--- Igual que en el login
+            'samesite' => 'Lax'  // <--- Igual que en el login
         ]);
         header("HTTP/1.0 200 OK");
         echo json_encode(['status' => 'success', 'message' => 'Logout successful']);

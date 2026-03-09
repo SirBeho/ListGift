@@ -82,8 +82,12 @@ class Controller
 
 
     public function update($id)
-    {
+    {   error_log($id);
+        error_log(print_r($_POST, true));
+        error_log($_POST['place']);
         try {
+           
+
             RoleAccess::admin();
             $Item = Model::findOrFail($id);
             $Item->update($_POST);          
@@ -97,7 +101,8 @@ class Controller
 
     public function giftItem($id) 
     {   
-        error_log(print_r($_POST, true));
+
+        
         try {
             //RoleAccess::admin();
            
@@ -108,7 +113,7 @@ class Controller
 
             $Item = Model::findOrFail($id);
             $Item->update([
-                'status' => 1 , 
+                'status' => 2 , 
                 'message' => $mensaje, 
                 'user_id' => $_REQUEST['auth']['user'] ?? null, // Si no viene el user_id, lo dejamos como null
                 'giver_name' => $nombre,

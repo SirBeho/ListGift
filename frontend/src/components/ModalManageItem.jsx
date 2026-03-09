@@ -133,9 +133,10 @@ export default function ModalManageItem({ isOpen, onClose, listId, refreshItems,
             const data = new FormData();
 
             // Método spoofing para Laravel (PUT no soporta multipart/form-data nativo bien en todos los servidores)
-            if (itemToEdit) {
-                data.append('_method', 'PUT');
-            }
+            /*  if (itemToEdit) {
+                 console.log("puteee")
+                 data.append('_method', 'PUT');
+             } */
 
             Object.keys(formData).forEach(key => {
                 if (key === 'price') {

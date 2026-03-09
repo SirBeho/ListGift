@@ -20,7 +20,7 @@ instance.interceptors.response.use(
     (response) => response, // Si todo sale bien, pasa de largo
     (error) => {
 
-        console.log('ERROR AXIOS INTERCEPTOR:', error);
+        console.error('ERROR AXIOS INTERCEPTOR:', error);
         // Si el servidor respondió con nuestro formato normalizado
         if (error.response && error.response.data) {
             error.normalized = {

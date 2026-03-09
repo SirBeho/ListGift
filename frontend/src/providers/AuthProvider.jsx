@@ -10,10 +10,14 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [redirecting, setRedirecting] = useState(false);
     const { clearUserData } = useList();
+
+
 
     useEffect(() => {
         const checkAuth = async () => {
+            console.log('verificando autenticación...')
             try {
                 // Endpoint que creamos para verificar la cookie JWT
                 const res = await instance.get('/auth/verify');
@@ -30,37 +34,44 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = async (credentials) => {
+        console.log('usuario login:', user)
         try {
             // Usamos la instancia que ya tiene el interceptor
             const res = await instance.post('/auth/login', credentials);
             if (res.data.status === 'success') {
-
+                setRedirecting(true);
                 setUser(res.data.user);
+                console.log('usuario seteado:', res.data.user)
             }
         } catch (err) {
             throw err.normalized;
         }
+
+
     };
 
     const logout = async () => {
+
         setLoading(true);
-        clearUserData();
-        localStorage.removeItem('token');
+
         try {
-            await instance.post('/auth/logout');
+            const res = await instance.post('/auth/logout');
+            console.log(res)
             console.log("saliendo")
         } catch (error) {
             console.error('Logout error:', error);
         }
-        navigate('/', { replace: true });
-        setTimeout(() => {
-            setUser(null);
-            setLoading(false);
-        }, 50);
+
+        localStorage.removeItem('token');
+        if (clearUserData) clearUserData();
+        setUser(null);
+        setRedirecting(false);
+        setLoading(false);
+
     };
 
     return (
-        <AuthContext.Provider value={{ loading, user, login, logout }}>
+        <AuthContext.Provider value={{ loading, user, login, logout, redirecting }}>
             {children}
         </AuthContext.Provider>
     );

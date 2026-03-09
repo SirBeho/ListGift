@@ -12,19 +12,22 @@ import { FaGoogle, FaFacebookF, FaTwitter, FaGithub } from "react-icons/fa";
 import classNames from 'classnames';
 import Gift3d from '../components/Gift3d';
 import Alert from '../components/Alert';
+import { useParams } from "react-router-dom";
 
 
 export default function Login() {
-    const { login } = useAuth();
+    const { user, loading: cargando, redirecting, login } = useAuth();
+    const { redirectTo } = useParams();
+
     const navigate = useNavigate(); // El encargado de redirigir
 
-    const [formData, setFormData] = useState({ username: "benjamin000", password: "1234" });
+    const [formData, setFormData] = useState({ username: "benjamin000", password: "123" });
     const [apiRes, setApiRes] = useState(null);
 
     const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
     const [showPassword, setShowPassword] = useState(false);
-    const [redirecting, setRedirecting] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [animating, setAnimating] = useState(false); // Nuevo estado para controlar la animación de salida
 
     // Hooks y lógica se mantienen igual...
     const handleInputChange = (event) => {
@@ -36,10 +39,16 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setApiRes(null);
+        setLoading(true);
         try {
             await login(formData);
-            navigate('/dashboard', { replace: true });
+            setAnimating(true);
+            setTimeout(() => {
+                navigate(redirectTo || "/dashboard", { replace: true });
+            }, 500); // Duración de la animación de salida */
         } catch (err) {
+            console.log('aqiui')
+            setLoading(false);
             setApiRes(err);
         }
     };
@@ -53,12 +62,13 @@ export default function Login() {
         }
     }, [msj]);
 
+
     return (
         // CAMBIO 1: px-4 para móviles, sm:px-6 para tablets+
         <main className="min-h-[100dvh] w-full flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-yellow-100 px-4 sm:px-6 py-10 overflow-hidden">
 
             <AnimatePresence mode="wait">
-                {!redirecting && (
+                {!animating && (
                     <motion.div
                         key="login"
                         initial={{ x: 100, opacity: 0 }}

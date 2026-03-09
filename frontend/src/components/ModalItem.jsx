@@ -5,27 +5,44 @@ import { CurrencyDollarIcon, MapPinIcon, ArrowTopRightOnSquareIcon, GiftIcon } f
 import { XMarkIcon, CheckBadgeIcon } from '@heroicons/react/20/solid'; // Añadido CheckBadgeIcon
 import ModalConfirmGift from './ModalConfirmGift';
 import instance, { API_BASE_URL } from '../service/AxiosInstance';
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function ModalItem({ selectedItem, show = false, onClose = () => { }, setApiRes, refreshItems, color1 = "#ffffff", color2 = "#ffffff" }) {
     const cancelButtonRef = useRef(null);
+
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const navigate = useNavigate();
 
     // Formateo de precio
     const formatPrice = (price) => {
         return new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP', minimumFractionDigits: 2 }).format(price);
     };
 
+
     const handleGiftClick = () => setShowConfirmation(true);
 
-    const handleConfirmGift = async (message) => {
+    const handleConfirmGift = async (formData) => {
+
+        const { message, name, phone } = formData;
+
         try {
-            const response = await instance.patch(`/items/${selectedItem.id}`, { status: 2, gift_message: message });
+
+            const response = await instance.patch(`/public/items/${selectedItem.id}`, {
+                status: 2,
+                gift_message: message,
+                giver_name: name,
+                giver_phone: phone
+
+            });
 
             if (response.status === 201 || response.status === 200) {
                 refreshItems();
                 setApiRes(response.data);
             }
         } catch (error) {
+            console.log(error)
             setApiRes(error.normalized || {});
         } finally {
             setShowConfirmation(false);
@@ -108,14 +125,38 @@ export default function ModalItem({ selectedItem, show = false, onClose = () => 
                                         {isGifted && (
                                             <div className="relative bg-green-50 p-5 rounded-2xl border border-green-100 mx-1">
                                                 <span className="absolute top-2 left-3 text-4xl text-green-300 font-serif leading-none">“</span>
+
                                                 <div className="relative z-10 text-center">
-                                                    <p className="text-green-800 font-semibold mb-1">
-                                                        ¡{selectedItem.donante_nombre || "Alguien"} cumplió este deseo!
-                                                    </p>
-                                                    {selectedItem.message && (
-                                                        <p className="text-green-700 italic text-sm">"{selectedItem.message}"</p>
+                                                    {selectedItem.isOwner ? (
+                                                        <>
+                                                            <p className="text-green-800 font-semibold mb-1">
+                                                                ¡{selectedItem.giver_name || "Alguien"} cumplió este deseo!
+                                                            </p>
+                                                            {selectedItem.message && (
+                                                                <p className="text-green-700 italic text-sm">"{selectedItem.message}"</p>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <div className="space-y-2">
+                                                            <p className="text-green-800 font-semibold">
+                                                                {selectedItem.isNewGift ? "¡Alguien te acaba de cumplir este deseo!" : "Este deseo ya ha sido cumplido por alguien más."}
+                                                            </p>
+                                                            {selectedItem.isNewGift && (
+                                                                <p className="text-xs text-green-600 px-4">
+                                                                    Si este regalo es para ti,{" "}
+                                                                    <button
+                                                                        onClick={() => navigate(`/login?redirectTo=${encodeURIComponent(window.location.pathname + window.location.search)}`)}
+                                                                        className="font-bold underline decoration-2 underline-offset-2 hover:text-green-800 transition-colors"
+                                                                    >
+                                                                        inicia sesión
+                                                                    </button>{" "}
+                                                                    para ver quién te lo envió y su mensaje.
+                                                                </p>
+                                                            )}
+                                                        </div>
                                                     )}
                                                 </div>
+
                                                 <span className="absolute bottom-[-10px] right-3 text-4xl text-green-300 font-serif leading-none">”</span>
                                             </div>
                                         )}

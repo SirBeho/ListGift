@@ -9,7 +9,7 @@ function Rol() {
     instance
       .get("/api/rols")
       .then((response) => {
-        console.log(response.data);
+
         setDatos(response.data);
       })
       .catch((error) => {

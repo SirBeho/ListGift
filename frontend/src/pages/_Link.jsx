@@ -23,9 +23,9 @@ function Log() {
   const fetchLatestData = async () => {
 
     try {
-      console.log("Fetching data from API...");
+      //console.log("Fetching data from API...");
       const response = await instance.get("/api/rolpage");
-      console.log(response.data);
+      //console.log(response.data);
       setDatos(response.data);
       setCachedData("Online");
       localStorage.setItem(CACHE_KEY, JSON.stringify(response.data));
