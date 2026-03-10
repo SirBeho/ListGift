@@ -15,9 +15,6 @@ if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL
 
 DB::initialize();
 
-
-
-
 //$router->setBasePath('/api');
 
 $router->options('/.*', function () {
