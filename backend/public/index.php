@@ -20,5 +20,5 @@ $dotenv->load();
 $dotenv = Dotenv::createMutable(__DIR__, '.env.local');S
 $dotenv->safeLoad(); */
 
-require '../src/Config/ENV.PHP';
-require '../src/routes/index.php';
+require  __DIR__ .'/../src/Config/ENV.PHP';
+require  __DIR__ .'/../src/routes/index.php';
