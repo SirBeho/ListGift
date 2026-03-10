@@ -1,0 +1,3 @@
+RewriteEngine On
+# Redirigir todo el tráfico a la carpeta backend/public
+RewriteRule ^(.*)$ backend/public/$1 [L]
