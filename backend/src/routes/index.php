@@ -6,6 +6,12 @@ use App\Middlewares\VerifyToken;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 $router = new Router();
+$router->setBasePath('/backend');
+
+$router->get  ('/', function () {
+    header('Content-Type: application/json');
+    echo json_encode(["status" => "success", "message" => "API RESTful en PHP con autenticación JWT y Eloquent ORM"]);
+});
 
 if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === '/health') {
     header('Content-Type: application/json');
@@ -15,7 +21,7 @@ if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL
 
 DB::initialize();
 
-//$router->setBasePath('/api');
+
 
 $router->options('/.*', function () {
     //$allowedOrigins = explode(',', $_ENV['CORS_ORIGIN'] ?? '');

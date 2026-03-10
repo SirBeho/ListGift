@@ -1,11 +1,9 @@
 # Este .htaccess está DENTRO de la carpeta /htdocs/backend/
-
-# 1. Enciende el motor de reescritura
 RewriteEngine On
 
-
-# Si el archivo o directorio solicitado NO existe (ej: /backend/api/users),
-# lo dirige a index.php (el router de tu API).
+# Si el archivo o directorio solicitado NO existe
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Envíalo al index.php que está DENTRO de public
+RewriteRule ^(.*)$ public/index.php [QSA,L]
