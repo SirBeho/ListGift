@@ -1,6 +1,6 @@
 {
     "name": "jorege/hs-api",
-    "description": "api para reportes de horas de servicios prestados por los estudiantes.",
+    "description": "api para gestion listas de regalos personalizados.",
     "type": "project",
     "require": {
         "vlucas/phpdotenv": "^5.6",
