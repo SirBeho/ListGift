@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const currentHost = window.location.hostname;
-export const API_BASE_URL = `http://${currentHost}:8000`;
+export const API_BASE_URL = `https://${currentHost}`;
 
 const instance = axios.create({
 
