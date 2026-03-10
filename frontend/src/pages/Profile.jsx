@@ -4,7 +4,7 @@ import { useAuth } from "../providers/AuthProvider";
 import { motion } from "framer-motion"; // Animaciones
 
 export default function Profile() {
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  //const API_BASE_URL = import.meta.env.VITE_API_URL;
   const { user, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [msj, setMsj] = useState(JSON.parse(sessionStorage.getItem("msj")) || {});
