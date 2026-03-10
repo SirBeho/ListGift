@@ -38,12 +38,11 @@ class Controller
                 $jwt = JWT::encode($payload, $key, 'HS256');
 
                 http_response_code(200);
-                http_response_code(200);
                 setcookie('token', $jwt, [
                     'expires' => time() + 60 * 60,
                     'path' => '/',
                     'domain' => '',
-                    'secure' => false,   
+                    'secure' => true,   
                     'httponly' => true,
                     'samesite' => 'lax'
                 ]);
@@ -123,7 +122,7 @@ class Controller
             'expires' => time() - 3600,
             'path' => '/',
             'domain' => '',
-            'secure' => false,     // <--- Igual que en el login
+            'secure' => true,     // <--- Igual que en el login
             'httponly' => true,
             'samesite' => 'Lax'  // <--- Igual que en el login
         ]);
