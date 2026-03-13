@@ -3,8 +3,8 @@ import axios from 'axios';
 
 //const currentHost = window.location.hostname;
 //export const API_BASE_URL = `https://${currentHost}`;
-//export const API_BASE_URL = import.meta.env.VITE_API_URL;
-export const API_BASE_URL = 'https://listgift.free.nf/backend';
+export const API_BASE_URL = import.meta.env.VITE_API_URL;
+//export const API_BASE_URL = 'https://listgift.free.nf/backend';
 
 const instance = axios.create({
 
