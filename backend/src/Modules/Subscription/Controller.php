@@ -49,8 +49,8 @@ class Controller
         $auth = [
             'VAPID' => [
                 'subject' => 'mailto:benjamin.tavarez.98@gmail.com',
-                'publicKey' => $_ENV['VAPID_PUBLIC_KEY'],
-                'privateKey' => $_ENV['VAPID_PRIVATE_KEY'],
+                'publicKey'  => $_ENV['VAPID_PUBLIC_KEY'] ?? getenv('VAPID_PUBLIC_KEY'),
+                'privateKey' => $_ENV['VAPID_PRIVATE_KEY'] ?? getenv('VAPID_PRIVATE_KEY'),
             ],
         ];
     
@@ -58,6 +58,7 @@ class Controller
             $webPush = new WebPush($auth);
         } catch (\ErrorException $e) {
             error_log("❌ Error de llaves VAPID: " . $e->getMessage());
+            return false; // <-- Agrega esto para salir de la función si falla
             // Esto te dirá si es un problema de OpenSSL o de formato
         }
     
