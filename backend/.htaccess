@@ -1,9 +1,31 @@
-# Este .htaccess está DENTRO de la carpeta /htdocs/backend/
-RewriteEngine On
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Le decimos a Apache dónde estamos parados
+    RewriteBase /backend/
 
-# Si el archivo o directorio solicitado NO existe
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+    # --- 1. SEGURIDAD: Bloquear .env y archivos ocultos ---
+    <FilesMatch "^\.">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
 
-# Envíalo al index.php que está DENTRO de public
-RewriteRule ^(.*)$ public/index.php [QSA,L]
+    # --- 2. SEGURIDAD: Bloquear Composer ---
+    <FilesMatch "(composer\.json|composer\.lock)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+
+    # --- 3. SEGURIDAD: Prohibir acceso a carpetas del código ---
+    RewriteRule ^(src|vendor|routes|database|Config|Modules) - [F,L,NC]
+
+    # --- 4. ENRUTAMIENTO: Imágenes ---
+    # Peticiones a /backend/uploads/... van directo a la carpeta public/uploads/
+    RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
+
+    # --- 5. ENRUTAMIENTO: API ---
+    # Si no es un archivo o carpeta real, mándalo al index.php de public
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>

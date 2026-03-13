@@ -29,12 +29,12 @@ echo ========================================================
 echo    TODO LISTO - INSTRUCCIONES:
 echo.
 echo    1. En tu celular (Chrome):
-echo       Entra a: http://192.168.100.134:5173
+echo       Entra a: http://192.168.100.10:5173
 echo.
 echo    2. SI LAS NOTIFICACIONES FALLAN:
 echo       Ve a chrome://flags en el celular.
 echo       Busca "Insecure origins treated as secure".
-echo       Añade: http://192.168.100.134:5173
+echo       Añade: http://192.168.100.10:5173
 echo       Reinicia Chrome.
 echo ========================================================
 pause

@@ -10,6 +10,14 @@ use App\Utils\Validator;
 
 class Controller
 {
+
+    private $isSecure; // Lo declaramos vacío arriba
+
+    public function __construct()
+    {
+        // Lo calculamos dinámicamente al construir la clase
+        $this->isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+    }
     public function login()
     {
 
@@ -42,7 +50,7 @@ class Controller
                     'expires' => time() + 60 * 60,
                     'path' => '/',
                     'domain' => '',
-                    'secure' => true,   
+                    'secure' => $this->isSecure,   
                     'httponly' => true,
                     'samesite' => 'lax'
                 ]);
@@ -122,7 +130,7 @@ class Controller
             'expires' => time() - 3600,
             'path' => '/',
             'domain' => '',
-            'secure' => true,     // <--- Igual que en el login
+            'secure' => $this->isSecure,     // <--- Igual que en el login
             'httponly' => true,
             'samesite' => 'Lax'  // <--- Igual que en el login
         ]);

@@ -24,6 +24,8 @@ import Alert from "../components/Alert";
 import ModalManageItem from "../components/ModalManageItem"; // <--- CAMBIO: Importamos el componente unificado
 import { API_BASE_URL } from "../service/AxiosInstance";
 
+
+
 // === VARIANTES ===
 const containerVariants = {
   initial: { opacity: 0 },
@@ -113,6 +115,7 @@ export default function List() {
   const ListShow = [...(listas || []), ...(publicLists || [])].find((lista) => lista.id.toString() === id);
 
   const isOwner = ListShow?.user_id === user?.id || user?.id == 1; // Helper para saber si es dueño
+  const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/uploads";
 
   useEffect(() => {
     if (!listas) LoadListas();
@@ -244,7 +247,7 @@ export default function List() {
             <div className="absolute inset-0 bg-white opacity-10 bg-[url('/pictures/git.png')] bg-repeat-space mix-blend-overlay" style={{ backgroundSize: "auto 100%" }}></div>
 
             <div className="relative p-6 md:p-8 lg:p-10 flex items-center">
-              {ListShow?.image && <img src={ListShow.image ? `${API_BASE_URL}/uploads/${ListShow.image}` : `${API_BASE_URL}/pictures/git.png`} alt="" className="w-24 h-24 rounded-full border-2 border-white mr-6 object-cover shadow-md" />}
+              {ListShow?.image && <img src={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `${VITE_STORAGE_URL}/pictures/git.png`} alt="" className="w-24 h-24 rounded-full border-2 border-white mr-6 object-cover shadow-md" />}
               <div className="flex-grow text-white">
                 <h2 className="text-3xl font-bold">{ListShow?.name}</h2>
                 <p className="opacity-90">{ListShow?.description}</p>
@@ -282,6 +285,8 @@ export default function List() {
                 const isGifted = item.status === 2;
                 const isHighlighted = item.id === highlightedId;
 
+                console.log(item.img_name)
+
                 return (
                   <motion.div
                     key={item.id}
@@ -311,7 +316,7 @@ export default function List() {
                     {isHighlighted && !isGifted && <div className="absolute top-3 right-3 z-20 bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg animate-bounce"><GiftIcon className="h-4 w-4 mr-1" /> ¡AQUÍ!</div>}
 
                     <div className="relative h-60 overflow-hidden rounded-t-2xl">
-                      <motion.img src={item.img_name ? `${API_BASE_URL}/uploads/${item.img_name}` : `${API_BASE_URL}/pictures/git.png`} alt={item.name} className={`w-full h-full object-cover block transition-all duration-500 ${isGifted ? 'grayscale-[80%] opacity-80' : ''}`} />
+                      <motion.img src={item.img_name ? `${VITE_STORAGE_URL}/${item.img_name}` : `${VITE_STORAGE_URL}/pictures/git.png`} alt={item.name} className={`w-full h-full object-cover block transition-all duration-500 ${isGifted ? 'grayscale-[80%] opacity-80' : ''}`} />
                       {isGifted && <div className="absolute inset-0 bg-green-900/10 mix-blend-multiply" />}
                     </div>
 

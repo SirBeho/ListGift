@@ -8,16 +8,24 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 $router = new Router();
 $router->setBasePath('/backend');
 
+//users/lists test dev
+/* $router->get('/users/lists', function () {
+    header('Content-Type: application/json');
+    echo json_encode(["status" => "success", "message" => "Ruta de prueba para users/lists"]);
+    exit; // Detiene la ejecución para evitar que DB::initialize() se ejecute en esta ruta de prueba
+}); */
+
+if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) == '/health') {
+    header('Content-Type: application/json');
+    echo json_encode(["status" => "success", "message" => "Integridad OK"]);
+    exit; // Aquí se detiene y NUNCA llega a DB::initialize()
+}
+
 $router->get  ('/', function () {
     header('Content-Type: application/json');
     echo json_encode(["status" => "success", "message" => "API RESTful en PHP con autenticación JWT y Eloquent ORM"]);
 });
 
-if (isset($_SERVER['REQUEST_URI']) && parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === '/health') {
-    header('Content-Type: application/json');
-    echo json_encode(["status" => "success", "message" => "Integridad OK"]);
-    exit; // Aquí se detiene y NUNCA llega a DB::initialize()
-}
 
 DB::initialize();
 

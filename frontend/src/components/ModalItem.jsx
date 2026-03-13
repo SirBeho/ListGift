@@ -4,13 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CurrencyDollarIcon, MapPinIcon, ArrowTopRightOnSquareIcon, GiftIcon } from '@heroicons/react/24/outline'; // Añadido GiftIcon
 import { XMarkIcon, CheckBadgeIcon } from '@heroicons/react/20/solid'; // Añadido CheckBadgeIcon
 import ModalConfirmGift from './ModalConfirmGift';
-import instance, { API_BASE_URL } from '../service/AxiosInstance';
+import instance from '../service/AxiosInstance';
 import { useNavigate } from "react-router-dom";
 
 
 
 export default function ModalItem({ selectedItem, show = false, onClose = () => { }, setApiRes, refreshItems, color1 = "#ffffff", color2 = "#ffffff" }) {
     const cancelButtonRef = useRef(null);
+    const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage";
 
     const [showConfirmation, setShowConfirmation] = useState(false);
     const navigate = useNavigate();
@@ -109,7 +110,7 @@ export default function ModalItem({ selectedItem, show = false, onClose = () => 
                                         <div className={`w-full h-72 sm:h-80 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center flex-shrink-0 relative border 
                                             ${isGifted ? 'bg-green-50 border-green-100' : 'bg-gray-50 border-gray-100'}`}>
                                             <img
-                                                src={selectedItem.img_name ? `${API_BASE_URL}/uploads/${selectedItem.img_name}` : `${API_BASE_URL}/pictures/git.png`}
+                                                src={selectedItem.img_name ? `${VITE_STORAGE_URL}/${selectedItem.img_name}` : `${VITE_STORAGE_URL}/pictures/git.png`}
                                                 alt={selectedItem.name}
                                                 className={`w-full h-full object-contain p-4 ${isGifted ? 'grayscale-[0.5]' : ''}`}
                                             />

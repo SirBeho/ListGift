@@ -34,7 +34,7 @@ class VerifyToken
             $_REQUEST['auth']['user_data'] = $user;
 
             // Si la ruta actual es la de "verificarme", respondemos aquí mismo
-            if ($_SERVER['REQUEST_URI'] === '/auth/verify') {
+            if ($_SERVER['REQUEST_URI'] === '/backend/auth/verify') {
                 echo json_encode([
                     'status' => 'success',
                     'user' => $_REQUEST['auth']['user_data'],

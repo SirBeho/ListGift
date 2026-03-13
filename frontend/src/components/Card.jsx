@@ -4,13 +4,13 @@ import { PencilSquareIcon } from "@heroicons/react/20/solid";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { ICON_MAP } from "../utils/iconLibrary";
-import { API_BASE_URL } from '../service/AxiosInstance';
+
 
 
 function Card({ data, litt = false }) {
 
   const SelectedIcon = ICON_MAP[data.icon] || ICON_MAP["gift"];
-
+  const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage";
   const cardRef = useRef(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -141,7 +141,7 @@ function Card({ data, litt = false }) {
           )}
           <img
             src={data.image
-              ? `${API_BASE_URL}/uploads/${data.image}`
+              ? `${VITE_STORAGE_URL}/${data.image}`
               : `pictures/git.png`
             }
             className="w-full h-48 object-cover rounded-t-xl " alt={`data ${data.name}`} />

@@ -2,9 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import { useList } from '../providers/ListProvider';
 import Card from '../components/Card';
-import instance from '../service/AxiosInstance';
-
-
 
 function Home() {
   const { user } = useAuth();
