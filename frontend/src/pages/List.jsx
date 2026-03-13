@@ -104,7 +104,7 @@ export default function List() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory] = useState(() => localStorage.getItem('giftListFilterCategory') || 'all');
-  const [sortOption, setSortOption] = useState(() => localStorage.getItem('giftListSortOption') || 'default');
+  const [sortOption, setSortOption] = useState(() => localStorage.getItem('giftListSortOption') || 'price-asc');
   const { search } = useLocation();
   const [highlightedId, setHighlightedId] = useState(null);
   const [apiRes, setApiRes] = useState(null);
@@ -269,6 +269,8 @@ export default function List() {
             <div className="relative">
               <select className="block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
                 <option value="default">Ordenar por</option>
+                <option value="name-asc">Nombre (A-Z)</option>
+                <option value="name-desc">Nombre (Z-A)</option>
                 <option value="price-asc">Precio (Menor a Mayor)</option>
                 <option value="price-desc">Precio (Mayor a Menor)</option>
               </select>
