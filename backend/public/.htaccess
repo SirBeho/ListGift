@@ -1,9 +1,0 @@
-RewriteEngine On
-
-# Si el archivo o carpeta existe, servirlo directamente (fotos)
-
-RewriteCond %{REQUEST_FILENAME} !-f RewriteCond %{REQUEST_FILENAME} !-d
-
-# Si no existe, mandarlo al index.php (API)
-
-RewriteRule ^ index.php [L]

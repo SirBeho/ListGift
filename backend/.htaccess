@@ -1,30 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Le decimos a Apache dónde estamos parados
     RewriteBase /backend/
 
-    # --- 1. SEGURIDAD: Bloquear .env y archivos ocultos ---
-    <FilesMatch "^\.">
-        Order allow,deny
-        Deny from all
-    </FilesMatch>
-
-    # --- 2. SEGURIDAD: Bloquear Composer ---
-    <FilesMatch "(composer\.json|composer\.lock)$">
-        Order allow,deny
-        Deny from all
-    </FilesMatch>
-
-    # --- 3. SEGURIDAD: Prohibir acceso a carpetas del código ---
-    RewriteRule ^(src|vendor|routes|database|Config|Modules) - [F,L,NC]
-
-    # --- 4. ENRUTAMIENTO: Imágenes ---
-    # Peticiones a /backend/uploads/... van directo a la carpeta public/uploads/
+    # 1. Puente para las imágenes
     RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
 
-    # --- 5. ENRUTAMIENTO: API ---
-    # Si no es un archivo o carpeta real, mándalo al index.php de public
+    # 2. Enrutador principal de la API
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/index.php [QSA,L]

@@ -9,12 +9,14 @@ import {
     PencilSquareIcon, // Icono para modo edición
     SparklesIcon      // Icono para modo creación
 } from '@heroicons/react/24/outline';
-import instance, { API_BASE_URL } from '../service/AxiosInstance'; // Importamos API_BASE_URL para previsualizar imagen existente
+import instance from '../service/AxiosInstance'; // Importamos API_BASE_URL para previsualizar imagen existente
 
 export default function ModalManageItem({ isOpen, onClose, listId, refreshItems, setApiRes, apiRes, itemToEdit = null }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+    const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage";
+
 
     // --- ESTADOS PARA LA ALERTA PREPOTENTE ---
     const [showPhotoAlert, setShowPhotoAlert] = useState(false);
@@ -47,7 +49,7 @@ export default function ModalManageItem({ isOpen, onClose, listId, refreshItems,
 
                 // Si tiene imagen, la mostramos como preview inicial
                 if (itemToEdit.img_name) {
-                    setPreviewUrl(`${API_BASE_URL}/uploads/${itemToEdit.img_name}`);
+                    setPreviewUrl(`${VITE_STORAGE_URL}/${itemToEdit.img_name}`);
                     // IMPORTANTE: En edición, asumimos que ya tiene foto válida, 
                     // así que "ignoramos" la alerta inicial para que no salte si no cambia la foto.
                     setIgnorePhotoWarning(true);
