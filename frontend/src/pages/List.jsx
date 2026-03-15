@@ -287,7 +287,7 @@ export default function List() {
                 const isGifted = item.status === 2;
                 const isHighlighted = item.id === highlightedId;
 
-                console.log(item.img_name)
+                ////////console.log(item.img_name)
 
                 return (
                   <motion.div

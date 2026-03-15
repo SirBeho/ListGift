@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = async (credentials) => {
-        console.log('usuario login:', user)
+        //console.log('usuario login:', user)
         try {
             // Usamos la instancia que ya tiene el interceptor
             const res = await instance.post('/auth/login', credentials);
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const res = await instance.post('/auth/logout');
-            console.log(res)
+            //console.log(res)
             console.log("saliendo")
         } catch (error) {
             console.error('Logout error:', error);

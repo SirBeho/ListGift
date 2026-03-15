@@ -11,7 +11,7 @@ export const ListProvider = ({ children }) => {
   const [listas, setListas] = useState(null);
 
   const LoadListas = async () => {
-    console.log('cargando')
+    //console.log('cargando')
     try {
       await instance.get('/users/lists')
         .then((response) => {
@@ -26,7 +26,7 @@ export const ListProvider = ({ children }) => {
 
     } catch (error) {
       console.error('Error fetching lists:');
-      console.log(error)
+      //console.log(error)
       setListas(null);
       return false; // Retorna null si hay un error
     }
