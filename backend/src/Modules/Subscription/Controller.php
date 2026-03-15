@@ -56,105 +56,42 @@ class Controller
     
         try {
             $webPush = new WebPush($auth);
+
+            foreach ($subscription as $sub) {
+                $webPush->queueNotification(
+                 WebPushObject::create([
+                     'endpoint' => $sub->endpoint,
+                     'publicKey' => $sub->p256dh,
+                     'authToken' => $sub->auth,
+                 ]),
+                 json_encode(['title' => $title, 'body' => $message,'url'   => $url])
+             );
+         }
+     
+         // 3. Disparar todos los envíos
+         // En SubscriptionController.php
+         foreach ($webPush->flush() as $report) {
+             $endpoint = $report->getEndpoint();
+             if ($report->isSuccess()) {
+                 error_log("✅ Notificación enviada con éxito a: $endpoint");
+             } else {
+                 error_log("❌ Error al enviar a {$endpoint}: {$report->getReason()}");
+                 if ($report->isSubscriptionExpired()) {
+                     SubscriptionModel::where('endpoint', $endpoint)->delete();
+                     error_log("🗑️ Suscripción expirada borrada de la DB.");
+                 }
+             }
+         }
+         
         } catch (\ErrorException $e) {
             error_log("❌ Error de llaves VAPID: " . $e->getMessage());
             return false; // <-- Agrega esto para salir de la función si falla
             // Esto te dirá si es un problema de OpenSSL o de formato
         }
     
-        foreach ($subscription as $sub) {
-               $webPush->queueNotification(
-                WebPushObject::create([
-                    'endpoint' => $sub->endpoint,
-                    'publicKey' => $sub->p256dh,
-                    'authToken' => $sub->auth,
-                ]),
-                json_encode(['title' => $title, 'body' => $message,'url'   => $url])
-            );
-        }
+       
+    }
+
+   
     
-        // 3. Disparar todos los envíos
-        // En SubscriptionController.php
-        foreach ($webPush->flush() as $report) {
-            $endpoint = $report->getEndpoint();
-            if ($report->isSuccess()) {
-                error_log("✅ Notificación enviada con éxito a: $endpoint");
-            } else {
-                error_log("❌ Error al enviar a {$endpoint}: {$report->getReason()}");
-                if ($report->isSubscriptionExpired()) {
-                    SubscriptionModel::where('endpoint', $endpoint)->delete();
-                    error_log("🗑️ Suscripción expirada borrada de la DB.");
-                }
-            }
-        }
-    }
-
-    public function index()
-    {
-        try {
-            $Subscriptions = Model::all();
-            header("HTTP/1.0 200 OK");
-            echo json_encode($Subscriptions);
-        } catch (\Throwable $th) {
-            header("HTTP/1.0 500 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $Subscription = Model::findOrFail($id);
-            header("HTTP/1.0 200 OK");
-            echo json_encode($Subscription);
-        } catch (ModelNotFoundException $th) {
-            header("HTTP/1.0 404 Not Found");
-            echo json_encode($th->getMessage());
-        }
-    }
-
-    public function store()
-    {
-        try {
-            RoleAccess::admin(); // Considerar si esto debe ser configurable
-
-            if (Model::where('name', $_POST['name'])->exists()) {
-                header("HTTP/1.0 409 Conflict");
-                echo json_encode(['status' => 'error', 'message' => 'Subscription already exists']);
-                return;
-            }
-            $Subscription = SubscribeModel::create($_POST);
-            header("HTTP/1.0 201 Created");
-            echo json_encode(['status' => 'success', 'message' => 'Subscription created successfully']);
-        } catch (\Throwable $th) {
-            header("HTTP/1.0 500 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function update($id)
-    {
-        try {
-            RoleAccess::admin(); // Considerar si esto debe ser configurable
-            $Subscription = Model::findOrFail($id);
-            $Subscription->update($_POST);
-            header("HTTP/1.0 200 OK");
-            echo json_encode(['status' => 'success', 'message' => 'Subscription updated successfully']);
-        } catch (ModelNotFoundException $th) {
-            header("HTTP/1.0 404 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function destroy($id)
-    {
-        try {
-            RoleAccess::admin(); // Considerar si esto debe ser configurable
-            $Subscription = Model::findOrFail($id);
-            $Subscription->delete();
-            echo json_encode(['status' => 'success', 'message' => 'Subscription deleted successfully']);
-        } catch (ModelNotFoundException $th) {
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
 }

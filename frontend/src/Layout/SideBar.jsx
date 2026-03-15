@@ -61,8 +61,8 @@ export default function SideBar({ sidebarController }) {
 
       {/* Logo y Título */}
       <div className="flex items-center gap-2 h-14 px-3 py-2 border-indigo-500 border-b shrink-0">
-        <div className="w-8 min-w-[2rem] h-8 rounded-full overflow-hidden bg-white/20">
-          <img className="object-cover w-full h-full" src="../pictures/logo.jpg" alt="Logo" />
+        <div className="w-8 min-w-[2rem] h-8 rounded-2xl overflow-hidden bg-white/20 border-blue-500 border-2">
+          <img className="object-cover w-full h-full bg-white" src="../pictures/logo.jpg" alt="Logo" />
         </div>
         {/* En móvil siempre mostramos texto si está abierto (que es siempre que se ve) */}
         <span className={`text-lg font-semibold overflow-hidden whitespace-nowrap transition-opacity duration-300

@@ -33,8 +33,8 @@ export default function Navbar({ sidebarController }) {
       <nav className="sticky top-0 left-0 w-full z-20 flex justify-between items-center px-6 h-16 bg-white shadow-sm border-b border-gray-100">
         {/* IZQUIERDA: Identidad de Marca (Rellena el espacio vacío) */}
         <Link to='/' className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-100">
-            <img src="../pictures/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+          <div className="w-8 h-8 rounded-xl overflow-hidden bg-indigo-100 border-blue-500 border-2">
+            <img src="../pictures/logo.jpg" alt="Logo" className="w-full h-full object-cover bg-white " />
           </div>
           <span className="text-xl font-bold text-gray-800 tracking-tight">List Gifts</span>
         </Link>

@@ -86,8 +86,6 @@ class Controller
         try {
             $user = Model::findOrFail($_REQUEST['auth']['user']);
 
-
-
             $user?->load('role', 'lists');
 
             header("HTTP/1.0 200 OK");
@@ -136,5 +134,26 @@ class Controller
         ]);
         header("HTTP/1.0 200 OK");
         echo json_encode(['status' => 'success', 'message' => 'Logout successful']);
+    }
+
+    public function verify()
+    {
+        // El middleware ya garantizó que $_REQUEST['auth'] existe y es válido
+        $userId = $_REQUEST['auth']['user']; 
+
+        // Aquí SÍ hacemos la consulta a la BD
+        $user = Model::with('Lists')->find($userId);
+
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(['status' => 'error', 'message' => 'Usuario no encontrado']);
+            return;
+        }
+
+        http_response_code(200);
+        echo json_encode([
+            'status' => 'success',
+            'user' => $user
+        ]);
     }
 }

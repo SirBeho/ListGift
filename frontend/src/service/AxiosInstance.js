@@ -24,6 +24,13 @@ instance.interceptors.response.use(
     (response) => response, // Si todo sale bien, pasa de largo
     (error) => {
 
+        const isVerifyRoute = error.config?.url?.includes('/auth/verify');
+        const isUnauthorized = error.response?.status === 401;
+
+        if (isUnauthorized && isVerifyRoute) {
+            return Promise.reject(error);
+        }
+
         console.error('ERROR AXIOS INTERCEPTOR:', error);
         // Si el servidor respondió con nuestro formato normalizado
         if (error.response && error.response.data) {

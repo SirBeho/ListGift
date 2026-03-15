@@ -8,8 +8,6 @@ export const useNotifications = () => {
             return;
         }
 
-
-
         try {
             const registration = await navigator.serviceWorker.register('/sw.js');
 
