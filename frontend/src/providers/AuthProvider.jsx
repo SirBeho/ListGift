@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
+        setLoading(true);
         const checkAuth = async () => {
             console.log('verificando autenticación...')
             try {
@@ -38,11 +39,11 @@ export const AuthProvider = ({ children }) => {
         try {
             // Usamos la instancia que ya tiene el interceptor
             const res = await instance.post('/auth/login', credentials);
-            console.log('respuesta login:', res.data)
+            //console.log('respuesta login:', res.data)
             if (res.data.status === 'success') {
                 setRedirecting(true);
                 setUser(res.data.user);
-                console.log('usuario seteado:', res.data.user)
+                //  console.log('usuario seteado:', res.data.user)
             }
         } catch (err) {
             console.log(err)

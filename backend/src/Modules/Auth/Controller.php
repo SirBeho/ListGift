@@ -5,6 +5,7 @@ namespace App\Modules\Auth;
 use App\Modules\User\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Firebase\JWT\JWT;
+use App\Modules\Auth\AuthHelper;
 
 use App\Utils\Validator;
 
@@ -37,8 +38,8 @@ class Controller
 
                 $payload = [
                     'iss' => 'http://localhost',
-                    'user' => $user->id,
-                    //'role' => $user->role,
+                    'user_id' => $user->id,
+                    'role_id' => $user->role_id,
                     'iat' => time(),
                     'exp' => time() + 60 * 60
                 ];
@@ -84,10 +85,10 @@ class Controller
     public function profile()
     {
         try {
-            $user = Model::findOrFail($_REQUEST['auth']['user']);
+        
+            $user = AuthHelper::getCurrentUser();
 
-            $user?->load('role', 'lists');
-
+           
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'user' => $user]);
         } catch (ModelNotFoundException $th) {
@@ -99,7 +100,7 @@ class Controller
     public function updatePassword()
     {
         try {
-            $user = Model::findOrFail($_REQUEST['auth']['user']);
+            $user = AuthHelper::getCurrentUser();
 
             if (!password_verify($_POST['old_password'], $user->password)) {
 
@@ -138,11 +139,8 @@ class Controller
 
     public function verify()
     {
-        // El middleware ya garantizó que $_REQUEST['auth'] existe y es válido
-        $userId = $_REQUEST['auth']['user']; 
-
-        // Aquí SÍ hacemos la consulta a la BD
-        $user = Model::with('Lists')->find($userId);
+        $user = AuthHelper::getCurrentUser();
+        error_log("Usuario autenticado: " . json_encode($user));
 
         if (!$user) {
             http_response_code(401);

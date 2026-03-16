@@ -115,7 +115,7 @@ class Controller
             $Item->update([
                 'status' => 2 , 
                 'message' => $mensaje, 
-                'user_id' => $_REQUEST['auth']['user'] ?? null, // Si no viene el user_id, lo dejamos como null
+                'user_id' => $_REQUEST['auth']['user_id'] ?? null, // Si no viene el user_id, lo dejamos como null
                 'giver_name' => $nombre,
                 'giver_phone' => $telefono
             ]);

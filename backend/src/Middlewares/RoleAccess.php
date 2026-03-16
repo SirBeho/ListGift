@@ -6,8 +6,7 @@ class RoleAccess
 {
     public static function admin()
     {
-        $role = $_REQUEST['auth']['user_data']['role_id'];
-
+        $role = $_REQUEST['auth']['role_id'];
 
         if ($role !== 1) {
             header("HTTP/1.0 403 Forbidden");
@@ -31,8 +30,8 @@ class RoleAccess
             exit();
         }
 
-        $role =  $auth_data['user_data']['role_id'];
-        $user_id =  intval($auth_data['user']);
+        $role =  $auth_data['role_id'];
+        $user_id =  intval($auth_data['user_id']);
 
 
         if ($role !== 1 && $user_id !== intval($id)) {

@@ -21,7 +21,6 @@ function ListaDeRegalos() {
 
   useEffect(() => {
     if (!listas) {
-      console.log('cargando listas...');
       LoadListas();
     }
   }, []);

@@ -11,9 +11,9 @@ use Minishlink\WebPush\Subscription as WebPushObject;
 class Controller
 {   
     public function subscribe() {
-        $userId = $_REQUEST['auth']['user'] ?? null;
+        $user_id = $_REQUEST['auth']['user_id'] ?? null;
             
-        if (!$userId) {
+        if (!$user_id) {
             http_response_code(401);
             echo json_encode(["error" => "No autorizado"]);
             return;
@@ -31,7 +31,7 @@ class Controller
         SubscriptionModel::updateOrCreate(
             ['endpoint' => $data['endpoint']],
             [
-                'user_id' => $userId,
+                'user_id' => $user_id,
                 'p256dh'  => $data['keys']['p256dh'],
                 'auth'    => $data['keys']['auth']
             ]
@@ -40,9 +40,9 @@ class Controller
         echo json_encode(['status' => 'success', 'message' => 'Suscripción guardada con éxito']);
     }
 
-    public static function  sendPush($userId, $title, $message , $url = '/') {
+    public static function  sendPush($user_id, $title, $message , $url = '/') {
         // 1. Obtener todas las suscripciones de ese usuario desde la DB
-        $subscription = SubscriptionModel::where('user_id', $userId)
+        $subscription = SubscriptionModel::where('user_id', $user_id)
             ->get();
                
         // 2. Configurar WebPush con tus llaves VAPID

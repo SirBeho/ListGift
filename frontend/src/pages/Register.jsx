@@ -104,6 +104,7 @@ export default function Register() {
                                 name="username"
                                 placeholder="Usuario"
                                 required
+                                autoComplete="username"
                                 onChange={handleInputChange}
                                 className="w-full outline-none"
                             />
@@ -118,6 +119,7 @@ export default function Register() {
                                 name="email"
                                 placeholder="Correo Electrónico"
                                 required
+                                autoComplete="email"
                                 onChange={handleInputChange}
                                 className="w-full outline-none"
                             />
@@ -131,6 +133,7 @@ export default function Register() {
                                 name="password"
                                 placeholder="Contraseña"
                                 required
+                                autoComplete="new-password"
                                 value={formData.password}
                                 onChange={handleInputChange}
                                 className="w-full outline-none pr-8"

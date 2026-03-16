@@ -96,7 +96,7 @@ const formatPrice = (price) => {
 };
 
 export default function List() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { listas, LoadListas, publicLists, LoadPublicListas } = useList();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -117,10 +117,22 @@ export default function List() {
   const isOwner = ListShow?.user_id === user?.id || user?.id == 1; // Helper para saber si es dueño
   const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/uploads";
 
+  //funcion para cargar lista publica y priva validando el user
+  const RefresListas = useCallback(async () => {
+    try {
+      if (user) LoadListas();
+      LoadPublicListas();
+    }
+    catch (error) {
+      console.error("Error al cargar las listas:", error);
+      setApiRes({ success: false, message: "Error al cargar las listas. Por favor, intenta de nuevo." });
+    }
+  }, [user]);
+
   useEffect(() => {
-    if (!listas) LoadListas();
-    if (!publicLists) LoadPublicListas();
-  }, [LoadListas, listas, publicLists, LoadPublicListas]);
+    if (loading) return;
+    RefresListas();
+  }, [loading, RefresListas]);
 
   useEffect(() => {
     if (listas !== null && !ListShow && id !== undefined) {
@@ -231,7 +243,7 @@ export default function List() {
         listId={id}
         onClose={() => setIsOpen(false)}
         setApiRes={setApiRes}
-        refreshItems={LoadListas}
+        refreshItems={RefresListas}
         apiRes={apiRes}
         itemToEdit={itemToEdit} // Pasamos el item si estamos editando
       />
@@ -287,7 +299,7 @@ export default function List() {
                 const isGifted = item.status === 2;
                 const isHighlighted = item.id === highlightedId;
 
-                ////////console.log(item.img_name)
+                //console.log(item.img_name)
 
                 return (
                   <motion.div
@@ -343,7 +355,7 @@ export default function List() {
           </AnimatePresence>
         </div>
 
-        {selectedItem && <ModalItem show={selectedItem != null} selectedItem={selectedItem} refreshItems={LoadListas} setApiRes={setApiRes} onClose={() => setSelectedItem(false)} color1={ListShow.color1} color2={ListShow.color2} />}
+        {selectedItem && <ModalItem show={selectedItem != null} selectedItem={selectedItem} refreshItems={RefresListas} setApiRes={setApiRes} onClose={() => setSelectedItem(false)} color1={ListShow.color1} color2={ListShow.color2} />}
       </motion.div>
     </div>
   );

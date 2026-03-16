@@ -7,10 +7,11 @@ use App\Modules\List\Model as ListModel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Middlewares\RoleAccess;
 use App\Utils\Validator;
+use App\Modules\Auth\AuthHelper;
 
 class Controller
 {
-    public function index()
+   /*  public function index()
     {
         try {
             RoleAccess::adminOrStudent();
@@ -36,7 +37,7 @@ class Controller
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
         }
-    }
+    } */
 
     public function show($id)
     {
@@ -56,10 +57,8 @@ class Controller
     {   
         try {
 
-            $user_id = $_REQUEST['auth']['user'] ?? null;
-            $role_id = $_REQUEST['auth']['user_data']['role_id'] ?? null;
-
-            ///$user = Model::findOrFail($_REQUEST['auth']['user']);
+            $user_id = $_REQUEST['auth']['user_id'] ?? null;
+            $role_id = $_REQUEST['auth']['role_id'];
 
             if (!$user_id) {
                 header("HTTP/1.0 401 Unauthorized");
@@ -72,8 +71,7 @@ class Controller
                 $listas = ListModel::with('items', 'user')->get();
 
             } else {
-                $user = Model::with('lists.items')->findOrFail($user_id);
-                $listas = $user->lists;
+                $listas  = Model::with('lists.items')->findOrFail($user_id)?->lists;
             }
 
             if (!$listas) {
@@ -96,7 +94,7 @@ class Controller
 
     public function store()
     {
-        try {
+       /*  try {
             // begin transaction
             Model::getConnectionResolver()->connection()->beginTransaction();
             RoleAccess::admin();
@@ -130,7 +128,7 @@ class Controller
             Model::getConnectionResolver()->connection()->rollBack();
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
+        } */
     }
 
     public function update($id)

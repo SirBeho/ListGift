@@ -23,7 +23,7 @@ class Validator
         $validated = [];
 
         if (array_key_exists('user_id', $rules) && !isset($data['user_id'])) {
-            $data['user_id'] = $_REQUEST['auth']['user_data']['id'] ?? null;
+            $data['user_id'] = $_REQUEST['auth']['user_id'] ?? null;
         }
 
         foreach ($rules as $field => $ruleString) {

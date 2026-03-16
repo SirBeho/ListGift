@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 //importar intancia
 import instance from '../service/AxiosInstance';
 
@@ -10,8 +10,7 @@ export const ListProvider = ({ children }) => {
   const [publicLists, setPublicLists] = useState(null);
   const [listas, setListas] = useState(null);
 
-  const LoadListas = async () => {
-    //console.log('cargando')
+  const LoadListas = useCallback(async () => {
     try {
       await instance.get('/users/lists')
         .then((response) => {
@@ -30,8 +29,9 @@ export const ListProvider = ({ children }) => {
       setListas(null);
       return false; // Retorna null si hay un error
     }
-  };
-  const LoadPublicListas = async () => {
+  }, []);
+
+  const LoadPublicListas = useCallback(async () => {
     try {
       await instance.get('/pub/lists')
         .then((response) => {
@@ -49,7 +49,7 @@ export const ListProvider = ({ children }) => {
       setPublicLists(null);
       return false; // Retorna null si hay un error
     }
-  };
+  }, []);
 
   const clearUserData = () => {
     setListas(null);

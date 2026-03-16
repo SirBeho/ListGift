@@ -1,23 +1,16 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useAuth } from '../providers/AuthProvider';
+import { useState, useEffect } from 'react';
 import { useList } from '../providers/ListProvider';
 import Card from '../components/Card';
 
 function Home() {
-  const { user } = useAuth();
-  const { publicLists: listas, LoadPublicListas: LoadListas } = useList();
+  const { publicLists: listas, LoadPublicListas } = useList();
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!listas) {
-      LoadListas();
+      LoadPublicListas();
     }
   }, []);
-
-  const ListUser = useMemo(() => {
-    // La operación de filtrado solo se ejecuta cuando 'listas' o 'user?.id' cambian.
-    return listas?.filter((lista) => lista.user_id === user?.id) || [];
-  }, [listas, user?.id]);
 
   if (error) {
     return (

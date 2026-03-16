@@ -110,6 +110,7 @@ export default function Login() {
                                     type="text"
                                     name="username"
                                     value={formData.username}
+                                    autoComplete="username"
                                     placeholder="Usuario"
                                     required
                                     onChange={handleInputChange}
@@ -125,6 +126,7 @@ export default function Login() {
                                     name="password"
                                     placeholder="Contraseña"
                                     required
+                                    autoComplete="current-password"
                                     value={formData.password}
                                     onChange={handleInputChange}
                                     className="w-full outline-none pr-8 bg-transparent text-sm sm:text-base"
