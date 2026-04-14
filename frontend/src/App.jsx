@@ -27,7 +27,6 @@ function AppRoutes() {
           <Route path="/register" element={<Register />} />
         </Route>
 
-
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/lists/:id" element={<List />} />

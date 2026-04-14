@@ -2,13 +2,11 @@ self.addEventListener('push', function (event) {
 
     const data = event.data ? event.data.json() : { title: 'Nuevo Regalo', body: '¡Alguien actualizó una lista!' };
 
-    console.log(data)
-
     const options = {
         body: data.body,
         vibrate: [100, 50, 100],
-        icon: './Logo.png',
-        badge: './gift.svg',
+        icon: './pictures/icon.png',
+        badge: './svg/gift.svg',
         data: {
             url: data.url || '/'
         }
