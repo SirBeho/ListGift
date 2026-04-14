@@ -4,7 +4,7 @@ import {
     PartyPopper,
     Wine,
     Heart,
-    Gem,          // 👈 En lugar de Ring
+    Gem,
     Baby,
     Star,
     Home,
