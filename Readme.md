@@ -140,21 +140,22 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://d1ngjctyujvjjy.cloudfront.net/badges/2022/10/24/devtools-circle.png" height="20">Browser DevTools</span>**
 
-  - Herramientas de Desarrollador del navegador (Consola, Red, Componentes de React) fundamentales para la depuración del frontend..
+  - Herramientas de Desarrollador del navegador (Consola, Red, Componentes de React) fundamentales para la depuración del frontend.
 
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://simpleskill.icons.workers.dev/svg?i=DBeaver" height="20">DBeaver</span>**
 
   - Cliente de escritorio para desarrolladores para gestionar y visualizar la base de datos MySQL.
 
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png" height="20">  VS Code</span>**
+
   - Entorno de desarrollo principal.
-  <!--
+
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://simpleskill.icons.workers.dev/svg?i=composer" height="20">  Composer</span>**
   - Administrador de dependencias de PHP utilizado en el _backend_.
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://simpleskill.icons.workers.dev/svg?i=npm" height="20">  npm</span>**
   - Administrador de paquetes de Node.js utilizado en el _frontend_.
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://simpleskill.icons.workers.dev/svg?i=vite" height="20">  Vite</span>**
-  - Herramienta de construcción rápida (_Build Tool_) para el _frontend_. -->
+  - Herramienta de construcción rápida (_Build Tool_) para el _frontend_.
 
 ---
 

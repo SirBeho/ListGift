@@ -19,7 +19,7 @@ class VerifyToken
             // 2. Decodificar (Sintaxis v7)
             $decoded = JWT::decode($_COOKIE['token'], new Key($_ENV['JWT_SECRET'], 'HS256'));
             $_REQUEST['auth'] = (array) $decoded;
-           
+          
         } catch (\Firebase\JWT\ExpiredException $e) {
             self::respondError('La sesión ha expirado', 401);
         } catch (\Exception $e) {
