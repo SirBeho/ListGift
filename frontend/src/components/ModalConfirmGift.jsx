@@ -7,10 +7,12 @@ import {
     PhoneIcon,
     ChatBubbleBottomCenterTextIcon
 } from '@heroicons/react/24/outline'; // Icono para el modal de regalo
-import PhoneInput from 'react-phone-number-input/input'
-
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css' //
 
 export default function ModalConfirmGift({ itemName, show = false, onClose, onConfirm }) {
+
+    console.log(show);
 
     const textAreaRef = useRef(null);
     //datos

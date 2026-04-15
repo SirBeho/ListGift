@@ -24,7 +24,7 @@ const IconPicker = ({ selectedIcon, onChange }) => {
                     }`}
             >
                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+                    <div className="p-1.5 bg-primary text-white rounded-lg shadow-sm">
                         <SelectedIcon size={18} strokeWidth={2.5} />
                     </div>
                     <span className="text-sm font-semibold text-gray-700 capitalize">
@@ -66,14 +66,14 @@ const IconPicker = ({ selectedIcon, onChange }) => {
                                                             setIsOpen(false);
                                                         }}
                                                         className={`relative p-2 rounded-lg transition-all flex items-center justify-center ${isSelected
-                                                            ? 'bg-blue-600 text-white shadow-md'
-                                                            : 'bg-gray-50 text-gray-500 hover:bg-blue-50 hover:text-blue-600'
+                                                            ? 'bg-primary text-white shadow-md'
+                                                            : 'bg-gray-50 text-gray-500 hover:bg-blue-50 hover:text-primary'
                                                             }`}
                                                         title={label}
                                                     >
                                                         <Icon size={16} />
                                                         {isSelected && (
-                                                            <div className="absolute -top-0.5 -right-0.5 bg-white text-blue-600 rounded-full p-0.5 shadow-sm border border-blue-100">
+                                                            <div className="absolute -top-0.5 -right-0.5 bg-white text-primary rounded-full p-0.5 shadow-sm border border-blue-100">
                                                                 <Check size={6} strokeWidth={4} />
                                                             </div>
                                                         )}

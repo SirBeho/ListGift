@@ -19,7 +19,7 @@ export default function Dashboard() {
       ))}
       <div className="w-full flex justify-between my-4">
         <h1 className="text-2xl ">Dashboard</h1>
-        <span className="text-sm text-blue-900 dark:text-blue-600">
+        <span className="text-sm text-blue-900 dark:text-primary">
           Home / <span className="text-gray-600 dark:text-gray-400">Dashboard</span>
         </span>
       </div>

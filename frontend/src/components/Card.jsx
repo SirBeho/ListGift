@@ -146,7 +146,7 @@ function Card({ data, litt = false }) {
             }
             className="w-full h-48 object-cover rounded-t-xl " alt={`data ${data.name}`} />
 
-          <div className="absolute top-2 right-2 bg-blue-100 text-blue-600 text-xs font-semibold rounded-full px-2 py-1 opacity-75 hover:opacity-100 transition-opacity duration-200">
+          <div className="absolute top-2 right-2 bg-blue-100 text-primary text-xs font-semibold rounded-full px-2 py-1 opacity-75 hover:opacity-100 transition-opacity duration-200">
             {data.items ? data.items.length : 0} items
           </div>
         </div>
@@ -167,7 +167,7 @@ function Card({ data, litt = false }) {
           <div className="flex justify-center space-x-3  ">
             <Link
               to={`/lists/${data.id}`}
-              className={`bg-blue-500 hover:bg-blue-600 text-white ${litt ? "py-0 px-2 h-7" : "py-2 px-4 font-bold"
+              className={`bg-blue-500 hover:bg-primary text-white ${litt ? "py-0 px-2 h-7" : "py-2 px-4 font-bold"
                 }  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center transform transition-transform duration-200 hover:scale-105`}>
               <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
               Ver

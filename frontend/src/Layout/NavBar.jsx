@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useNotifications } from '../service/Notifications'; // Ajusta si cambiaste la ruta
 import {
-  Bars3Icon,
+
   ArrowRightOnRectangleIcon,
   UserCircleIcon
 } from "@heroicons/react/24/outline"; // Asegúrate de tener heroicons instalados
 import Alert from '../components/Alert';
 import { useAuth } from "../providers/AuthProvider";
-import { useList } from "../providers/ListProvider";
 
 export default function Navbar({ sidebarController }) {
-  const { user, loading, logout } = useAuth();
-  const { clearUserData } = useList();
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = sidebarController;
   const [menuOpen, setMenuOpen] = useState(false);
   const { subscribeUser } = useNotifications();
   const [apiRes, setApiRes] = useState(null);
-  const navigate = useNavigate();
   const location = useLocation();
 
   const handleSupcribe = async () => {
@@ -30,7 +27,7 @@ export default function Navbar({ sidebarController }) {
   // ---------------------------------------------------------
   if (!user) {
     return (
-      <nav className="sticky top-0 left-0 w-full z-20 flex justify-between items-center px-6 h-16 bg-white shadow-sm border-b border-gray-100">
+      <nav className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-6 h-16 bg-white shadow-sm border-b border-gray-100">
         {/* IZQUIERDA: Identidad de Marca (Rellena el espacio vacío) */}
         <Link to='/' className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 rounded-xl overflow-hidden bg-indigo-100 border-blue-500 border-2">

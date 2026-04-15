@@ -13,7 +13,8 @@ import {
   GiftIcon,
   ArrowsUpDownIcon,
   PlusIcon,
-  PencilSquareIcon, // <--- IMPORTANTE: Icono para el botón de editar
+  PencilSquareIcon,
+  ArrowRightIcon, // <--- IMPORTANTE: Icono para el botón de editar
 } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 import { BeatLoader } from "react-spinners";
@@ -22,55 +23,16 @@ import { useAuth } from "../providers/AuthProvider";
 import confetti from "canvas-confetti";
 import Alert from "../components/Alert";
 import ModalManageItem from "../components/ModalManageItem"; // <--- CAMBIO: Importamos el componente unificado
-import { API_BASE_URL } from "../service/AxiosInstance";
-
-
+import GiftCard from "../components/GiftCard";
+//arrow.svg
 
 // === VARIANTES ===
-const containerVariants = {
+/* const containerVariants = {
   initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+  animate: { opacity: 1, transition: { staggerChildren: 1, delayChildren: 1 } },
   exit: { opacity: 0 },
-};
+}; */
 
-const itemVariants = {
-  initial: {
-    opacity: 0,
-    y: 30,
-    scale: 0.9,
-    borderColor: "rgba(0,0,0,0)",
-    boxShadow: "0 0 0 rgba(0,0,0,0)"
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    borderColor: "rgba(0,0,0,0)",
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-    transition: { type: 'spring', damping: 15, stiffness: 100, duration: 0.3 }
-  },
-  highlight: {
-    opacity: 1,
-    y: 0,
-    scale: 1.02,
-    borderColor: ["#f3f4f6", "#ec4899", "#f3f4f6"],
-    boxShadow: [
-      "0px 0px 0px rgba(236, 72, 153, 0)",
-      "0px 0px 20px rgba(236, 72, 153, 0.4)",
-      "0px 0px 0px rgba(236, 72, 153, 0)"
-    ],
-    transition: {
-      opacity: { duration: 0.3 },
-      y: { type: "spring", stiffness: 100, damping: 20 },
-      scale: { duration: 0.3 },
-      borderColor: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-      boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-    }
-  },
-  exit: { opacity: 0, y: -20, scale: 0.95, transition: { duration: 0.2 } },
-  hover: { scale: 1.03, rotate: 1, boxShadow: '0px 10px 20px rgba(0,0,0,0.1)', transition: { duration: 0.2 } },
-  tap: { scale: 0.95 },
-};
 
 const emptyListVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -87,13 +49,49 @@ const progressBarVariants = {
   animate: { width: '100%', transition: { duration: 4, ease: 'easeInOut' } },
 };
 
-const formatPrice = (price) => {
-  return new Intl.NumberFormat('es-DO', {
-    style: 'currency',
-    currency: 'DOP',
-    minimumFractionDigits: 2,
-  }).format(price);
+const gridVariants = {
+  initial: {
+    opacity: 0
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.4, // 👈 Ajusta este número para que sea "súper lenta"
+    },
+  },
 };
+
+
+const containerVariants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.2,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+// 2. VARIANTES DEL HIJO CON CUSTOM
+const cardVariants = {
+  initial: { opacity: 0, y: 50 },
+
+  // Recibe el custom para cambiar estilo si está destacado
+  animate: ({ isHighlighted }) => ({
+    opacity: 1,
+    y: 0,
+    scale: isHighlighted ? 1.1 : 1,
+    borderColor: isHighlighted ? "#ec4899" : "#e2e8f0",
+    transition: {
+      type: "tween",
+      ease: "easeOut",
+      duration: 0.8
+    }
+  }),
+};
+
 
 export default function List() {
   const { user, loading } = useAuth();
@@ -106,7 +104,7 @@ export default function List() {
   const [filterCategory] = useState(() => localStorage.getItem('giftListFilterCategory') || 'all');
   const [sortOption, setSortOption] = useState(() => localStorage.getItem('giftListSortOption') || 'price-asc');
   const { search } = useLocation();
-  const [highlightedId, setHighlightedId] = useState(null);
+  const [highlightedId, setHighlightedId] = useState(19);
   const [apiRes, setApiRes] = useState(null);
 
   // --- NUEVOS ESTADOS PARA GESTIÓN DE ITEMS ---
@@ -116,6 +114,10 @@ export default function List() {
 
   const isOwner = ListShow?.user_id === user?.id || user?.id == 1; // Helper para saber si es dueño
   const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/uploads";
+
+  const totalItems = ListShow?.items?.length || 0;
+  const giftedItems = ListShow?.items?.filter(i => i.status === 2).length || 0;
+  const progressPercent = totalItems > 0 ? (giftedItems / totalItems) * 100 : 0;
 
   //funcion para cargar lista publica y priva validando el user
   const RefresListas = useCallback(async () => {
@@ -182,6 +184,15 @@ export default function List() {
 
   }, [ListShow?.items, searchTerm, filterCategory, sortOption]);
 
+
+  const [replayKey, setReplayKey] = useState(0);
+
+  const handleReplay = () => {
+
+    setReplayKey((prev) => prev + 1);
+  };
+
+
   // Highlight Effect
   useEffect(() => {
     if (ListShow?.items) {
@@ -223,7 +234,7 @@ export default function List() {
 
   if (!ListShow || id == undefined) {
     return (
-      <motion.div variants={notFoundVariants} initial="initial" animate="animate" exit="exit" className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-pink-50 via-rose-100 to-purple-100">
+      <motion.div variants={notFoundVariants} initial="initial" animate="animate" exit="exit" className="flex   flex-col items-center justify-center h-screen bg-gradient-to-br from-pink-50 via-rose-100 to-purple-100">
         <motion.div className="bg-white shadow-xl rounded-3xl max-w-md w-full p-10 text-center border-t-8 border-pink-500">
           <ExclamationTriangleIcon className="h-16 w-16 mx-auto text-pink-600 mb-6" />
           <h2 className="text-3xl font-bold text-pink-700 mb-5">Lista no encontrada</h2>
@@ -234,10 +245,9 @@ export default function List() {
   }
 
   return (
-    <div>
+    <div className="pt-14 min-h-screen bg-slate-50">
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
-      {/* Componente Unificado para Crear/Editar */}
       <ModalManageItem
         isOpen={isOpen}
         listId={id}
@@ -245,118 +255,156 @@ export default function List() {
         setApiRes={setApiRes}
         refreshItems={RefresListas}
         apiRes={apiRes}
-        itemToEdit={itemToEdit} // Pasamos el item si estamos editando
+        itemToEdit={itemToEdit}
       />
 
-      <motion.div className="p-6 relative" variants={containerVariants} initial="initial" animate="animate" exit="exit" style={{ fontFamily: "'Nunito Sans', sans-serif" }}>
+      <motion.div className="max-w-7xl mx-auto p-4 sm:p-6" variants={containerVariants} initial="initial" animate="animate" exit="exit">
 
-        {/* Header Lista */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
-          <motion.div className="mb-8 rounded-xl shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300" style={{ backgroundImage: `linear-gradient(135deg, ${ListShow.color1} 0%, ${ListShow.color2} 100%)` }} initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}>
-            {ListShow?.status && (
-              <motion.span className={`absolute top-3 right-3 inline-flex items-center h-fit text-xs font-semibold px-2.5 py-0.5 rounded shadow-sm ${ListShow.status.toLowerCase() === 'active' ? 'bg-green-300 text-white' : 'bg-blue-300 text-white'}`}>{ListShow.status}</motion.span>
-            )}
-            <div className="absolute inset-0 bg-white opacity-10 bg-[url('/pictures/git.png')] bg-repeat-space mix-blend-overlay" style={{ backgroundSize: "auto 100%" }}></div>
+        {/* BOTÓN REGRESAR */}
+        <button
+          onClick={() => navigate('/')}
+          className="mb-6 flex items-center text-slate-500 hover:text-pink-600 transition-colors font-medium text-sm "
+        >
 
-            <div className="relative p-6 md:p-8 lg:p-10 flex items-center">
-              {ListShow?.image && <img src={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `${VITE_STORAGE_URL}/pictures/git.png`} alt="" className="w-24 h-24 rounded-full border-2 border-white mr-6 object-cover shadow-md" />}
-              <div className="flex-grow text-white">
-                <h2 className="text-3xl font-bold">{ListShow?.name}</h2>
-                <p className="opacity-90">{ListShow?.description}</p>
+          <ArrowRightIcon className="h-4 w-4 mr-1 rotate-180 " />
+          Volver a explorar
+        </button>
+
+        {/* Header Lista con Estadísticas */}
+        <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden mb-8">
+          <motion.div
+            className="relative p-6 md:p-10 text-white"
+            style={{ backgroundImage: `linear-gradient(135deg, ${ListShow.color1} 0%, ${ListShow.color2} 100%)` }}
+          >
+            {/* Decoración de fondo */}
+            <div className="absolute inset-0 opacity-10 bg-[url('/pictures/git.png')] bg-repeat rotate-12 scale-150 pointer-events-none"></div>
+            <div className="relative flex flex-col md:flex-row items-center gap-6">
+              <div className="relative">
+                <img
+                  src={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `${VITE_STORAGE_URL}/pictures/git.png`}
+                  className="w-28 h-28 rounded-3xl object-cover border-4 border-white/30 shadow-2xl"
+                  alt=""
+                />
+                {isOwner && (
+                  <div className="absolute -bottom-2 -right-2 bg-white text-pink-600 p-2 rounded-xl shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                    <PencilSquareIcon className="h-4 w-4" />
+                  </div>
+                )}
               </div>
-              {/* BOTÓN FLOTANTE: ABRIR CREAR */}
+
+              <div className="flex-grow text-center md:text-left">
+                <h2 className="text-4xl font-black tracking-tight mb-2">{ListShow?.name}</h2>
+                <p className="text-white/80 max-w-xl line-clamp-2">{ListShow?.description}</p>
+
+                {/* BARRA DE PROGRESO */}
+                <div className="mt-6 flex items-center gap-4">
+                  <div className="flex-grow h-2 bg-black/20 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progressPercent}%` }}
+                      className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                    />
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-widest">
+                    {giftedItems}/{totalItems} CUMPLIDOS
+                  </span>
+                </div>
+              </div>
+
               {isOwner && (
-                <button onClick={handleOpenCreate} className="bg-white text-pink-500 p-3 rounded-full shadow-lg hover:scale-110 transition-transform">
-                  <PlusIcon className="h-6 w-6" />
+                <button
+                  onClick={handleOpenCreate}
+                  className="bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all active:scale-95 flex-shrink-0"
+                >
+                  <PlusIcon className="h-5 w-5 text-pink-500" />
+                  Agregar Regalo
                 </button>
               )}
             </div>
           </motion.div>
 
-          <div className="flex items-center space-x-4 mb-4">
+          {/* Filtros y Búsqueda */}
+          <div className="p-4 sm:p-6 bg-white flex flex-col md:flex-row gap-4 border-t border-slate-100">
             <div className="relative flex-grow">
-              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input type="text" placeholder="Buscar regalos..." className="w-full pl-10 pr-3 py-2 rounded-md border border-gray-300 focus:ring-pink-500 focus:border-pink-500" value={searchTerm} onChange={handleSearch} />
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="¿Qué regalo buscas?"
+                className="w-full pl-12 pr-4 py-3 rounded-xl border-none bg-slate-100 focus:ring-2 focus:ring-pink-500 transition-all"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+
+
             </div>
-            <div className="relative">
-              <select className="block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
-                <option value="default">Ordenar por</option>
-                <option value="name-asc">Nombre (A-Z)</option>
-                <option value="name-desc">Nombre (Z-A)</option>
-                <option value="price-asc">Precio (Menor a Mayor)</option>
-                <option value="price-desc">Precio (Mayor a Menor)</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"><ArrowsUpDownIcon className="h-5 w-5" /></div>
-            </div>
+
+            <select
+              className="bg-slate-100 border-none rounded-xl py-3 px-4 font-bold text-slate-600 focus:ring-2 focus:ring-pink-500 cursor-pointer"
+              value={sortOption}
+              onChange={(e) => handleSort(e.target.value)}
+            >
+              <option value="default">Ordenar por</option>
+              <option value="name-asc">Nombre (A-Z)</option>
+              <option value="name-desc">Nombre (Z-A)</option>
+              <option value="price-asc">Más económico</option>
+              <option value="price-desc">Más exclusivos</option>
+
+            </select>
+
+            <button
+              onClick={handleReplay}
+              className="px-8 py-3 bg-pink-500 text-white font-black rounded-full hover:bg-pink-400 active:scale-95 transition-all"
+            >
+              Repetir Cascada + Custom
+            </button>
           </div>
         </div>
 
-        {/* Grid de Items */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence>
-            {itemsToRender.length > 0 ? (
-              itemsToRender.map((item) => {
-                const isGifted = item.status === 2;
-                const isHighlighted = item.id === highlightedId;
+        <motion.div
+          key={replayKey} // <--- IMPORTANTE: Cambia la KEY para reiniciar la animación
+          variants={gridVariants}
+          initial="initial"
+          animate="animate"
+          // Usamos Grid para que Framer calcule las posiciones más fácil
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          {itemsToRender.map((item) => (
+            <GiftCard
+              key={item.id} // La KEY debe ser el ID real para que el 'layout' funcione
+              item={item}
+              isOwner={isOwner}
+              highlightedId={19}
+              handleOpenEdit={handleOpenEdit}
+              setSelectedItem={setSelectedItem}
+              VITE_STORAGE_URL={VITE_STORAGE_URL}
+            />
+          ))}
+        </motion.div>
 
-                //console.log(item.img_name)
+        {/* Mensaje vacío */}
+        {itemsToRender.length === 0 && (
+          <motion.div variants={emptyListVariants} className="py-20 text-center">
+            <div className="bg-white inline-block p-10 rounded-3xl shadow-sm border border-slate-100">
+              <InboxStackIcon className="h-16 w-16 text-slate-200 mx-auto mb-4" />
+              <h4 className="text-xl text-slate-400 font-bold">No encontramos regalos aquí</h4>
+            </div>
+          </motion.div>
+        )}
 
-                return (
-                  <motion.div
-                    key={item.id}
-                    id={`item-${item.id}`}
-                    variants={itemVariants}
-                    initial="initial"
-                    animate={isHighlighted ? "highlight" : "animate"}
-                    exit="exit"
-                    whileHover="hover"
-                    whileTap="tap"
-                    onClick={() => setSelectedItem(item)}
-                    className={`relative rounded-2xl overflow-hidden cursor-pointer border-2 ${isHighlighted ? 'z-10' : ''} ${isGifted ? 'bg-green-50 border-green-200' : 'bg-white'}`}
-                    style={{ willChange: "transform, box-shadow, border-color" }}
-                  >
-                    {/* BOTÓN EDITAR (SOLO PARA EL DUEÑO) */}
-                    {isOwner && !isGifted && (
-                      <button
-                        onClick={(e) => handleOpenEdit(e, item)}
-                        className="absolute top-3 left-3 z-20 bg-white/90 text-indigo-600 p-1.5 rounded-full shadow-sm hover:bg-white hover:text-indigo-800 hover:scale-110 transition-all border border-indigo-100"
-                        title="Editar regalo"
-                      >
-                        <PencilSquareIcon className="h-4 w-4" />
-                      </button>
-                    )}
-
-                    {isGifted && <div className="absolute top-3 right-3 z-20 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-sm"><CheckBadgeIcon className="h-4 w-4 mr-1" /> REGALADO</div>}
-                    {isHighlighted && !isGifted && <div className="absolute top-3 right-3 z-20 bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg animate-bounce"><GiftIcon className="h-4 w-4 mr-1" /> ¡AQUÍ!</div>}
-
-                    <div className="relative h-60 overflow-hidden rounded-t-2xl">
-                      <motion.img src={item.img_name ? `${VITE_STORAGE_URL}/${item.img_name}` : `${VITE_STORAGE_URL}/pictures/git.png`} alt={item.name} className={`w-full h-full object-cover block transition-all duration-500 ${isGifted ? 'grayscale-[80%] opacity-80' : ''}`} />
-                      {isGifted && <div className="absolute inset-0 bg-green-900/10 mix-blend-multiply" />}
-                    </div>
-
-                    <div className="p-6 flex flex-col justify-between h-full relative">
-                      <div>
-                        <h3 className={`text-xl font-semibold mb-3 ${isGifted ? 'text-green-800 line-through' : 'text-gray-900'}`}>{item.name}</h3>
-                        <p className={`text-lg font-bold mb-2 flex items-center ${isGifted ? 'text-green-600' : 'text-pink-600'}`}>
-                          <CurrencyDollarIcon className="h-5 w-5 mr-2" /> {formatPrice(item.price)}
-                        </p>
-                      </div>
-                      {isGifted && item.donante_nombre && <p className="text-xs text-green-600 font-medium mt-2">Regalado por {item.donante_nombre}</p>}
-                    </div>
-                  </motion.div>
-                );
-              })
-            ) : (
-              <motion.div variants={emptyListVariants} initial="initial" animate="animate" exit="exit" className="col-span-full text-center p-8 bg-white rounded-2xl shadow-md border border-dashed border-gray-300">
-                <InboxStackIcon className="h-14 w-14 text-gray-400 mx-auto mb-3" />
-                <h4 className="text-xl text-gray-600 font-semibold">¡La lista está vacía!</h4>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {selectedItem && <ModalItem show={selectedItem != null} selectedItem={selectedItem} refreshItems={RefresListas} setApiRes={setApiRes} onClose={() => setSelectedItem(false)} color1={ListShow.color1} color2={ListShow.color2} />}
+        {selectedItem && (
+          <ModalItem
+            show={!!selectedItem}
+            selectedItem={selectedItem}
+            refreshItems={RefresListas}
+            setApiRes={setApiRes}
+            onClose={() => setSelectedItem(false)}
+            color1={ListShow.color1}
+            color2={ListShow.color2}
+          />
+        )}
       </motion.div>
     </div>
   );
 }
+
+

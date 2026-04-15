@@ -85,7 +85,7 @@ export default function Profile() {
           {!isEditing && (
             <motion.button
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600"
+              className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-primary"
               whileHover={{ scale: 1.1 }}
             >
               Editar

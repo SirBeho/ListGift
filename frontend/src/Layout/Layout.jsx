@@ -4,6 +4,7 @@ import { useAuth } from "../providers/AuthProvider";
 import { motion } from "framer-motion";
 import SideBar from "./SideBar";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 
 
 export default function Layout() {
@@ -45,7 +46,7 @@ export default function Layout() {
 
           <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} />
 
-          <motion.div
+          <motion.div id="main-scroll-area"
             className='flex-1  overflow-y-auto '
             key={location.pathname}
             initial={{ opacity: 0, x: -20 }}
@@ -56,12 +57,14 @@ export default function Layout() {
 
           >
             <Outlet />
+
+            <Footer full={!user} />
+
           </motion.div>
         </div>
 
-        <footer className="bg-white dark:bg-gray-700 text-center flex justify-between py-1 px-5 ">
-          <p className="text-sm text-gray-500">© 2025 ING Benjamin Tavarez - BTC.</p>
-        </footer>
+
+
       </div>
     </div>
   );

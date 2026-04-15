@@ -49,14 +49,14 @@ function ListaDeRegalos() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="absolute top-5 right-8 z-10 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-2xl flex items-center justify-center transition-colors border-4 border-white dark:border-gray-800"
+          className="absolute top-5 right-8 z-10 bg-primary hover:bg-blue-700 text-white p-2 rounded-full shadow-2xl flex items-center justify-center transition-colors border-4 border-white dark:border-gray-800"
         > Agregar Lista
           <PlusIcon className="h-5 w-5 ms-2" />
         </button>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-5">
           <div className="text-center mb-4 transform transition-transform duration-300 hover:scale-105">
-            <h3 className="text-3xl font-semibold text-blue-600">{user ? user.name : 'Usuario'}</h3>
+            <h3 className="text-3xl font-semibold text-primary">{user ? user.name : 'Usuario'}</h3>
             <p className="mt-1 text-gray-500">¡Mira tus listas de regalos!</p>
           </div>
 
@@ -82,7 +82,7 @@ function ListaDeRegalos() {
                 <p className="text-gray-400 mb-6">Comienza creando tu primera lista de deseos.</p>
                 <button
                   onClick={() => setIsCreateModalOpen(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors"
+                  className="bg-primary hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors"
                 >
                   Crear lista ahora
                 </button>
@@ -112,7 +112,7 @@ function ListaDeRegalos() {
                     <p className="text-gray-400 mb-6">Comienza creando tu primera lista de deseos.</p>
                     <button
                       onClick={() => navigate('/lists/create')}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors"
+                      className="bg-primary hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors"
                     >
                       Crear lista ahora
                     </button>

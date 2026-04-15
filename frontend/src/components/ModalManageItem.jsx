@@ -186,7 +186,7 @@ export default function ModalManageItem({ isOpen, onClose, listId, refreshItems,
     const TitleIcon = isEditing ? PencilSquareIcon : SparklesIcon;
     const headerGradient = isEditing
         ? 'from-indigo-600 to-purple-600' // Morado para editar
-        : 'from-blue-600 to-indigo-600';  // Azul para crear
+        : 'from-primary to-indigo-600';  // Azul para crear
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -334,7 +334,7 @@ export default function ModalManageItem({ isOpen, onClose, listId, refreshItems,
                                                     </div>
                                                     <input
                                                         type="url" placeholder="https://..."
-                                                        className="w-full rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 pl-10 py-3 px-4 border transition-all text-sm text-blue-600"
+                                                        className="w-full rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 pl-10 py-3 px-4 border transition-all text-sm text-primary"
                                                         value={formData.place_link} onChange={(e) => setFormData({ ...formData, place_link: e.target.value })}
                                                     />
                                                 </div>
@@ -367,7 +367,7 @@ export default function ModalManageItem({ isOpen, onClose, listId, refreshItems,
                                                     ? 'bg-red-500 shadow-red-200 hover:bg-red-600'
                                                     : isEditing
                                                         ? 'bg-gradient-to-r from-indigo-600 to-purple-600 shadow-purple-200 hover:shadow-purple-300' // Color edición
-                                                        : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-200 hover:shadow-blue-300' // Color creación
+                                                        : 'bg-gradient-to-r from-primary to-indigo-600 shadow-blue-200 hover:shadow-blue-300' // Color creación
                                                 } hover:scale-[1.02]`}
                                         >
                                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>

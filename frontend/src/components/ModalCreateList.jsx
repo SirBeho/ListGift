@@ -107,7 +107,7 @@ export default function ModalCreateList({ isOpen, onClose, setApiRes, apiRes, re
                                         <div className='absolute inset-0 flex flex-col justify-center items-center h-full w-full z-20'>
                                             {!previewUrl && (
                                                 <div className={`flex flex-col items-center transition-all ${showPhotoAlert ? 'scale-110' : ''}`}>
-                                                    <div className={`mx-auto flex h-10 w-10 items-center justify-center rounded-full mb-2 transition-all  group-hover:scale-110 ${showPhotoAlert ? 'bg-white text-red-600  animate-pulse' : 'bg-blue-100 text-blue-600'}`}>
+                                                    <div className={`mx-auto flex h-10 w-10 items-center justify-center rounded-full mb-2 transition-all  group-hover:scale-110 ${showPhotoAlert ? 'bg-white text-red-600  animate-pulse' : 'bg-blue-100 text-primary'}`}>
                                                         <PhotoIcon className="h-6 w-6" />
                                                     </div>
                                                     <p className={` text-sm font-medium drop-shadow-md text-white ${showPhotoAlert ? ' underline animate-bounce' : ''}`}>
@@ -191,7 +191,7 @@ export default function ModalCreateList({ isOpen, onClose, setApiRes, apiRes, re
                                     <div className="pt-4 flex flex-col gap-2">
                                         <div className="flex gap-4">
                                             <button type="button" onClick={handleClose} className="px-6 py-3.5 text-sm font-bold text-gray-400 hover:text-gray-600">Cancelar</button>
-                                            <button type="submit" disabled={isSubmitting} className={`flex-1 py-3.5 rounded-2xl font-bold text-white shadow-lg transition-all relative overflow-hidden group/btn ${showPhotoAlert ? 'bg-red-500 shadow-red-200' : 'bg-blue-600 shadow-blue-200'}`}>
+                                            <button type="submit" disabled={isSubmitting} className={`flex-1 py-3.5 rounded-2xl font-bold text-white shadow-lg transition-all relative overflow-hidden group/btn ${showPhotoAlert ? 'bg-red-500 shadow-red-200' : 'bg-primary shadow-blue-200'}`}>
                                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></div>
                                                 <span className="relative z-10 flex items-center justify-center gap-2">
                                                     {isSubmitting ? 'Procesando...' : showPhotoAlert ? '¡Crear Sin Foto!' : 'Crear Lista'}
