@@ -4,7 +4,6 @@ import Card from '../components/Card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import Text from '../components/text';
 
 function Home() {
   const { publicLists: listas, LoadPublicListas } = useList();
@@ -106,7 +105,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <Text />
+
 
       {/* 2. GRID DE LISTAS PÚBLICAS */}
       <section className="bg-muted/30 relative ">

@@ -302,6 +302,11 @@ export default function List() {
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progressPercent}%` }}
+                      transition={{
+                        duration: 1.5,      // 👈 Tiempo que tarda en llenarse (1.5s es el "sweet spot")
+                        ease: "circOut",    // 👈 Empieza rápido y frena suavemente al final
+                        delay: 0.5          // 👈 Espera a que la lista cargue antes de moverse
+                      }}
                       className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                     />
                   </div>
@@ -351,12 +356,7 @@ export default function List() {
 
             </select>
 
-            <button
-              onClick={handleReplay}
-              className="px-8 py-3 bg-pink-500 text-white font-black rounded-full hover:bg-pink-400 active:scale-95 transition-all"
-            >
-              Repetir Cascada + Custom
-            </button>
+
           </div>
         </div>
 
@@ -373,7 +373,7 @@ export default function List() {
               key={item.id} // La KEY debe ser el ID real para que el 'layout' funcione
               item={item}
               isOwner={isOwner}
-              highlightedId={19}
+              highlightedId={highlightedId}
               handleOpenEdit={handleOpenEdit}
               setSelectedItem={setSelectedItem}
               VITE_STORAGE_URL={VITE_STORAGE_URL}
