@@ -105,7 +105,7 @@ export default function ModalItem({ selectedItem, show = false, onClose = () => 
                                 </div>
 
                                 {/* BODY */}
-                                <div className="overflow-y-auto px-8 py-6 custom-scrollbar space-y-6">
+                                <div className="overflow-y-auto px-8 py-2 custom-scrollbar space-y-6">
 
                                     {/* Imagen con Contenedor Estilizado */}
                                     <div className="relative group">

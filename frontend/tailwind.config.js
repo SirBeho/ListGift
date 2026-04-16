@@ -23,6 +23,7 @@ export default {
       colors: {
         'gray-sl': '#353a40',
         'gray-33': '#333',
+        success: 'oklch(var(--success) / <alpha-value>)',
 
         background: "oklch(var(--background) / <alpha-value>)",
         foreground: "oklch(var(--foreground) / <alpha-value>)",
@@ -30,6 +31,10 @@ export default {
           DEFAULT: "oklch(var(--primary)/<alpha-value>)",
           foreground: "oklch(var(--primary-foreground) / <alpha-value>)",
         },
+        /* success: {
+          DEFAULT: "oklch(var(--success)/<alpha-value>)",
+          foreground: "oklch(var(--success-foreground) / <alpha-value>)",
+        }, */
         card: {
           DEFAULT: "oklch(var(--card) / <alpha-value>)",
           foreground: "oklch(var(--card-foreground) / <alpha-value>)",

@@ -44,6 +44,7 @@ export default function Login() {
             await login(formData);
             setAnimating(true);
             setTimeout(() => {
+
                 navigate(redirectTo || "/dashboard", { replace: true });
             }, 500); // Duración de la animación de salida */
         } catch (err) {

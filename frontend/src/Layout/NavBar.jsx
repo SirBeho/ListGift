@@ -4,10 +4,12 @@ import { useNotifications } from '../service/Notifications'; // Ajusta si cambia
 import {
 
   ArrowRightOnRectangleIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  Bars3Icon
 } from "@heroicons/react/24/outline"; // Asegúrate de tener heroicons instalados
 import Alert from '../components/Alert';
 import { useAuth } from "../providers/AuthProvider";
+import Logo from "../components/Logo";
 
 export default function Navbar({ sidebarController }) {
   const { user, logout } = useAuth();
@@ -29,28 +31,19 @@ export default function Navbar({ sidebarController }) {
     return (
       <nav className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-6 h-16 bg-white shadow-sm border-b border-gray-100">
         {/* IZQUIERDA: Identidad de Marca (Rellena el espacio vacío) */}
-        <Link to='/' className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-xl overflow-hidden bg-indigo-100 border-blue-500 border-2">
-            <img src="../pictures/logo.jpg" alt="Logo" className="w-full h-full object-cover bg-white " />
-          </div>
-          <span className="text-xl font-bold text-gray-800 tracking-tight">List Gifts</span>
-        </Link>
+        <Logo letra={true} />
 
         {/* DERECHA: Solo el botón de acción */}
         <div className="flex items-center">
           {/* Si estoy en login, muestro ir a registro, y viceversa */}
-          {location.pathname === '/register' ? (
-            <Link to="/login" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-              Iniciar Sesión
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="px-5 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200"
-            >
-              Iniciar Sesión
-            </Link>
-          )}
+
+          <Link
+            to="/login"
+            className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary/50 transition-colors shadow-md shadow-indigo-200"
+          >
+            Iniciar Sesión
+          </Link>
+
         </div>
       </nav>
     );
@@ -60,7 +53,7 @@ export default function Navbar({ sidebarController }) {
   // MODO PRIVADO (Usuario Logueado - Tu código original optimizado)
   // ---------------------------------------------------------
   return (
-    <nav className="sticky top-0 left-0 w-full z-20 flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
+    <nav className="sticky top-0 left-0 w-full z-40 flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
       {/* IZQUIERDA: Toggle Sidebar + Breadcrumbs/Logo */}
@@ -69,7 +62,7 @@ export default function Navbar({ sidebarController }) {
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-200"
         >
-          <img className="w-4 h-4" src="/svg/bars.svg" alt="Menu" />
+          <Bars3Icon strokeWidth={2} className="w-6 h-6" />
         </button>
 
         {/* Opcional: Mostrar dónde estás o el logo también aquí */}
@@ -83,7 +76,7 @@ export default function Navbar({ sidebarController }) {
       </div>
 
       {/* DERECHA: Menú de Usuario */}
-      <div className="relative">
+      <div className="relative z-40">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="flex items-center gap-3 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-200"
@@ -104,9 +97,9 @@ export default function Navbar({ sidebarController }) {
         {menuOpen && (
           <>
             {/* Backdrop invisible para cerrar al hacer clic fuera */}
-            <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)}></div>
+            <div className="fixed inset-0 " onClick={() => setMenuOpen(false)}></div>
 
-            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-20 animate-in fade-in zoom-in-95 duration-200">
+            <div className="absolute right-0  mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-20 animate-in fade-in zoom-in-95 duration-200">
               <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <UserCircleIcon className="w-5 h-5" />
                 Mi Perfil

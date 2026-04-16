@@ -7,12 +7,13 @@ import {
     PhoneIcon,
     ChatBubbleBottomCenterTextIcon
 } from '@heroicons/react/24/outline'; // Icono para el modal de regalo
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput from 'react-phone-number-input/input'
 import 'react-phone-number-input/style.css' //
 
 export default function ModalConfirmGift({ itemName, show = false, onClose, onConfirm }) {
 
     console.log(show);
+
 
     const textAreaRef = useRef(null);
     //datos
@@ -27,6 +28,8 @@ export default function ModalConfirmGift({ itemName, show = false, onClose, onCo
             message: '' // El mensaje siempre empieza vacío
         };
     });
+
+    console.log(datos)
 
     const { name, phone, message } = datos;
 
@@ -143,9 +146,10 @@ export default function ModalConfirmGift({ itemName, show = false, onClose, onCo
                                                 <PhoneInput
                                                     className='block w-full pl-10 rounded-lg border border-gray-300 p-2 text-sm ring-0 focus:ring-green-500 focus:ring-2 outline-none transition-all'
                                                     data-cy="input-telefono"
-                                                    country='DO'
+                                                    country="DO"
                                                     value={datos.phone}
                                                     name="phone"
+                                                    international={false}
                                                     onChange={(value) => setDatos(prev => ({ ...prev, phone: value }))}
                                                     placeholder="(000) 000-0000"
                                                     pattern="^\(\d{3}\) \d{3}-\d{4}$"

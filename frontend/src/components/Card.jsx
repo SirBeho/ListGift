@@ -7,7 +7,7 @@ import { ICON_MAP } from "../utils/iconLibrary";
 
 
 
-function Card({ data, litt = false }) {
+export default function Card({ data, litt = false }) {
 
   const SelectedIcon = ICON_MAP[data.icon] || ICON_MAP["gift"];
   const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage";
@@ -97,11 +97,7 @@ function Card({ data, litt = false }) {
     };
   }
 
-
-
   return (
-
-
     <div
       key={data.id}
       ref={cardRef}
@@ -182,4 +178,4 @@ function Card({ data, litt = false }) {
   );
 }
 
-export default Card;
+

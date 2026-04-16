@@ -35,19 +35,21 @@ export default function Layout() {
       {user && sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm sm:hidden"
         />
       )}
 
+
+
       <div className={`flex flex-col w-full h-full min-h-screen justify-between
-          ml-0 ${user && (sidebarOpen ? "md:ml-60" : "md:ml-14")} transition-all duration-300 ease-out`} >
+          ml-0 ${user && (sidebarOpen ? "sm:ml-60" : location.pathname == "/" ? "ml-0" : "sm:ml-14")} transition-all duration-300 ease-out`} >
 
         <div className='flex-1  flex-grow flex flex-col overflow-y-auto app-content overflow-x-hidden'>
 
           <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} />
 
           <motion.div id="main-scroll-area"
-            className='flex-1  overflow-y-auto '
+            className={`flex-1  overflow-y-auto ${!user && location.pathname != "/" ? "mt-14" : ""}`}
             key={location.pathname}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0, transition: { duration: 0.5 } }}
@@ -58,7 +60,7 @@ export default function Layout() {
           >
             <Outlet />
 
-            <Footer full={!user} />
+            <Footer full={true} />
 
           </motion.div>
         </div>
@@ -66,6 +68,6 @@ export default function Layout() {
 
 
       </div>
-    </div>
+    </div >
   );
 }

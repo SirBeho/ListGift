@@ -7,29 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 
-// 1. Variantes Estructurales (Para el List.jsx y el contenedor de la Card)
-const layoutVariants = {
-    initial: {
-        opacity: 0,
-        y: 60,
-        scale: 0.9
-    },
-    animate: {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        transition: {
-            type: "tween",
-            ease: "easeOut",
-            duration: 1.2 // Tu entrada lenta cinematográfica
-        }
-    },
-    exit: {
-        opacity: 0,
-        scale: 0.9,
-        transition: { type: "tween", ease: "easeOut", duration: 1.2 }
-    }
-};
+
 
 const interactionVariants = {
     // Controla el pulso del highlight y el estado base del borde
@@ -70,91 +48,80 @@ const formatPrice = (price) => {
     }).format(price);
 };
 
-const GiftCard = React.forwardRef(({ item, isOwner, highlightedId, handleOpenEdit, setSelectedItem, VITE_STORAGE_URL }) => {
+export default function GiftCard({ item, isOwner, highlightedId, handleOpenEdit, setSelectedItem, VITE_STORAGE_URL }) {
     const isGifted = item.status === 2;
     const isHighlighted = item.id === highlightedId;
-
     return (
         <motion.div
-            layout
-            variants={layoutVariants}
+            variants={interactionVariants}
+            custom={{ isHighlighted, isGifted }}
+            whileHover="hover"
+            whileTap="tap"
+            animate="active"
             onClick={() => setSelectedItem(item)}
-            transition={{ layout: { type: "spring", stiffness: 300, damping: 25 } }}
-        >
-            <motion.div
-                variants={interactionVariants}
-                custom={{ isHighlighted, isGifted }}
-                whileHover="hover"
-                whileTap="tap"
-                animate="active"
-                onClick={() => setSelectedItem(item)}
-                className={`cursor-pointer group relative rounded-3xl p-3 border-2 
+            className={`cursor-pointer group relative rounded-3xl p-3 border-2 
           ${isGifted ? 'bg-green-50/70 border-green-200 shadow-sm' : 'bg-white border-slate-100 shadow-sm'}`}
 
-            >
-                {/* Imagen */}
-                <div className={`relative h-52 w-full rounded-2xl overflow-hidden mb-4 
+        >
+            {/* Imagen */}
+            <div className={`relative h-52 w-full rounded-2xl overflow-hidden mb-4 
           ${isGifted ? 'bg-white border-b-2 border-green-100' : 'bg-slate-50'}`}>
-                    <img
-                        src={item.img_name ? `${VITE_STORAGE_URL}/${item.img_name}` : `${VITE_STORAGE_URL}/pictures/git.png`}
-                        className={`w-full h-full object-cover block transition-all duration-700 
+                <img
+                    src={item.img_name ? `${VITE_STORAGE_URL}/${item.img_name}` : `${VITE_STORAGE_URL}/pictures/git.png`}
+                    className={`w-full h-full object-cover block transition-all duration-700 
               ${isGifted ? 'grayscale-[80%] opacity-80' : ''}`}
-                        alt=""
-                    />
+                    alt=""
+                />
 
-                    {/* Badges Flotantes */}
-                    <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
-                        {isGifted && (
-                            <div className="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black flex items-center shadow-lg">
-                                <CheckBadgeIcon className="h-4 w-4 mr-1" /> REGALADO
-                            </div>
-                        )}
-                        {isHighlighted && !isGifted && (
-                            <div className="bg-pink-500 text-white p-2 rounded-full shadow-lg animate-pulse">
-                                <GiftIcon className="h-5 w-5" />
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Acciones de Dueño */}
-                    {isOwner && !isGifted && (
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation(); // Previene que se abra el modal de detalles
-                                handleOpenEdit(e, item);
-                            }}
-                            className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-indigo-600 p-2.5 rounded-xl shadow-xl hover:bg-pink-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10 border border-indigo-50"
-                            title="Editar regalo"
-                        >
-                            <PencilSquareIcon className="h-4 w-4" />
-                        </button>
+                {/* Badges Flotantes */}
+                <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
+                    {isGifted && (
+                        <div className="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black flex items-center shadow-lg">
+                            <CheckBadgeIcon className="h-4 w-4 mr-1" /> REGALADO
+                        </div>
+                    )}
+                    {isHighlighted && !isGifted && (
+                        <div className="bg-pink-500 text-white p-2 rounded-full shadow-lg animate-pulse">
+                            <GiftIcon className="h-5 w-5" />
+                        </div>
                     )}
                 </div>
 
-                {/* Info */}
-                <div className="px-3 pb-2 flex-grow flex flex-col justify-between">
-                    <div>
-                        <h3 className={`font-bold text-lg mb-1 truncate 
+                {/* Acciones de Dueño */}
+                {isOwner && !isGifted && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation(); // Previene que se abra el modal de detalles
+                            handleOpenEdit(e, item);
+                        }}
+                        className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-indigo-600 p-2.5 rounded-xl shadow-xl hover:bg-pink-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10 border border-indigo-50"
+                        title="Editar regalo"
+                    >
+                        <PencilSquareIcon className="h-4 w-4" />
+                    </button>
+                )}
+            </div>
+
+            {/* Info */}
+            <div className="px-3 pb-2 flex-grow flex flex-col justify-between">
+                <div>
+                    <h3 className={`font-bold text-lg mb-1 truncate 
               ${isGifted ? 'text-green-900 line-through opacity-60' : 'text-slate-900'}`}>
-                            {item.name}
-                        </h3>
-                        <div className={`text-base font-black flex items-center 
+                        {item.name}
+                    </h3>
+                    <div className={`text-base font-black flex items-center 
               ${isGifted ? 'text-green-600' : 'text-pink-600'}`}>
-                            <CurrencyDollarIcon className="h-5 w-5 mr-1.5 opacity-70" /> {formatPrice(item.price)}
-                        </div>
+                        <CurrencyDollarIcon className="h-5 w-5 mr-1.5 opacity-70" /> {formatPrice(item.price)}
                     </div>
-
-                    {isGifted && item.donante_nombre && (
-                        <div className="mt-4 pt-3 border-t border-green-100">
-                            <p className="text-[10px] font-bold tracking-wider text-green-700 uppercase">Cumplido por:</p>
-                            <p className="text-sm font-semibold text-green-900 truncate">{item.donante_nombre}</p>
-                        </div>
-                    )}
                 </div>
-            </motion.div>
-        </motion.div >
-    );
-});
 
-GiftCard.displayName = "GiftCard";
-export default GiftCard;
+                {isGifted && item.donante_nombre && (
+                    <div className="mt-4 pt-3 border-t border-green-100">
+                        <p className="text-[10px] font-bold tracking-wider text-green-700 uppercase">Cumplido por:</p>
+                        <p className="text-sm font-semibold text-green-900 truncate">{item.donante_nombre}</p>
+                    </div>
+                )}
+            </div>
+        </motion.div>
+    );
+};

@@ -54,25 +54,23 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-
+        // 1. Detenemos cualquier redirección automática con el loading
         setLoading(true);
 
         try {
-            const res = await instance.post('/auth/logout');
-            //console.log(res)
-            console.log("saliendo")
+            navigate('/', { replace: true });
+            await instance.post('/auth/logout');
         } catch (error) {
             console.error('Logout error:', error);
+        } finally {
+
+            localStorage.removeItem('token');
+            if (clearUserData) clearUserData();
+            setUser(null);
+            setRedirecting(false);
+            setLoading(false);
         }
-
-        localStorage.removeItem('token');
-        if (clearUserData) clearUserData();
-        setUser(null);
-        setRedirecting(false);
-        setLoading(false);
-
     };
-
     return (
         <AuthContext.Provider value={{ loading, user, login, logout, redirecting }}>
             {children}

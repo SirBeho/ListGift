@@ -5,7 +5,6 @@ import { RequireAuth, PublicRoute } from "./guards/AuthControl";
 import Layout from "./Layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import Lists from "./pages/Lists";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import List from "./pages/List";
@@ -33,7 +32,7 @@ function AppRoutes() {
           <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/lists" element={<Lists />} />
+
           </Route>
         </Route>
 

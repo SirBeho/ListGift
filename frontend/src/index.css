@@ -98,72 +98,6 @@
 }
 
 
-
-
-
-.toggle span,
-.toggle>div,
-.toggle a,
-.toggle li.block {
-  @apply flex;
-}
-
-.toggle a {
-  @apply hover:bg-indigo-500;
-}
-
-aside:not(.toggle) a {
-  @apply hover:scale-150;
-}
-
-aside.toggle>ul li:hover img {
-  @apply scale-125;
-}
-
-/* .toggle li:hover{
-    @apply bg-white;
-}
-
-.toggle a:hover{
-    @apply ps-2;
-    @apply ms-2;
-}  
- */
-
-.toggle a:hover {
-  @apply ps-2;
-  @apply ms-0;
-}
-
-aside:not(.toggle) div.despliege {
-  @apply w-56;
-}
-
-aside:not(.toggle) img.despliege {
-  @apply w-5;
-  @apply p-0;
-}
-
-aside:not(.toggle) img.despliege:hover {
-  @apply scale-125;
-  @apply bg-gray-sl;
-}
-
-
-aside.toggle .submenu li {
-  @apply ps-2;
-
-}
-
-aside.toggle .submenu li>a {
-  @apply ps-1;
-
-}
-
-aside.toggle .submenu li:hover {
-  @apply ps-1;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -182,51 +116,63 @@ aside.toggle .submenu li:hover {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-
 @layer base {
   :root {
-    /* Fondo: Gris Nube muy claro (#F3F4F6) */
-    --background: 0.961 0.004 264;
-    /* Texto: Gris Carbón casi negro (#1F2937) */
-    --foreground: 0.278 0.022 256;
+    /* Fondo: Soft Slate (#F8FAFC) - Un gris nube muy sutil y limpio */
+    --background: 0.98 0.005 264;
+    /* Texto: Dark Slate (#0F172A) - Casi negro para máxima legibilidad */
+    --foreground: 0.17 0.03 264;
 
-    /* Primario: Tu Azul Real (#2056E1) */
-    --primary: 0.511 0.219 264;
+    /* Primario: Rose Coral (#F43F5E) - El color vibrante de tu marca */
+    /* --primary: 0.63 0.24 15.5; */
+    /* Tu nuevo Coral Salmón (#f1786f) */
+    --primary: 0.72 0.16 28;
     --primary-foreground: 1 0 0;
-    /* Blanco */
+    /* Blanco puro para contraste */
+
+    /* Éxito: Emerald Green (#10B981) - Para los checks y estados positivos */
+    --success: 0.69 0.17 164;
 
     /* Tarjetas y Menús: Blanco Puro */
     --card: 1 0 0;
-    --card-foreground: 0.278 0.022 256;
+    --card-foreground: 0.17 0.03 264;
 
-    /* Colores Muted (para textos secundarios) */
-    --muted: 0.94 0.008 264;
-    --muted-foreground: 0.45 0.015 256;
+    /* Colores Muted (para textos secundarios y placeholders) */
+    --muted: 0.96 0.01 264;
+    --muted-foreground: 0.45 0.03 264;
 
-    /* Bordes y Líneas */
-    --border: 0.9 0.006 264;
-    --radius: 0.75rem;
-    /* Bordes redondeados modernos */
+    /* Bordes y Líneas finas */
+    --border: 0.91 0.01 264;
+
+    /* Radio de borde: Ajustado para el estilo rounded-3xl (1.5rem) */
+    --radius: 1.5rem;
   }
 
-  /* Modo Oscuro (se activa si pones la clase .dark en el <html>) */
+  /* Modo Oscuro: Basado en Slate profundo para un look "Dystopian" elegante */
   .dark {
-    --background: 0.15 0.015 264;
-    --foreground: 0.95 0.005 264;
-    --primary: 0.65 0.18 264;
-    --primary-foreground: 0.15 0.015 264;
-    --card: 0.18 0.015 264;
-    --card-foreground: 0.95 0.005 264;
-    --muted: 0.25 0.015 264;
-    --muted-foreground: 0.65 0.01 264;
-    --border: 0.3 0.015 264;
+    --background: 0.12 0.03 264;
+    --foreground: 0.98 0.005 264;
+
+    /* Rose Coral en modo oscuro, un pelín más luminoso para que resalte */
+    --primary: 0.68 0.22 15.5;
+    --primary-foreground: 0.12 0.03 264;
+
+    --card: 0.15 0.03 264;
+    --card-foreground: 0.98 0.005 264;
+
+    --muted: 0.25 0.03 264;
+    --muted-foreground: 0.65 0.02 264;
+
+    --border: 0.28 0.03 264;
   }
 }
 
 @layer base {
-
   body {
     background-color: oklch(var(--background) / 1);
     color: oklch(var(--foreground) / 1);
+    /* Suavizado de tipografía para un look más premium */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

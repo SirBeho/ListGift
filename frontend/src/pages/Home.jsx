@@ -4,8 +4,10 @@ import Card from '../components/Card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useAuth } from '../providers/AuthProvider';
 
 function Home() {
+  const { user } = useAuth();
   const { publicLists: listas, LoadPublicListas } = useList();
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(localStorage.getItem("sidebarOpen") === "true");
@@ -71,46 +73,48 @@ function Home() {
 
   return (
     // Agregamos id="inicio" para referencia
-    <main id="inicio" className="flex flex-col min-h-screen z-30 pt-20">
+    <main id="inicio" className="flex flex-col min-h-screen z-30 ">
 
-      {/* 1. HERO SECTION */}
-      <section className=" flex flex-col items-center justify-center text-center ">
-        {/*  <div className='sticky top-0 z-20  w-full '>
+      {/* 1. SECCIÓN PRINCIPAL DE BIENVENIDA (Solo para no usuarios) */}
+      {!user && (
+        < section className=" flex flex-col items-center justify-center text-center pt-20 ">
+          {/*  <div className='sticky top-0 z-20  w-full '>
           <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} />
         </div> */}
-        <div className='px-6  pb-10 lg:py-15'>
+          <div className='px-6  pb-10 lg:py-15'>
 
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground md:leading-tight tracking-tight text-balance">
-            Regalar se vuelve <br className="hidden md:block" />
-            <span className="text-primary italic sm:text-7xl text-3xl">maravillosamente sencillo.</span>
-          </h1>
-          <p className="mt-6 text-sm md:text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
-            Crea listas de regalos espectaculares para cualquier ocasión. Comparte con amigos y familiares,
-            y deja que sepan exactamente qué te hace ilusión recibir.
-          </p>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground md:leading-tight tracking-tight text-balance">
+              Regalar se vuelve <br className="hidden md:block" />
+              <span className="text-primary italic sm:text-7xl text-3xl">maravillosamente sencillo.</span>
+            </h1>
+            <p className="mt-6 text-sm md:text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
+              Crea listas de regalos espectaculares para cualquier ocasión. Comparte con amigos y familiares,
+              y deja que sepan exactamente qué te hace ilusión recibir.
+            </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center w-full sm:w-auto">
-            <button className=" w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-primary-foreground font-medium bg-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all group">
-              <span>Empecemos!! — Es Gratis</span>
-              <ArrowRightIcon strokeWidth={3} className="w-4 h-4 ml-2  transition-transform duration-300 group-hover:translate-x-1.5" />
-            </button>
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center w-full sm:w-auto">
+              <button className=" w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-primary-foreground font-medium bg-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all group">
+                <span>Empecemos!! — Es Gratis</span>
+                <ArrowRightIcon strokeWidth={3} className="w-4 h-4 ml-2  transition-transform duration-300 group-hover:translate-x-1.5" />
+              </button>
 
-            <button
-              onClick={() => scrollToSection('features')}
-              className="w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-foreground font-medium bg-transparent border-2 border-border hover:bg-muted/50 transition-all"
-            >
-              Saber más
-            </button>
+              <button
+                onClick={() => scrollToSection('features')}
+                className="w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-foreground font-medium bg-transparent border-2 border-border hover:bg-muted/50 transition-all"
+              >
+                Saber más
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>)
+      }
 
 
       {/* 2. GRID DE LISTAS PÚBLICAS */}
       <section className="bg-muted/30 relative ">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
-        <h3 className="w-full sticky top-0 z-40 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 " >
+        <h3 className="w-full sticky top-0 z-30 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 " >
           Explorar Listas de Regalos
         </h3>
 
@@ -157,7 +161,7 @@ function Home() {
       <section id="features" className="bg-background relative">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
 
-        <h3 className="w-full sticky top-0 z-40 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 text-center " >
+        <h3 className="w-full sticky top-0 z-20 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 text-center " >
           Todo lo que necesitas
         </h3>
 
@@ -213,32 +217,33 @@ function Home() {
       </section>
 
       {/* 4. CALL TO ACTION & CONTACTO */}
-      <section className="relative bg-white border-t border-border/50 z-50 ">
-        <div className='bg-primary/5 py-10 '>
-          <div className="max-w-4xl mx-auto px-6 text-center z-10  ">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight mb-6">
-              ¿Listo para simplificar tus regalos?
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty">
-              No más regalos repetidos ni tallas equivocadas. Crea tu primera lista hoy mismo y compártela con quienes más te importan.
-            </p>
+      {!user && (
+        <section className="relative bg-white border-t border-border/50 z-50 ">
+          <div className='bg-primary/5 py-10 '>
+            <div className="max-w-4xl mx-auto px-6 text-center z-10  ">
+              <h2 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight mb-6">
+                ¿Listo para simplificar tus regalos?
+              </h2>
+              <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty">
+                No más regalos repetidos ni tallas equivocadas. Crea tu primera lista hoy mismo y compártela con quienes más te importan.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
 
-              <Link
-                to="/login"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
-              >
-                Crear mi cuenta gratis
-              </Link>
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-border text-foreground font-medium hover:bg-muted/50 transition-colors flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                Contactar soporte
-              </button>
+                <Link
+                  to="/login"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
+                >
+                  Crear mi cuenta gratis
+                </Link>
+                <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-border text-foreground font-medium hover:bg-muted/50 transition-colors flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  Contactar soporte
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>)}
 
       {/* 5. FOOTER */}
 
@@ -266,7 +271,7 @@ function Home() {
         )}
       </AnimatePresence>
 
-    </main>
+    </main >
   );
 }
 

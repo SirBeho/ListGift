@@ -33,7 +33,7 @@ class Controller
 
             if ($user && password_verify($validated['password'], $user->password)) {
 
-                $user->load('lists');
+                $user->load('role','lists');
                 $key = $_ENV['JWT_SECRET'];
 
                 $payload = [
@@ -55,6 +55,7 @@ class Controller
                     'httponly' => true,
                     'samesite' => 'lax'
                 ]);
+
 
                 echo json_encode([
                     'status' => 'success',

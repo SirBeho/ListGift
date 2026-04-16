@@ -11,6 +11,7 @@
 - [Pruebas](#pruebas)
 - [Documentación de la API](#documentación-de-la-api)
 - [Contribución](#contribución)
+- [Sobre el Proyecto](#proyecto)
 - [Contacto](#contacto)
 
 ## ✨ Descripción y Arquitectura
@@ -226,6 +227,10 @@ Las contribuciones son bienvenidas. Por favor, sigue los siguientes pasos:
 2.  Crea una rama para tu nueva característica (`git checkout -b feature/nueva-caracteristica`).
 3.  Realiza los cambios y haz commit (`git commit -m 'Agregada nueva característica'`).
 4.  Envía un pull request.
+
+## Sobre el Proyecto
+
+Color,Hex,Tailwind Class,Uso Principal Rose Coral,#F43F5E,rose-500,"Marca, Logo, Botones Primarios (CTA)" Emerald Green,#10B981,emerald-500,"Checkmarks, Estados de éxito, Precios bajos" Dark Slate,#0F172A,slate-900,"Títulos, Texto principal, Sidebar Dark" Soft Slate,#F8FAFC,slate-50,"Fondos de página, Inputs deshabilitados" Indigo Accent,#4F46E5,indigo-600,"Enlaces, Modo Edición, Detalles secundarios"
 
 <h2 style="font-size: 1.5rem; font-weight: 600; border-bottom: 2px solid #3182ce">🧑‍💻 Autor</h2>
  <table >

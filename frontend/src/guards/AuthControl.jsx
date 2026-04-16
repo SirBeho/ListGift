@@ -7,7 +7,8 @@ export const PublicRoute = () => {
     if (loading) {
         return <div className="spinner">Cargando sesión...</div>;
     }
-    return !user || redirecting ? <Outlet /> : <Navigate to="/dashboard" replace />;
+    console.log(user, redirecting)
+    return !user || redirecting ? <Outlet /> : <Navigate to="/profile" replace />;
 };
 
 export const RequireAuth = () => {

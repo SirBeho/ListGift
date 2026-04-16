@@ -1,3 +1,4 @@
+import Logo from "../components/Logo";
 
 export default function Layout({ full = false }) {
 
@@ -10,13 +11,8 @@ export default function Layout({ full = false }) {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-6">
 
 
+                    <Logo letra={true} />
 
-                    <div className="flex items-center gap-3 hover:opacity-70 transition-opacity">
-                        <div className="w-8 h-8 rounded-xl overflow-hidden bg-indigo-100 border-blue-500 border-2">
-                            <img src="../pictures/logo.jpg" alt="Logo" className="w-full h-full object-cover bg-white " />
-                        </div>
-                        <span className="text-xl font-bold text-gray-800 tracking-tight">List Gifts</span>
-                    </div>
 
                     <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-muted-foreground">
                         <a href="#" className="hover:text-foreground transition-colors">Sobre el proyecto</a>

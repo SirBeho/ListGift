@@ -24,14 +24,6 @@ import confetti from "canvas-confetti";
 import Alert from "../components/Alert";
 import ModalManageItem from "../components/ModalManageItem"; // <--- CAMBIO: Importamos el componente unificado
 import GiftCard from "../components/GiftCard";
-//arrow.svg
-
-// === VARIANTES ===
-/* const containerVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { staggerChildren: 1, delayChildren: 1 } },
-  exit: { opacity: 0 },
-}; */
 
 
 const emptyListVariants = {
@@ -57,11 +49,33 @@ const gridVariants = {
     opacity: 1,
     transition: {
       delayChildren: 0.3,
-      staggerChildren: 0.4, // 👈 Ajusta este número para que sea "súper lenta"
+      staggerChildren: 0.4,
     },
   },
 };
-
+// 1. Variantes Estructurales (Para el List.jsx y el contenedor de la Card)
+const layoutVariants = {
+  initial: {
+    opacity: 0,
+    y: 60,
+    scale: 0.9
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "tween",
+      ease: "easeOut",
+      duration: 1.2 // Tu entrada lenta cinematográfica
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    transition: { type: "tween", ease: "easeOut", duration: 1.2 }
+  }
+};
 
 const containerVariants = {
   initial: { opacity: 0 },
@@ -74,23 +88,7 @@ const containerVariants = {
   },
 };
 
-// 2. VARIANTES DEL HIJO CON CUSTOM
-const cardVariants = {
-  initial: { opacity: 0, y: 50 },
 
-  // Recibe el custom para cambiar estilo si está destacado
-  animate: ({ isHighlighted }) => ({
-    opacity: 1,
-    y: 0,
-    scale: isHighlighted ? 1.1 : 1,
-    borderColor: isHighlighted ? "#ec4899" : "#e2e8f0",
-    transition: {
-      type: "tween",
-      ease: "easeOut",
-      duration: 0.8
-    }
-  }),
-};
 
 
 export default function List() {
@@ -104,7 +102,7 @@ export default function List() {
   const [filterCategory] = useState(() => localStorage.getItem('giftListFilterCategory') || 'all');
   const [sortOption, setSortOption] = useState(() => localStorage.getItem('giftListSortOption') || 'price-asc');
   const { search } = useLocation();
-  const [highlightedId, setHighlightedId] = useState(19);
+  const [highlightedId, setHighlightedId] = useState(null);
   const [apiRes, setApiRes] = useState(null);
 
   // --- NUEVOS ESTADOS PARA GESTIÓN DE ITEMS ---
@@ -245,18 +243,9 @@ export default function List() {
   }
 
   return (
-    <div className="pt-14 min-h-screen bg-slate-50">
+    <div className=" min-h-screen bg-slate-50">
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
-      <ModalManageItem
-        isOpen={isOpen}
-        listId={id}
-        onClose={() => setIsOpen(false)}
-        setApiRes={setApiRes}
-        refreshItems={RefresListas}
-        apiRes={apiRes}
-        itemToEdit={itemToEdit}
-      />
 
       <motion.div className="max-w-7xl mx-auto p-4 sm:p-6" variants={containerVariants} initial="initial" animate="animate" exit="exit">
 
@@ -303,9 +292,9 @@ export default function List() {
                       initial={{ width: 0 }}
                       animate={{ width: `${progressPercent}%` }}
                       transition={{
-                        duration: 1.5,      // 👈 Tiempo que tarda en llenarse (1.5s es el "sweet spot")
-                        ease: "circOut",    // 👈 Empieza rápido y frena suavemente al final
-                        delay: 0.5          // 👈 Espera a que la lista cargue antes de moverse
+                        duration: 1.5,
+                        ease: "circOut",
+                        delay: 0.5
                       }}
                       className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                     />
@@ -339,8 +328,6 @@ export default function List() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-
-
             </div>
 
             <select
@@ -355,29 +342,32 @@ export default function List() {
               <option value="price-desc">Más exclusivos</option>
 
             </select>
-
-
           </div>
         </div>
 
         <motion.div
-          key={replayKey} // <--- IMPORTANTE: Cambia la KEY para reiniciar la animación
           variants={gridVariants}
           initial="initial"
           animate="animate"
-          // Usamos Grid para que Framer calcule las posiciones más fácil
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {itemsToRender.map((item) => (
-            <GiftCard
-              key={item.id} // La KEY debe ser el ID real para que el 'layout' funcione
-              item={item}
-              isOwner={isOwner}
-              highlightedId={highlightedId}
-              handleOpenEdit={handleOpenEdit}
-              setSelectedItem={setSelectedItem}
-              VITE_STORAGE_URL={VITE_STORAGE_URL}
-            />
+            <motion.div
+              key={item.id}
+              layout
+              variants={layoutVariants}
+              onClick={() => setSelectedItem(item)}
+              transition={{ layout: { type: "spring", stiffness: 300, damping: 25 } }}
+            >
+              <GiftCard
+                item={item}
+                isOwner={isOwner}
+                highlightedId={highlightedId}
+                handleOpenEdit={handleOpenEdit}
+                setSelectedItem={setSelectedItem}
+                VITE_STORAGE_URL={VITE_STORAGE_URL}
+              />
+            </motion.div >
           ))}
         </motion.div>
 
@@ -402,6 +392,17 @@ export default function List() {
             color2={ListShow.color2}
           />
         )}
+
+
+        <ModalManageItem
+          isOpen={isOpen}
+          listId={id}
+          onClose={() => setIsOpen(false)}
+          setApiRes={setApiRes}
+          refreshItems={RefresListas}
+          apiRes={apiRes}
+          itemToEdit={itemToEdit} // Pasamos el item si estamos editando
+        />
       </motion.div>
     </div>
   );
