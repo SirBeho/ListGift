@@ -12,11 +12,10 @@ use App\Utils\Validator;
 class Controller
 {
 
-    private $isSecure; // Lo declaramos vacío arriba
+    private $isSecure; 
 
     public function __construct()
     {
-        // Lo calculamos dinámicamente al construir la clase
         $this->isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
     }
     public function login()
