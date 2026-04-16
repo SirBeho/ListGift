@@ -94,7 +94,7 @@ export default function GiftCard({ item, isOwner, highlightedId, handleOpenEdit,
                             e.stopPropagation(); // Previene que se abra el modal de detalles
                             handleOpenEdit(e, item);
                         }}
-                        className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-indigo-600 p-2.5 rounded-xl shadow-xl hover:bg-pink-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10 border border-indigo-50"
+                        className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-indigo-600 p-2.5 rounded-xl shadow-xl hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10 border border-indigo-50"
                         title="Editar regalo"
                     >
                         <PencilSquareIcon className="h-4 w-4" />
@@ -110,7 +110,7 @@ export default function GiftCard({ item, isOwner, highlightedId, handleOpenEdit,
                         {item.name}
                     </h3>
                     <div className={`text-base font-black flex items-center 
-              ${isGifted ? 'text-green-600' : 'text-pink-600'}`}>
+              ${isGifted ? 'text-green-600' : 'text-primary'}`}>
                         <CurrencyDollarIcon className="h-5 w-5 mr-1.5 opacity-70" /> {formatPrice(item.price)}
                     </div>
                 </div>

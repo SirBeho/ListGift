@@ -308,7 +308,7 @@ export default function List() {
               {isOwner && (
                 <button
                   onClick={handleOpenCreate}
-                  className="bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all active:scale-95 flex-shrink-0"
+                  className="bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all hover:-translate-y-1 active:scale-95 flex-shrink-0"
                 >
                   <PlusIcon className="h-5 w-5 text-pink-500" />
                   Agregar Regalo
@@ -392,7 +392,6 @@ export default function List() {
             color2={ListShow.color2}
           />
         )}
-
 
         <ModalManageItem
           isOpen={isOpen}

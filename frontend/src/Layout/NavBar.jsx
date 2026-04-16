@@ -5,8 +5,9 @@ import {
 
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
-  Bars3Icon
-} from "@heroicons/react/24/outline"; // Asegúrate de tener heroicons instalados
+  Bars3Icon,
+} from "@heroicons/react/24/outline";
+import { HomeIcon } from "@heroicons/react/24/solid";
 import Alert from '../components/Alert';
 import { useAuth } from "../providers/AuthProvider";
 import Logo from "../components/Logo";
@@ -66,9 +67,10 @@ export default function Navbar({ sidebarController }) {
         </button>
 
         {/* Opcional: Mostrar dónde estás o el logo también aquí */}
-        <Link to="/" className="flex gap-2">
+        <Link to="/" className="flex items-center gap-2 hover:scale-105">
           {/* <h1 className="mr-2">HOME </h1> */}
-          <img src="/svg/home.svg" alt="" srcSet="" />
+          {/*   home solido */}
+          <HomeIcon className="w-5 h-5" />
           <span>HOME</span>
         </Link>
 
