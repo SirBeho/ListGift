@@ -106,15 +106,7 @@ export default function Dashboard() {
         </div>
 
         {/* Botón de acción principal único */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center justify-center gap-2 bg-primary hover:scale-105 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-pink-200 transition-all"
-        >
-          <PlusIcon className="w-5 h-5 stroke-[3px]" />
-          Nueva Lista
-        </motion.button>
+
       </header>
 
       {/* 2. STATS GRID (Indicadores Fijos) */}
@@ -144,11 +136,40 @@ export default function Dashboard() {
 
       {/* 3. SECCIÓN: MIS LISTAS */}
       <section className="mb-12">
-        <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-2xl font-bold text-slate-800">Mis Listas</h2>
-          <div className="h-1 flex-1 bg-slate-100 rounded-full max-w-[100px]"></div>
-        </div>
 
+
+
+        <header className="relative mb-10 flex flex-col sm:items-center sm:flex-row  justify-between gap-4">
+          <div >
+            <motion.h1
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-2xl font-bold text-slate-900 tracking-tight"
+            >
+              Mis Listas
+            </motion.h1>
+
+          </div>
+
+          <div className="hidden sm:block h-1 flex-1 bg-slate-500 rounded-full w-full"></div>
+
+
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setIsCreateModalOpen(true)}
+            className="sm:absolute right-0 -top-10 flex items-center justify-center gap-2 bg-primary hover:scale-105 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-pink-200 transition-all"
+          >
+            <PlusIcon className="w-5 h-5 stroke-[3px]" />
+            Nueva Lista
+          </motion.button>
+        </header>
+
+
+
+        <div className='mb-5 flex flex-col md:flex-row justify-between gap-4 w-full m-8'>
+        </div>
         <motion.div
           key={misListas.length > 0 ? "con-datos" : "vacio"}
           variants={gridVariants}
