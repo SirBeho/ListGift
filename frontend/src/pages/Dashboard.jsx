@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from '../providers/AuthProvider';
 import { useList } from '../providers/ListProvider';
+import { useTitle } from '../Hook/useTitle';
 
 // Componentes
 import Card from '../components/Card';
@@ -55,6 +56,8 @@ const gridVariants = {
 
 
 export default function Dashboard() {
+  useTitle('Dashboard');
+
   const { user } = useAuth();
   const { listas, LoadListas } = useList();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -62,17 +65,34 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!listas) LoadListas();
+
   }, []);
+
+
 
   // Filtrado optimizado de las listas del usuario
   const misListas = useMemo(() => {
     return listas?.filter((lista) => lista.user_id === user?.id) || [];
   }, [listas, user?.id]);
 
+
+  const statsData = useMemo(() => {
+    // 1. Total de listas es simplemente el largo del array
+    const totalListas = misListas?.length || 0;
+
+    const regalosPendientes = misListas?.reduce((acc, lista) => {
+      console.log(lista.items);
+      const pendientes = lista.items?.filter(gift => gift.status !== 2).length || 0;
+      return acc + pendientes;
+    }, 0) || 0;
+
+    return { totalListas, regalosPendientes };
+  }, [misListas]);
+
   // Indicadores Fijos (Placeholders profesionales)
   const stats = [
-    { id: 1, label: 'Total listas', value: 6, icon: <ListBulletIcon className="w-6 h-6" />, color: 'bg-blue-50 text-blue-600' },
-    { id: 2, label: 'Regalos activos', value: 109, icon: <GiftIcon className="w-6 h-6" />, color: 'bg-pink-50 text-pink-600' },
+    { id: 1, label: 'Total listas', value: statsData.totalListas, icon: <ListBulletIcon className="w-6 h-6" />, color: 'bg-blue-50 text-blue-600' },
+    { id: 2, label: 'Regalos activos', value: statsData.regalosPendientes, icon: <GiftIcon className="w-6 h-6" />, color: 'bg-pink-50 text-pink-600' },
     { id: 3, label: 'Notificaciones', value: 3, icon: <BellIcon className="w-6 h-6" />, color: 'bg-amber-50 text-amber-600' },
   ];
 

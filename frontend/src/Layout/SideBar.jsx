@@ -20,7 +20,7 @@ export default function SideBar({ sidebarController }) {
   const sidebarRef = useRef(null);
   const location = useLocation();
 
-  console.log(user)
+
 
   const handleSubmenuToggle = (e, submenuKey) => {
     e.preventDefault();

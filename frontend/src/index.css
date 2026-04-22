@@ -75,16 +75,7 @@
   @apply bg-indigo-400;
 }
 
-.card-enter {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 300ms ease-out, transform 300ms ease-out;
-}
 
-.card-enter.card-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 .interpolate {
 
@@ -110,11 +101,6 @@
   }
 }
 
-.card-enter {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.5s ease-out forwards;
-}
 
 @layer base {
   :root {

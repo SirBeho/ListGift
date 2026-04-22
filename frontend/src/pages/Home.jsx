@@ -5,6 +5,47 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useAuth } from '../providers/AuthProvider';
+import { Helmet } from 'react-helmet-async';
+
+
+
+const gridVariants = {
+  initial: {
+    opacity: 0
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.4,
+    },
+  },
+};
+// 1. Variantes Estructurales (Para el List.jsx y el contenedor de la Card)
+const layoutVariants = {
+  initial: {
+    opacity: 0,
+    y: 60,
+    scale: 0.9
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "tween",
+      ease: "easeOut",
+      duration: 1.2 // Tu entrada lenta cinematográfica
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    transition: { type: "tween", ease: "easeOut", duration: 1.2 }
+  }
+};
+
+
 
 function Home() {
   const { user } = useAuth();
@@ -13,7 +54,18 @@ function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(localStorage.getItem("sidebarOpen") === "true");
   const [busqueda, setBusqueda] = useState('');
 
-
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ListGift",
+    "url": "https://listgift.free.nf",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://listgift.free.nf/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "description": "Crea y comparte listas de regalos personalizadas para bodas, cumpleaños y baby showers en República Dominicana."
+  };
 
   useEffect(() => {
     if (!listas) {
@@ -24,42 +76,29 @@ function Home() {
   const [mostrarBoton, setMostrarBoton] = useState(false);
 
   useEffect(() => {
-    const scrollContainer = document.getElementById("main-scroll-area");
-
-    // Si el contenedor no existe aún, salimos
-    if (!scrollContainer) return;
-
-    const controlarScroll = () => {
-      // Extraemos las 3 medidas mágicas del contenedor
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
-
-
-      // Calculamos el porcentaje de 0 a 100
-      const porcentaje = (scrollTop / (scrollHeight - clientHeight)) * 100;
-
-      if (porcentaje > 80) {
-        setMostrarBoton(true);
-      } else {
-        setMostrarBoton(false);
-      }
+    const onScroll = () => {
+      const d = document.documentElement;
+      // Comparamos el ratio directamente (0.8 es el 80%)
+      const isBottom = (window.scrollY / (d.scrollHeight - window.innerHeight)) > 0.8;
+      setMostrarBoton(isBottom);
     };
 
-    // Escuchamos el evento 'scroll' EN EL DIV
-    scrollContainer.addEventListener('scroll', controlarScroll);
-
-    // Limpieza
-    return () => scrollContainer.removeEventListener('scroll', controlarScroll);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Función para hacer scroll suave hacia una sección
   const scrollToSection = (id) => {
-    // Si queremos ir al inicio, vamos a la parte superior de la ventana
+    if (!id) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
 
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
     }
+
   };
   const filteredList = useCallback(() => {
     if (!listas) return [];
@@ -94,15 +133,17 @@ function Home() {
     // Agregamos id="inicio" para referencia
     <main id="inicio" className="flex flex-col min-h-screen z-30 ">
 
+
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+
+
       {/* 1. SECCIÓN PRINCIPAL DE BIENVENIDA (Solo para no usuarios) */}
       {!user && (
-        < section className=" flex flex-col items-center justify-center text-center pt-20 ">
-          {/*  <div className='sticky top-0 z-20  w-full '>
-          <NavBar sidebarController={[sidebarOpen, setSidebarOpen]} />
-        </div> */}
-          <div className='px-6  pb-10 lg:py-15'>
-
-
+        <section className="flex flex-col items-center justify-center text-center pt-6">
+          {/* H1 con palabras clave para Google */}
+          <div className='px-6 pb-10 lg:py-15'>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground md:leading-tight tracking-tight text-balance">
               Regalar se vuelve <br className="hidden md:block" />
               <span className="text-primary italic sm:text-7xl text-3xl">maravillosamente sencillo.</span>
@@ -131,11 +172,13 @@ function Home() {
       }
 
       {/* 2. GRID DE LISTAS PÚBLICAS */}
-      <section className="bg-muted/30 relative  ">
+      <section className="bg-muted/30 relative">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
-        <h3 className="w-full sticky top-0 z-30 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 " >
+
+        {/* Usamos un H2 para la jerarquía SEO correcta */}
+        <h2 className="w-full sticky top-0 z-10 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12">
           Explorar Listas de Regalos
-        </h3>
+        </h2>
 
         <div className="border-b border-border/40 bg-muted/80 shadow-xl  mx-auto px-6 sm:px-8 lg:px-12 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-3">
           <p className="text-left group cursor-default mt-1 text-muted-foreground text-lg " >
@@ -153,20 +196,34 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 bg-card  px-6 sm:px-8 lg:px-12 py-12 max-w-[1400px] mx-auto w-full rounded-md ">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+
+
+        <div className="relative  bg-card  px-6 sm:px-8 lg:px-12 py-12 max-w-[1400px] mx-auto w-full rounded-md ">
+          <AnimatePresence mode="wait">
             {listasFiltradas?.length > 0 ? (
-              listasFiltradas.map((lista, index) => (
-                <div
-                  key={lista.id}
-                  className={`card ${lista.id} card-enter`}
-                  style={{ animationDelay: `${index * 150}ms` }}
-                >
-                  <Card data={lista} litt />
-                </div>
-              ))
+              <motion.section
+                key="grid"
+                variants={gridVariants}
+                initial="initial"
+                animate="animate"
+                className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 "
+              >
+
+                {listasFiltradas.map((lista) => (
+                  <motion.div
+                    key={lista.id}
+                    layout
+                    variants={layoutVariants}
+                    transition={{ layout: { type: "spring", stiffness: 300, damping: 25 } }}
+                  >
+                    <Card data={lista} litt />
+                  </motion.div >
+                ))}
+              </motion.section>
             ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-16 px-6 bg-card border border-border rounded-3xl border-dashed">
+              <motion.div key="empty"
+                className="col-span-full flex flex-col items-center justify-center py-16 px-6 bg-card border border-border rounded-3xl border-dashed">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
                   <span className="text-2xl">{busqueda ? "🔍" : "🎁"}</span>
                 </div>
@@ -186,9 +243,10 @@ function Home() {
                     Limpiar búsqueda
                   </button>
                 )}
-              </div>
+              </motion.div>
             )}
-          </div>
+
+          </AnimatePresence>
         </div>
 
 
@@ -203,9 +261,11 @@ function Home() {
       <section id="features" className="bg-background relative  ">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
 
-        <h3 className="w-full sticky top-0 z-20 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 text-center " >
+        <h3 className="w-full sticky top-0 z-10 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 text-center " >
           Todo lo que necesitas
         </h3>
+
+
 
         <p className="w-full text-center pb-2 text-lg text-muted-foreground mx-auto bg-muted/80 shadow-md border-b border-border">
           Funciones potentes para que regalar sea más fácil y sin complicaciones.
@@ -271,17 +331,25 @@ function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-
                 <Link
                   to="/register"
                   className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
                 >
                   Crear mi cuenta gratis
                 </Link>
-                <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-border text-foreground font-medium hover:bg-muted/50 transition-colors flex items-center justify-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+
+                {/* Botón de WhatsApp - Convertido a Enlace */}
+                <a
+                  href={`https://wa.me/18098892235?text=${encodeURIComponent('¡Hola! Necesito soporte con mi cuenta de ListGift.')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-border text-foreground font-medium hover:bg-muted/50 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
                   Contactar soporte
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -298,7 +366,7 @@ function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}    // Cómo se queda (visible, posición normal)
             exit={{ opacity: 0, y: 50, scale: 0.5 }}    // Cómo muere (se vuelve a hundir y desaparecer)
             transition={{ duration: 0.3, ease: "easeInOut" }} // Duración de la magia
-            onClick={() => scrollToSection('inicio')}
+            onClick={() => scrollToSection()}
             className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 border border-primary-foreground/10 hover:shadow-xl hover:scale-105 transition-shadow"
             aria-label="Volver arriba"
           >

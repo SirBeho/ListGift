@@ -17,6 +17,8 @@ export default function Card({ data, litt = false }) {
   const perspective = 500;
   const throttleDelay = 20; // Milisegundos - ajusta este valor
 
+
+
   const handleMouseMove = (event) => {
     const card = cardRef.current;
 

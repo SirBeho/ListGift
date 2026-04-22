@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNotifications } from '../service/Notifications'; // Ajusta si cambiaste la ruta
@@ -54,7 +55,7 @@ export default function Navbar({ sidebarController }) {
   // MODO PRIVADO (Usuario Logueado - Tu código original optimizado)
   // ---------------------------------------------------------
   return (
-    <nav className="sticky top-0 left-0 w-full z-40 flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
+    <nav className="sticky top-0 z-10 left-0 w-full flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
       {/* IZQUIERDA: Toggle Sidebar + Breadcrumbs/Logo */}
@@ -78,7 +79,7 @@ export default function Navbar({ sidebarController }) {
       </div>
 
       {/* DERECHA: Menú de Usuario */}
-      <div className="relative z-40">
+      <div className=" ">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="flex items-center gap-3 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-200"
@@ -96,12 +97,12 @@ export default function Navbar({ sidebarController }) {
         </button>
 
         {/* Dropdown Menu */}
-        {menuOpen && (
+        {menuOpen && createPortal(
           <>
             {/* Backdrop invisible para cerrar al hacer clic fuera */}
-            <div className="fixed inset-0 " onClick={() => setMenuOpen(false)}></div>
+            <div className="fixed inset-0 z-20  bg-black/10" onClick={() => setMenuOpen(false)}></div>
 
-            <div className="absolute right-0  mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-20 animate-in fade-in zoom-in-95 duration-200">
+            <div className="fixed z-20 right-2 top-14 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1  animate-in fade-in zoom-in-95 duration-200">
               <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <UserCircleIcon className="w-5 h-5" />
                 Mi Perfil
@@ -126,7 +127,7 @@ export default function Navbar({ sidebarController }) {
                 Cerrar Sesión
               </button>
             </div>
-          </>
+          </>, document.body
         )}
       </div>
     </nav>

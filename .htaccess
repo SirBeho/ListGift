@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond %{REQUEST_URI} ^/backend/ [NC]
+    RewriteRule ^(.*)$ $1 [L]
+
+    RewriteCond %{REQUEST_URI} ^/lists/([0-9]+)$
+    RewriteRule ^(.*)$ seo_handler.php?id=%1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^(.*)$ $1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [L]
+</IfModule>

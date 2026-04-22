@@ -13,10 +13,13 @@ import {
     LockClosedIcon,
     SparklesIcon
 } from "@heroicons/react/24/outline";
+import { useTitle } from "../Hook/useTitle";
 
 export default function InfoPage() {
     const { section } = useParams();
     const [showDetails, setShowDetails] = useState(false);
+    console.log(section)
+    useTitle(section === "about" ? "Sobre el Proyecto" : section === "privacy" ? "Política de Privacidad" : section === "terms" ? "Términos de Servicio" : "Información");
 
     const infoContent = {
         about: {
@@ -64,7 +67,7 @@ export default function InfoPage() {
                         {/* Decoración sutil */}
                         <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full transition-transform group-hover:scale-110 group-hover:bg-primary/20" />
 
-                        <div className="w-28 h-28 rounded-full overflow-hidden shadow-xl shrink-0 border-4 border-white relative z-10 ring-4 ring-emerald-50">
+                        <div className="w-28 h-28 rounded-full overflow-hidden shadow-xl shrink-0 border-4 border-white relative ring-4 ring-emerald-50">
                             <img src="https://raw.githubusercontent.com/SirBeho/compilador/refs/heads/master/img/ouner.jpg" alt="Ing. Benjamin Tavarez" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-center md:text-left relative z-10">
@@ -281,10 +284,11 @@ export default function InfoPage() {
     };
 
     const data = infoContent[section];
+
     if (!data) return <Navigate to="/" />;
 
     return (
-        <main className="min-h-screen bg-slate-50 py-12 px-6">
+        <main className="min-h-screen bg-slate-50 py-5 px-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

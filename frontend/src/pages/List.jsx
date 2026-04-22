@@ -1,36 +1,23 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useList } from "../providers/ListProvider";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
-  CurrencyDollarIcon,
-  InboxStackIcon,
   ExclamationTriangleIcon,
-  UserIcon,
-  CalendarIcon,
-  FunnelIcon,
   MagnifyingGlassIcon,
-  GiftIcon,
-  ArrowsUpDownIcon,
   PlusIcon,
   PencilSquareIcon,
-  ArrowRightIcon, // <--- IMPORTANTE: Icono para el botón de editar
+  ArrowRightIcon,
 } from "@heroicons/react/24/outline";
-import { CheckBadgeIcon } from "@heroicons/react/20/solid";
 import { BeatLoader } from "react-spinners";
 import ModalItem from "../components/ModalItem";
 import { useAuth } from "../providers/AuthProvider";
 import confetti from "canvas-confetti";
 import Alert from "../components/Alert";
-import ModalManageItem from "../components/ModalManageItem"; // <--- CAMBIO: Importamos el componente unificado
+import ModalManageItem from "../components/ModalManageItem";
 import GiftCard from "../components/GiftCard";
 
 
-const emptyListVariants = {
-  initial: { opacity: 0, scale: 0.8 },
-  animate: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 120, damping: 12, duration: 0.4 } },
-  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
-};
 const notFoundVariants = {
   initial: { opacity: 0, y: -50 },
   animate: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 80, damping: 10, duration: 0.6 } },
@@ -53,7 +40,6 @@ const gridVariants = {
     },
   },
 };
-// 1. Variantes Estructurales (Para el List.jsx y el contenedor de la Card)
 const layoutVariants = {
   initial: {
     opacity: 0,
@@ -67,7 +53,7 @@ const layoutVariants = {
     transition: {
       type: "tween",
       ease: "easeOut",
-      duration: 1.2 // Tu entrada lenta cinematográfica
+      duration: 1.2
     }
   },
   exit: {
@@ -117,7 +103,30 @@ export default function List() {
   const giftedItems = ListShow?.items?.filter(i => i.status === 2).length || 0;
   const progressPercent = totalItems > 0 ? (giftedItems / totalItems) * 100 : 0;
 
-  //funcion para cargar lista publica y priva validando el user
+  const structuredData = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": ListShow?.name,
+    "description": ListShow?.description,
+    "numberOfItems": ListShow?.items?.length || 0,
+    "itemListElement": ListShow?.items?.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "name": item.name,
+        "description": item.description,
+        "image": item.image ? `${VITE_STORAGE_URL}/${item.image}` : `${VITE_STORAGE_URL}/pictures/git.png`,
+        "offers": {
+          "@type": "Offer",
+          "price": item.price,
+          "priceCurrency": "DOP"
+        }
+      }
+    }))
+  }), [ListShow, VITE_STORAGE_URL]);
+
+
   const RefresListas = useCallback(async () => {
     try {
       if (user) LoadListas();
@@ -144,7 +153,6 @@ export default function List() {
   const handleSearch = (event) => setSearchTerm(event.target.value);
   const handleSort = (option) => setSortOption(option);
 
-  // --- HANDLERS PARA ABRIR EL MODAL ---
 
   // Abrir modo CREAR
   const handleOpenCreate = () => {
@@ -181,14 +189,6 @@ export default function List() {
     return items.map(item => ({ ...item, isOwner }));
 
   }, [ListShow?.items, searchTerm, filterCategory, sortOption]);
-
-
-  const [replayKey, setReplayKey] = useState(0);
-
-  const handleReplay = () => {
-
-    setReplayKey((prev) => prev + 1);
-  };
 
 
   // Highlight Effect
@@ -233,6 +233,7 @@ export default function List() {
   if (!ListShow || id == undefined) {
     return (
       <motion.div variants={notFoundVariants} initial="initial" animate="animate" exit="exit" className="flex   flex-col items-center justify-center h-screen bg-gradient-to-br from-pink-50 via-rose-100 to-purple-100">
+        <title>Lista no encontrada | ListGift</title>
         <motion.div className="bg-white shadow-xl rounded-3xl max-w-md w-full p-10 text-center border-t-8 border-pink-500">
           <ExclamationTriangleIcon className="h-16 w-16 mx-auto text-pink-600 mb-6" />
           <h2 className="text-3xl font-bold text-pink-700 mb-5">Lista no encontrada</h2>
@@ -242,37 +243,57 @@ export default function List() {
     );
   }
 
+
+
+
   return (
     <div className=" min-h-screen bg-slate-50">
+
+      <title>{`${ListShow.name} | ListGift`}</title>
+      <meta name="description" content={ListShow.description || `Mira la lista de regalos de ${ListShow.user?.name}`} />
+
+      {/* Open Graph (Social SEO) */}
+      <meta property="og:title" content={`Lista de Regalos: ${ListShow.name}`} />
+      <meta property="og:description" content={ListShow.description} />
+      <meta property="og:image" content={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `https://ununique-convertibly-rachel.ngrok-free.dev/pictures/git.png`} />
+      <meta property="og:image" content={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `${VITE_STORAGE_URL}/pictures/git.png`} />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:type" content="article" />
+
+      {/* JSON-LD Script */}
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
 
-      <motion.div className="max-w-7xl mx-auto p-4 sm:p-6" variants={containerVariants} initial="initial" animate="animate" exit="exit">
+      <motion.main key={id} className="max-w-7xl mx-auto p-4 sm:p-6" variants={containerVariants} initial="initial" animate="animate" exit="exit">
 
         {/* BOTÓN REGRESAR */}
-        <button
-          onClick={() => navigate('/')}
-          className="mb-6 flex items-center text-slate-500 hover:text-pink-600 transition-colors font-medium text-sm "
-        >
-
-          <ArrowRightIcon className="h-4 w-4 mr-1 rotate-180 " />
-          Volver a explorar
-        </button>
+        <nav aria-label="Navegación de regreso">
+          <button
+            onClick={() => navigate('/')}
+            className="mb-2 flex items-center text-slate-500 hover:text-pink-600 transition-colors font-medium text-sm group"
+          >
+            <ArrowRightIcon className="h-4 w-4 mr-1 rotate-180 group-hover:-translate-x-1 transition-transform" />
+            Volver a explorar
+          </button>
+        </nav>
 
         {/* Header Lista con Estadísticas */}
-        <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden mb-8">
+        <article className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden mb-8">
           <motion.div
             className="relative p-6 md:p-10 text-white"
             style={{ backgroundImage: `linear-gradient(135deg, ${ListShow.color1} 0%, ${ListShow.color2} 100%)` }}
           >
-            {/* Decoración de fondo */}
             <div className="absolute inset-0 opacity-10 bg-[url('/pictures/git.png')] bg-repeat rotate-12 scale-150 pointer-events-none"></div>
             <div className="relative flex flex-col md:flex-row items-center gap-6">
               <div className="relative">
                 <img
                   src={ListShow.image ? `${VITE_STORAGE_URL}/${ListShow.image}` : `${VITE_STORAGE_URL}/pictures/git.png`}
                   className="w-28 h-28 rounded-3xl object-cover border-4 border-white/30 shadow-2xl"
-                  alt=""
+                  alt={`Portada de la Lista de regalos ${ListShow.name} creada por ${ListShow.user?.name || 'un usuario'} en ListGift`}
                 />
                 {isOwner && (
                   <div className="absolute -bottom-2 -right-2 bg-white text-pink-600 p-2 rounded-xl shadow-lg cursor-pointer hover:scale-110 transition-transform">
@@ -282,20 +303,18 @@ export default function List() {
               </div>
 
               <div className="flex-grow text-center md:text-left">
-                <h2 className="text-4xl font-black tracking-tight mb-2">{ListShow?.name}</h2>
-                <p className="text-white/80 max-w-xl line-clamp-2">{ListShow?.description}</p>
+                {/* H1 es vital para SEO: Solo uno por página */}
+                <h1 className="text-4xl font-black tracking-tight mb-2">{ListShow.name}</h1>
+                <p className="text-white/80 max-w-xl line-clamp-2 italic">
+                  {ListShow.description || "Sin descripción disponible"}
+                </p>
 
                 {/* BARRA DE PROGRESO */}
-                <div className="mt-6 flex items-center gap-4">
+                <div className="mt-6 flex items-center gap-4" aria-label="Progreso de regalos cumplidos">
                   <div className="flex-grow h-2 bg-black/20 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progressPercent}%` }}
-                      transition={{
-                        duration: 1.5,
-                        ease: "circOut",
-                        delay: 0.5
-                      }}
                       className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                     />
                   </div>
@@ -308,7 +327,7 @@ export default function List() {
               {isOwner && (
                 <button
                   onClick={handleOpenCreate}
-                  className="bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all hover:-translate-y-1 active:scale-95 flex-shrink-0"
+                  className="bg-white text-slate-900 px-6 py-4 rounded-2xl shadow-xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all hover:-translate-y-1 active:scale-95"
                 >
                   <PlusIcon className="h-5 w-5 text-pink-500" />
                   Agregar Regalo
@@ -317,11 +336,13 @@ export default function List() {
             </div>
           </motion.div>
 
-          {/* Filtros y Búsqueda */}
-          <div className="p-4 sm:p-6 bg-white flex flex-col md:flex-row gap-4 border-t border-slate-100">
+          {/* Filtros - Mejorado con labels para accesibilidad */}
+          <section className="p-4 sm:p-6 bg-white flex flex-col md:flex-row gap-4 border-t border-slate-100">
             <div className="relative flex-grow">
+              <label htmlFor="search-gifts" className="sr-only">Buscar regalos</label>
               <MagnifyingGlassIcon className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
+                id="search-gifts"
                 type="text"
                 placeholder="¿Qué regalo buscas?"
                 className="w-full pl-12 pr-4 py-3 rounded-xl border-none bg-slate-100 focus:ring-2 focus:ring-pink-500 transition-all"
@@ -331,6 +352,7 @@ export default function List() {
             </div>
 
             <select
+              aria-label="Ordenar regalos"
               className="bg-slate-100 border-none rounded-xl py-3 px-4 font-bold text-slate-600 focus:ring-2 focus:ring-pink-500 cursor-pointer"
               value={sortOption}
               onChange={(e) => handleSort(e.target.value)}
@@ -340,46 +362,69 @@ export default function List() {
               <option value="name-desc">Nombre (Z-A)</option>
               <option value="price-asc">Más económico</option>
               <option value="price-desc">Más exclusivos</option>
-
             </select>
-          </div>
-        </div>
+          </section>
+        </article>
 
-        <motion.div
-          variants={gridVariants}
-          initial="initial"
-          animate="animate"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-        >
-          {itemsToRender.map((item) => (
-            <motion.div
-              key={item.id}
-              layout
-              variants={layoutVariants}
-              onClick={() => setSelectedItem(item)}
-              transition={{ layout: { type: "spring", stiffness: 300, damping: 25 } }}
+
+        <AnimatePresence mode="wait">
+          {itemsToRender?.length > 0 ? (
+            <motion.section
+              variants={gridVariants}
+              initial="initial"
+              animate="animate"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
-              <GiftCard
-                item={item}
-                isOwner={isOwner}
-                highlightedId={highlightedId}
-                handleOpenEdit={handleOpenEdit}
-                setSelectedItem={setSelectedItem}
-                VITE_STORAGE_URL={VITE_STORAGE_URL}
-              />
-            </motion.div >
-          ))}
-        </motion.div>
 
-        {/* Mensaje vacío */}
-        {itemsToRender.length === 0 && (
-          <motion.div variants={emptyListVariants} className="py-20 text-center">
-            <div className="bg-white inline-block p-10 rounded-3xl shadow-sm border border-slate-100">
-              <InboxStackIcon className="h-16 w-16 text-slate-200 mx-auto mb-4" />
-              <h4 className="text-xl text-slate-400 font-bold">No encontramos regalos aquí</h4>
-            </div>
-          </motion.div>
-        )}
+              {itemsToRender.map((item) => (
+                <motion.div
+                  key={item.id}
+                  layout
+                  variants={layoutVariants}
+                  onClick={() => setSelectedItem(item)}
+                  className="cursor-pointer"
+                >
+                  <GiftCard
+                    item={item}
+                    isOwner={isOwner}
+                    highlightedId={highlightedId}
+                    handleOpenEdit={handleOpenEdit}
+                    setSelectedItem={setSelectedItem}
+                    VITE_STORAGE_URL={VITE_STORAGE_URL}
+                  />
+                </motion.div >
+              ))}
+
+            </motion.section>
+          ) : (
+            <motion.div key="empty"
+              className="col-span-full flex flex-col items-center justify-center py-16 px-6 bg-card border border-border rounded-3xl border-dashed">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl" role="img" aria-label={searchTerm ? "Lupa de búsqueda" : "Regalo"}>
+                  {searchTerm ? "🔍" : "🎁"}
+                </span>
+              </div>
+              <h4 className="text-xl font-medium text-foreground">
+                {searchTerm ? `No encontramos nada para "${searchTerm}"` : "No hay listas públicas aún"}
+              </h4>
+              <p className="text-muted-foreground mt-1 text-center">
+                {searchTerm
+                  ? "Intenta con otras palabras o revisa la ortografía."
+                  : "Sé el primero en crear una lista y compartirla con el mundo."}
+              </p>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="mt-4 text-primary font-bold text-sm hover:underline"
+                >
+                  Limpiar búsqueda
+                </button>
+              )}
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+
 
         {selectedItem && (
           <ModalItem
@@ -402,7 +447,7 @@ export default function List() {
           apiRes={apiRes}
           itemToEdit={itemToEdit} // Pasamos el item si estamos editando
         />
-      </motion.div>
+      </motion.main>
     </div>
   );
 }

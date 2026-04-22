@@ -34,7 +34,6 @@ function AppRoutes() {
           <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
-
           </Route>
         </Route>
 
