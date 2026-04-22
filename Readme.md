@@ -28,6 +28,8 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 ---
 
+4. Capturas de Pantalla o Demo Visual
+
 ## 🎯 Funcionalidades Clave
 
 ### 1. Gestión de Recursos (CRUD)
@@ -121,7 +123,7 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 ---
 
-### <span style="display: inline-flex; align-items: center;gap:10px"><img src="https://ekiip.com/wp-content/uploads/2020/01/cropped-devops.png"  width="50"> Desarrollo y Operaciones - DevOps</span>
+### <span style="display: inline-flex; align-items: center;gap:10px"><img src="./frontend/public/pictures/devs.png"  width="50"> Desarrollo y Operaciones - DevOps</span>
 
 - **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://simpleskill.icons.workers.dev/svg?i=github" height="20">  Git / GitHub</span>**
 
@@ -147,7 +149,7 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
   - Cliente de escritorio para desarrolladores para gestionar y visualizar la base de datos MySQL.
 
-- **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png" height="20">  VS Code</span>**
+- **<span style="display: inline-flex; align-items: center;gap:10px"> <img src="./frontend/public/pictures/vscode.png" height="20">  VS Code</span>**
 
   - Entorno de desarrollo principal.
 
@@ -229,8 +231,6 @@ Las contribuciones son bienvenidas. Por favor, sigue los siguientes pasos:
 4.  Envía un pull request.
 
 ## Sobre el Proyecto
-
-Color,Hex,Tailwind Class,Uso Principal Rose Coral,#F43F5E,rose-500,"Marca, Logo, Botones Primarios (CTA)" Emerald Green,#10B981,emerald-500,"Checkmarks, Estados de éxito, Precios bajos" Dark Slate,#0F172A,slate-900,"Títulos, Texto principal, Sidebar Dark" Soft Slate,#F8FAFC,slate-50,"Fondos de página, Inputs deshabilitados" Indigo Accent,#4F46E5,indigo-600,"Enlaces, Modo Edición, Detalles secundarios"
 
 <h2 style="font-size: 1.5rem; font-weight: 600; border-bottom: 2px solid #3182ce">🧑‍💻 Autor</h2>
  <table >

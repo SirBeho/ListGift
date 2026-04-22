@@ -1,4 +1,5 @@
 import Logo from "../components/Logo";
+import { Link } from "react-router-dom";
 
 export default function Layout({ full = false }) {
 
@@ -15,9 +16,9 @@ export default function Layout({ full = false }) {
 
 
                     <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-muted-foreground">
-                        <a href="#" className="hover:text-foreground transition-colors">Sobre el proyecto</a>
-                        <a href="#" className="hover:text-foreground transition-colors">Política de Privacidad</a>
-                        <a href="#" className="hover:text-foreground transition-colors">Términos de Servicio</a>
+                        <Link to="/info/about" className="hover:text-primary transition-colors">Sobre el proyecto</Link>
+                        <Link to="/info/privacy" className="hover:text-primary transition-colors">Política de Privacidad</Link>
+                        <Link to="/info/terms" className="hover:text-primary transition-colors">Términos de Servicio</Link>
                     </div>
                 </div>
             </div>}

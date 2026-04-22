@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+    ArrowLeftIcon,
     UserIcon,
     LockClosedIcon,
     EnvelopeIcon, // Nuevo icono para email
@@ -76,28 +77,36 @@ export default function Register() {
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-yellow-100 px-6">
+            {/* Botón Volver */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute top-6 left-6 z-50">
+                <Link to="/" className="flex items-center gap-2 text-slate-400 hover:text-primary transition-colors font-medium text-sm group">
+                    <ArrowLeftIcon className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                    Seguir explorando
+                </Link>
+            </motion.div>
+
             <AnimatePresence mode="wait">
                 <motion.div
-                    key="register"
-                    initial={{ x: 500, opacity: 0 }}
+                    key="register-card"
+                    initial={{ x: 160, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 100, opacity: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="bg-white shadow-xl rounded-2xl border-t-pink-500 border-t-8 max-w-md w-full p-8 "
+                    exit={{ x: -160, opacity: 0 }}
+                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                    className="bg-white shadow-2xl shadow-primary/10 rounded-[1.5rem] border-t-primary border-t-8 max-w-md w-full p-8 relative z-10"
                 >
-                    <motion.div className="text-center mb-6">
-                        <h2 className="text-3xl font-bold text-pink-600">
-                            ✍️ Crea tu Cuenta
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">
+                            Únete a <span className="text-primary">ListGift</span>
                         </h2>
-                        <p className="text-gray-500">
-                            Regístrate para empezar a organizar tus regalos
+                        <p className="text-slate-500 font-medium mt-2">
+                            Empieza a organizar tus deseos hoy mismo
                         </p>
-                    </motion.div>
+                    </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Username */}
-                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition">
-                            <UserIcon className="h-5 w-5 text-pink-400 mr-2" />
+                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-orange-200 transition">
+                            <UserIcon className="h-5 w-5 text-primary mr-2" />
                             <input
                                 aria-label="Nombre de usuario"
                                 type="text"
@@ -111,8 +120,8 @@ export default function Register() {
                         </div>
 
                         {/* Email */}
-                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition">
-                            <EnvelopeIcon className="h-5 w-5 text-pink-400 mr-2" />
+                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-orange-200 transition">
+                            <EnvelopeIcon className="h-5 w-5 text-primary mr-2" />
                             <input
                                 aria-label="Email"
                                 type="email"
@@ -126,8 +135,8 @@ export default function Register() {
                         </div>
 
                         {/* Password (Igual que en Login) */}
-                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-pink-300 transition relative">
-                            <LockClosedIcon className="h-5 w-5 text-pink-400 mr-2" />
+                        <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 ring-orange-200 transition relative">
+                            <LockClosedIcon className="h-5 w-5 text-primary mr-2" />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
@@ -141,7 +150,7 @@ export default function Register() {
                             <button
                                 type="button"
                                 onClick={handleTogglePassword}
-                                className="absolute right-3 text-pink-400 hover:text-pink-600"
+                                className="absolute right-3 text-primary hover:text-pink-600"
                                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                             >
                                 {showPassword ? (
@@ -174,8 +183,8 @@ export default function Register() {
                             className={classNames(
                                 "w-full py-2 rounded-lg transition duration-300 shadow",
                                 {
-                                    "bg-pink-300 cursor-not-allowed": loading,
-                                    "bg-pink-500 hover:bg-pink-600 text-white": !loading,
+                                    "bg-orange-200 cursor-not-allowed": loading,
+                                    "bg-primary hover:bg-orange-600 text-white": !loading,
                                 }
                             )}
                         >
@@ -186,7 +195,7 @@ export default function Register() {
                     {/* Login Link */}
                     <div className="mt-6 text-center text-sm text-gray-500">
                         ¿Ya tienes cuenta?{" "}
-                        <Link to="/login" className="text-pink-500 hover:underline">
+                        <Link to="/login" className="text-primary hover:underline">
                             Inicia sesión
                         </Link>
                     </div>

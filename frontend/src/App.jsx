@@ -12,6 +12,7 @@ import PusherListener from "./service/PusherListener";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ListProvider } from "./providers/ListProvider";
 import { AnimatePresence } from "framer-motion";
+import InfoPage from "./pages/InfoPage";
 
 
 function AppRoutes() {
@@ -28,6 +29,7 @@ function AppRoutes() {
 
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/info/:section" element={<InfoPage />} />
           <Route path="/lists/:id" element={<List />} />
           <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Dashboard />} />

@@ -60,6 +60,7 @@ export default function Layout() {
           >
             <Outlet />
 
+
             <Footer full={true} />
 
           </motion.div>

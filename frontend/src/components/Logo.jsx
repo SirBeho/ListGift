@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Logo = ({ negativo = false, letra = false }) => {
 
     return (
-        <Link to={"/"}
+        <Link to="/"
             className="flex items-center justify-center   border-b border-slate-100/50 shrink-0 group cursor-pointer">
             {/* Contenedor del Icono con Tonalidades */}
             <div className="relative ">

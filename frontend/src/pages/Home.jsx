@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useList } from '../providers/ListProvider';
 import Card from '../components/Card';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +11,8 @@ function Home() {
   const { publicLists: listas, LoadPublicListas } = useList();
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(localStorage.getItem("sidebarOpen") === "true");
+  const [busqueda, setBusqueda] = useState('');
+
 
 
   useEffect(() => {
@@ -59,6 +61,23 @@ function Home() {
 
     }
   };
+  const filteredList = useCallback(() => {
+    if (!listas) return [];
+    const termino = busqueda.toLowerCase();
+    let listaf = listas;
+    if (termino) {
+      listaf = listas.filter(lista =>
+        lista.name.toLowerCase().includes(termino) ||
+        lista.description.toLowerCase().includes(termino)
+      );
+    }
+
+
+    return listaf;
+
+  }, [listas, busqueda]);
+
+  const listasFiltradas = filteredList();
 
   if (error) {
     return (
@@ -94,10 +113,11 @@ function Home() {
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center w-full sm:w-auto">
-              <button className=" w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-primary-foreground font-medium bg-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all group">
+              <Link to={"/login"}
+                className=" w-auto inline-flex items-center justify-center rounded-full px-8 py-4 text-base text-primary-foreground font-medium bg-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all group">
                 <span>Empecemos!! — Es Gratis</span>
                 <ArrowRightIcon strokeWidth={3} className="w-4 h-4 ml-2  transition-transform duration-300 group-hover:translate-x-1.5" />
-              </button>
+              </Link>
 
               <button
                 onClick={() => scrollToSection('features')}
@@ -110,15 +130,14 @@ function Home() {
         </section>)
       }
 
-
       {/* 2. GRID DE LISTAS PÚBLICAS */}
-      <section className="bg-muted/30 relative ">
+      <section className="bg-muted/30 relative  ">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
         <h3 className="w-full sticky top-0 z-30 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 " >
           Explorar Listas de Regalos
         </h3>
 
-        <div className="border-b border-border/40 bg-muted/80 shadow-xl mx-auto px-6 sm:px-8 lg:px-12 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="border-b border-border/40 bg-muted/80 shadow-xl  mx-auto px-6 sm:px-8 lg:px-12 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-3">
           <p className="text-left group cursor-default mt-1 text-muted-foreground text-lg " >
             ¡Encuentra el detalle perfecto para tus amigos y familiares!
           </p>
@@ -127,15 +146,17 @@ function Home() {
             <input
               type="text"
               placeholder="Buscar por nombre o evento..."
+              value={busqueda} // Conectamos el estado
+              onChange={(e) => setBusqueda(e.target.value)} // Actualizamos el estado
               className="w-full pl-12 pr-4 py-3 rounded-2xl border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all shadow-sm"
             />
           </div>
         </div>
 
-        <div className="bg-card px-6 sm:px-8 lg:px-12 py-12 max-w-[1400px] mx-auto w-full rounded-md">
+        <div className="relative z-10 bg-card  px-6 sm:px-8 lg:px-12 py-12 max-w-[1400px] mx-auto w-full rounded-md ">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {listas?.length > 0 ? (
-              listas.map((lista, index) => (
+            {listasFiltradas?.length > 0 ? (
+              listasFiltradas.map((lista, index) => (
                 <div
                   key={lista.id}
                   className={`card ${lista.id} card-enter`}
@@ -147,18 +168,39 @@ function Home() {
             ) : (
               <div className="col-span-full flex flex-col items-center justify-center py-16 px-6 bg-card border border-border rounded-3xl border-dashed">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                  <span className="text-2xl">🎁</span>
+                  <span className="text-2xl">{busqueda ? "🔍" : "🎁"}</span>
                 </div>
-                <h4 className="text-xl font-medium text-foreground">No hay listas públicas aún</h4>
-                <p className="text-muted-foreground mt-1 text-center">Sé el primero en crear una lista y compartirla con el mundo.</p>
+                <h4 className="text-xl font-medium text-foreground">
+                  {busqueda ? `No encontramos nada para "${busqueda}"` : "No hay listas públicas aún"}
+                </h4>
+                <p className="text-muted-foreground mt-1 text-center">
+                  {busqueda
+                    ? "Intenta con otras palabras o revisa la ortografía."
+                    : "Sé el primero en crear una lista y compartirla con el mundo."}
+                </p>
+                {busqueda && (
+                  <button
+                    onClick={() => setBusqueda("")}
+                    className="mt-4 text-primary font-bold text-sm hover:underline"
+                  >
+                    Limpiar búsqueda
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
+
+
+        <div className="absolute  w-full  pb-20 shadow-[0_-20px_25px_-5px_rgba(0,0,0,0.1)]">
+
+        </div>
+
       </section>
 
+
       {/* 3. FEATURES SECTION */}
-      <section id="features" className="bg-background relative">
+      <section id="features" className="bg-background relative  ">
         <div className="w-full max-w-[1400px] mx-auto h-[1px] bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
 
         <h3 className="w-full sticky top-0 z-20 bg-muted/80 backdrop-blur-md mx-auto text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground tracking-tight hover:text-primary transition-colors py-4 md:py-2 px-6 sm:px-8 lg:px-12 text-center " >
@@ -231,7 +273,7 @@ function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
 
                 <Link
-                  to="/login"
+                  to="/register"
                   className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
                 >
                   Crear mi cuenta gratis

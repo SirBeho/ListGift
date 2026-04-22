@@ -82,8 +82,8 @@ export default function Dashboard() {
   };
 
   const itemVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    initial: { opacity: 0, y: 20, transition: { duration: 0.2, ease: "easeOut" } },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } }
   };
 
   return (
@@ -105,7 +105,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Botón de acción principal único */}
 
       </header>
 
@@ -137,8 +136,6 @@ export default function Dashboard() {
       {/* 3. SECCIÓN: MIS LISTAS */}
       <section className="mb-12">
 
-
-
         <header className="relative mb-10 flex flex-col sm:items-center sm:flex-row  justify-between gap-4">
           <div >
             <motion.h1
@@ -148,12 +145,9 @@ export default function Dashboard() {
             >
               Mis Listas
             </motion.h1>
-
           </div>
 
-          <div className="hidden sm:block h-1 flex-1 bg-slate-500 rounded-full w-full"></div>
-
-
+          <div className="hidden sm:block h-1 flex-1 bg-slate-500/50 rounded-full w-full"></div>
 
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -165,8 +159,6 @@ export default function Dashboard() {
             Nueva Lista
           </motion.button>
         </header>
-
-
 
         <div className='mb-5 flex flex-col md:flex-row justify-between gap-4 w-full m-8'>
         </div>

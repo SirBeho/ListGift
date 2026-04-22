@@ -7,7 +7,7 @@ export default function Objeto3D() {
   return (
     // 2. Usar Suspense para manejar el estado de carga
     <Suspense fallback={<div>Cargando Objeto 3D...</div>}>
-      <div className='h-56 w-[200%]  relative right-0 -inset-x-1/2  z-0 pb-16 sx:pb-0'>
+      <div className='h-56 w-[200%]  relative right-0 -inset-x-1/2  z-0 pb-10 sx:pb-0'>
         <Spline scene="https://prod.spline.design/ePHCRs3CLX3qM3Uh/scene.splinecode" className='z-10' />
       </div>
     </Suspense>
