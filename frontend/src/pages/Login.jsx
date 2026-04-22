@@ -49,7 +49,7 @@ export default function Login() {
                 navigate(redirectTo || "/dashboard", { replace: true });
             }, 500); // Duración de la animación de salida */
         } catch (err) {
-            //console.log('aqiui')
+
             setLoading(false);
             setApiRes(err);
         }

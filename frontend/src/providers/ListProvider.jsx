@@ -25,7 +25,6 @@ export const ListProvider = ({ children }) => {
 
     } catch (error) {
       console.error('Error fetching lists:');
-      //console.log(error)
       setListas(null);
       return false; // Retorna null si hay un error
     }

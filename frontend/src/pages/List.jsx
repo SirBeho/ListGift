@@ -16,7 +16,7 @@ import confetti from "canvas-confetti";
 import Alert from "../components/Alert";
 import ModalManageItem from "../components/ModalManageItem";
 import GiftCard from "../components/GiftCard";
-
+import { useTitle } from "../Hooks/useTitle";
 
 const notFoundVariants = {
   initial: { opacity: 0, y: -50 },
@@ -78,6 +78,9 @@ const containerVariants = {
 
 
 export default function List() {
+
+
+
   const { user, loading } = useAuth();
   const { listas, LoadListas, publicLists, LoadPublicListas } = useList();
   const { id } = useParams();
@@ -102,7 +105,7 @@ export default function List() {
   const totalItems = ListShow?.items?.length || 0;
   const giftedItems = ListShow?.items?.filter(i => i.status === 2).length || 0;
   const progressPercent = totalItems > 0 ? (giftedItems / totalItems) * 100 : 0;
-
+  useTitle(ListShow.name || "Lista de Regalos");
   const structuredData = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "ItemList",

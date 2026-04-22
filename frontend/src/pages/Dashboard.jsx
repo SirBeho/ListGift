@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from '../providers/AuthProvider';
 import { useList } from '../providers/ListProvider';
-import { useTitle } from '../Hook/useTitle';
+import { useTitle } from '../Hooks/useTitle';
 
 // Componentes
 import Card from '../components/Card';

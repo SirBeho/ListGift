@@ -12,7 +12,7 @@ import 'react-phone-number-input/style.css' //
 
 export default function ModalConfirmGift({ itemName, show = false, onClose, onConfirm }) {
 
-    console.log(show);
+
 
 
     const textAreaRef = useRef(null);
@@ -29,7 +29,7 @@ export default function ModalConfirmGift({ itemName, show = false, onClose, onCo
         };
     });
 
-    console.log(datos)
+
 
     const { name, phone, message } = datos;
 

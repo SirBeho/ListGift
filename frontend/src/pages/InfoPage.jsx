@@ -13,12 +13,11 @@ import {
     LockClosedIcon,
     SparklesIcon
 } from "@heroicons/react/24/outline";
-import { useTitle } from "../Hook/useTitle";
+import { useTitle } from "../Hooks/useTitle";
 
 export default function InfoPage() {
     const { section } = useParams();
     const [showDetails, setShowDetails] = useState(false);
-    console.log(section)
     useTitle(section === "about" ? "Sobre el Proyecto" : section === "privacy" ? "Política de Privacidad" : section === "terms" ? "Términos de Servicio" : "Información");
 
     const infoContent = {

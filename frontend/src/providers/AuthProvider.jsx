@@ -35,15 +35,14 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = async (credentials) => {
-        //console.log('usuario login:', user)
+
         try {
             // Usamos la instancia que ya tiene el interceptor
             const res = await instance.post('/auth/login', credentials);
-            //console.log('respuesta login:', res.data)
             if (res.data.status === 'success') {
                 setRedirecting(true);
                 setUser(res.data.user);
-                //  console.log('usuario seteado:', res.data.user)
+
             }
         } catch (err) {
             console.log(err)
