@@ -105,7 +105,9 @@ export default function List() {
   const totalItems = ListShow?.items?.length || 0;
   const giftedItems = ListShow?.items?.filter(i => i.status === 2).length || 0;
   const progressPercent = totalItems > 0 ? (giftedItems / totalItems) * 100 : 0;
-  useTitle(ListShow.name || "Lista de Regalos");
+  useTitle(ListShow?.name || "Lista de Regalos");
+
+
   const structuredData = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "ItemList",

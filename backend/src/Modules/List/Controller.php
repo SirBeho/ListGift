@@ -31,10 +31,10 @@ class Controller
     {
         try {
             //admin, owner o public
-             $List = Model::findOrFail($id);
+            $List = Model::findOrFail($id);
             if (!$List->is_public) {
                 RoleAccess::checkOwner($List);
-             } 
+            } 
 
             header("HTTP/1.0 200 OK");
             echo json_encode($List);
