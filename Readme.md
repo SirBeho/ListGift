@@ -33,11 +33,11 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 ## 📸 Capturas de Pantalla
 
-![Home View](./frontend/public/pictures/CEO_LOGO.png)
-
-|                       List Gift                       |
-| :---------------------------------------------------: |
-| ![Dashboard](./frontend/public/pictures/CEO_LOGO.png) |
+<div align="center">
+  <h3>ListGift</h3>
+  <img src="./frontend/public/pictures/CEO_LOGO.png" width="200" alt="Logo ListGift" />
+  <p>Tu plataforma inteligente de gestión de regalos</p>
+</div>
 
 | Galería Principal | Galería Principal (Desktop) | Side Bar |
 | :-: | :-: | :-: |
