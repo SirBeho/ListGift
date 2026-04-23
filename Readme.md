@@ -1,18 +1,21 @@
-# 🎁 ListGist: Servicio Web para Gestión de Listas de Regalos [![GitHub Actions CI/CD Status](https://github.com/SirBeho/ListGift/actions/workflows/main.yml/badge.svg)](https://github.com/sirbeho/listgift/actions/workflows/main.yml)
+# 🎁 ListGist: Gestión de Listas de Regalos
+
+[![GitHub Actions CI/CD Status](https://github.com/SirBeho/ListGift/actions/workflows/main.yml/badge.svg)](https://github.com/sirbeho/listgift/actions/workflows/main.yml)![License](https://img.shields.io/github/license/SirBeho/ListGift) ![Last Commit](https://img.shields.io/github/last-commit/SirBeho/ListGift)
 
 <img src="https://simpleskill.icons.workers.dev/svg?i=react,vite,tailwindcss,php,mysql,framer,docker" height="40">
 
 ## Índice
 
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Funcionalidades Principales](#funcionalidades-principales)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Comandos por Entorno](#comandos-por-entorno)
-- [Pruebas](#pruebas)
-- [Documentación de la API](#documentación-de-la-api)
-- [Contribución](#contribución)
-- [Sobre el Proyecto](#proyecto)
-- [Contacto](#contacto)
+- [✨ Descripción y Arquitectura](#-descripción-y-arquitectura)
+- [📸 Capturas de Pantalla](#-capturas-de-pantalla)
+- [🎯 Funcionalidades Clave](#-funcionalidades-clave)
+- [⚙️ Tecnologías Utilizadas](#️-tecnologías-utilizadas)
+- [📝 Comandos por Entorno](#-comandos-por-entorno)
+- [🔬 Pruebas](#-pruebas)
+- [🛠️ Próximos Pasos (Roadmap)](#️-próximos-pasos-roadmap)
+- [🤝 Contribución](#-contribución)
+- [📄 Licencia](#-licencia)
+- [🧑‍💻 Autor](#-autor)
 
 ## ✨ Descripción y Arquitectura
 
@@ -28,7 +31,21 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 ---
 
-4. Capturas de Pantalla o Demo Visual
+## 📸 Capturas de Pantalla
+
+![Home View](./frontend/public/pictures/CEO_LOGO.png)
+
+|                       List Gift                       |
+| :---------------------------------------------------: |
+| ![Dashboard](./frontend/public/pictures/CEO_LOGO.png) |
+
+| Galería Principal | Galería Principal (Desktop) | Side Bar |
+| :-: | :-: | :-: |
+| ![Home View](./frontend/public/pictures/img1.png) | ![Home2 View](./frontend/public/pictures/og-home.png) | ![Side Bar](./frontend/public/pictures/img3.png) |
+
+|                     Dashboard                     |               Articulos de la lista                |
+| :-----------------------------------------------: | :------------------------------------------------: |
+| ![Dashboard](./frontend/public/pictures/img4.png) | ![Itens List](./frontend/public/pictures/img5.png) |
 
 ## 🎯 Funcionalidades Clave
 
@@ -221,18 +238,138 @@ Actualmente, este proyecto no cuenta con una sección de pruebas detallada en la
 
 ---
 
+## 🛠️ Próximos Pasos (Roadmap)
+
+### ✨ Experiencia de Usuario (UX)
+
+> #### 📱 PWA Completa (Instalable)
+>
+> - **Dificultad:** 🟡 | **Impacto:** Alto
+> - **Descripción:** Configuración avanzada de `manifest.json` y Service Workers para permitir la instalación de la app en la pantalla de inicio móvil.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### 🔔 Centro de Notificaciones Internas
+>
+> - **Dificultad:** 🟡 | **Impacto:** Medio
+> - **Descripción:** Historial de actividad dentro de la interfaz para que el usuario gestione sus alertas sin depender exclusivamente de notificaciones push.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### 📅 Integración con Calendario
+>
+> - **Dificultad:** 🟡 | **Impacto:** Bajo
+> - **Descripción:** Sincronización con Google y Apple Calendar para enviar recordatorios automáticos sobre la proximidad de los eventos.
+> - **Estado:** `Proyecto Futuro`
+
+---
+
+### 💼 Funcionalidades de Negocio
+
+> #### 💰 Recolecta (Group Gifting)
+>
+> - **Dificultad:** 🔴 | **Impacto:** Alto
+> - **Descripción:** Lógica de aportes colectivos y barra de progreso visual para financiar regalos costosos entre varios invitados.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### 🔗 Generador de Códigos QR
+>
+> - **Dificultad:** 🟢 | **Impacto:** Medio
+> - **Descripción:** Generación automática de QR únicos por cada lista para facilitar el acceso rápido desde invitaciones físicas o digitales.
+> - **Estado:** `Proyecto Futuro`
+
+---
+
+### 📱 Comunicación y Engagement
+
+> #### 💬 WhatsApp Business API
+>
+> - **Dificultad:** 🔴 | **Impacto:** Crítico
+> - **Descripción:** Automatización de alertas y confirmaciones de regalos enviadas directamente al WhatsApp del dueño de la lista.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### ✍️ Recordatorios de Agradecimiento
+>
+> - **Dificultad:** 🟢 | **Impacto:** Alto
+> - **Descripción:** Generación de un resumen post-evento con accesos directos para enviar mensajes de agradecimiento por WhatsApp a cada invitado.
+> - **Estado:** `Proyecto Futuro`
+
+---
+
+### 🛡️ Seguridad y Control
+
+> #### 🔒 Listas Protegidas por Contraseña
+>
+> - **Dificultad:** 🟢 | **Impacto:** Medio
+> - **Descripción:** Permitir que el dueño asigne un PIN de acceso para listas privadas, asegurando que solo invitados seleccionados vean el contenido.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### 🔑 OAuth 2.0 (Social Login)
+>
+> - **Dificultad:** 🟡 | **Impacto:** Crítico
+> - **Descripción:** Integración de "Continuar con Google" para eliminar la fricción en el registro y mejorar la tasa de conversión de usuarios.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### ⏱️ Bloqueo por Fecha de Evento
+>
+> - **Dificultad:** 🟢 | **Impacto:** Medio
+> - **Descripción:** Deshabilitar automáticamente la opción de regalar o modificar la lista una vez pasada la fecha programada del evento.
+> - **Estado:** `Proyecto Futuro`
+
+---
+
+### 🚀 Desarrollo y DevOps
+
+> #### 🎭 Pruebas E2E con Playwright
+>
+> - **Dificultad:** 🔴 | **Impacto:** Alto
+> - **Descripción:** Automatización de pruebas de flujo crítico (crear lista, reservar regalo) para asegurar la estabilidad en cada despliegue de CI/CD.
+> - **Estado:** `Proyecto Futuro`
+>
+> ---
+>
+> #### 🕵️ Importación por URL (Scraping)
+>
+> - **Dificultad:** 🔴 | **Impacto:** Crítico
+> - **Descripción:** Extracción automática de metadatos (imagen, precio, nombre) al procesar enlaces de tiendas externas para agilizar la creación de ítems.
+> - **Estado:** `Proyecto Futuro`
+
+---
+
+### 💡 Guía de Dificultad:
+
+- 🟢 **Fácil:** Lógica simple en el backend o frontend (1-3 días).
+- 🟡 **Media:** Requiere integraciones de terceros o cambios estructurales (1 semana).
+- 🔴 **Difícil:** Arquitectura compleja, servicios de pago o mantenimiento continuo (+2 semanas).
+
+---
+
 ## 🤝 Contribución
 
-Las contribuciones son bienvenidas. Por favor, sigue los siguientes pasos:
+Las contribuciones son las que hacen de la comunidad de código abierto un lugar increíble para aprender, inspirar y crear. Cualquier contribución que hagas será **muy apreciada**.
 
-1.  Haz un fork del proyecto.
-2.  Crea una rama para tu nueva característica (`git checkout -b feature/nueva-caracteristica`).
-3.  Realiza los cambios y haz commit (`git commit -m 'Agregada nueva característica'`).
-4.  Envía un pull request.
+1. Realiza un **Fork** del proyecto.
+2. Crea una **Rama** para tu característica (`git checkout -b feature/NuevaMejora`).
+3. Realiza tus **Commits** (`git commit -m 'Add: Alguna mejora'`).
+4. Haz **Push** a la rama (`git push origin feature/NuevaMejora`).
+5. Abre un **Pull Request**.
 
-## Sobre el Proyecto
+## 📄 Licencia
 
-<h2 style="font-size: 1.5rem; font-weight: 600; border-bottom: 2px solid #3182ce">🧑‍💻 Autor</h2>
+Este proyecto es de código abierto y está disponible bajo la Licencia MIT.
+
+## 🧑‍💻 Autor
+
  <table >
                 <tbody id="simbolo">
                 <tr><td style="display: flex;"><div style="width: 10rem; height: 13rem; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" ><img src="https://raw.githubusercontent.com/SirBeho/compilador/refs/heads/master/img/ouner.jpg" alt="Descripción de la imagen"  style="width: 26rem; height: 13rem; object-fit: cover;border-radius: 0.5rem;"/></div></td><td> 

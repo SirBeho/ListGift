@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,10 +17,11 @@ import { useParams } from "react-router-dom";
 
 
 export default function Login() {
-    const { user, loading: cargando, redirecting, login } = useAuth();
-    const { redirectTo } = useParams();
+    const { login } = useAuth();
 
     const navigate = useNavigate(); // El encargado de redirigir
+    const { state } = useLocation();
+    const from = state?.from || '/dashboard';
 
     const [formData, setFormData] = useState({ username: "benjamin000", password: "123" });
     const [apiRes, setApiRes] = useState(null);
@@ -38,6 +39,7 @@ export default function Login() {
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         setApiRes(null);
         setLoading(true);
@@ -46,10 +48,10 @@ export default function Login() {
             setAnimating(true);
             setTimeout(() => {
 
-                navigate(redirectTo || "/dashboard", { replace: true });
+                navigate(from, { replace: true });
             }, 500); // Duración de la animación de salida */
         } catch (err) {
-
+            console.log(err);
             setLoading(false);
             setApiRes(err);
         }
@@ -130,6 +132,8 @@ export default function Login() {
                                     {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
                                 </button>
                             </div>
+
+                            <Alert apiRes={apiRes} />
 
                             <button
                                 type="submit"

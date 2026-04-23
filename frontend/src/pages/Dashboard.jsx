@@ -48,8 +48,8 @@ const gridVariants = {
   animate: {
     opacity: 1,
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.4,
+      delayChildren: 0.1,
+      staggerChildren: 0.2,
     },
   },
 };
@@ -81,7 +81,6 @@ export default function Dashboard() {
     const totalListas = misListas?.length || 0;
 
     const regalosPendientes = misListas?.reduce((acc, lista) => {
-      console.log(lista.items);
       const pendientes = lista.items?.filter(gift => gift.status !== 2).length || 0;
       return acc + pendientes;
     }, 0) || 0;

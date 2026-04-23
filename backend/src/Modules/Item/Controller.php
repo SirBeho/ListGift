@@ -112,6 +112,16 @@ class Controller
             $telefono = $_POST['giver_phone'] ?? 'Unknown';
 
             $Item = Model::findOrFail($id);
+
+            if ($Item->status === 2) {
+                header("HTTP/1.0 409 Conflict"); // Error 409: Conflicto
+                echo json_encode([
+                    'status' => 'error', 
+                    'message' => '¡Vaya! Alguien más acaba de regalar este ítem hace un momento.'
+                ]);
+                return;
+            }
+            
             $Item->update([
                 'status' => 2 , 
                 'message' => $mensaje, 

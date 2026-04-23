@@ -53,7 +53,7 @@ const layoutVariants = {
     transition: {
       type: "tween",
       ease: "easeOut",
-      duration: 1.2
+      duration: 1
     }
   },
   exit: {

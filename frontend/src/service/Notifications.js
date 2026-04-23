@@ -8,8 +8,13 @@ export const useNotifications = () => {
             return;
         }
 
+        if (Notification.permission === 'denied') {
+            console.log('Permiso de notificaciones denegado previamente');
+            return { status: 'error', message: 'Permiso denegado previamente. Por favor, actívalo en los ajustes del sitio.' };
+        }
+
         try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
+            const registration = await navigator.serviceWorker.ready;
 
             const permission = await Notification.requestPermission();
             if (permission !== 'granted') {

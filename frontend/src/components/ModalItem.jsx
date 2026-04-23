@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import {
     CurrencyDollarIcon,
     MapPinIcon,
@@ -11,10 +12,10 @@ import {
 import { XMarkIcon, CheckBadgeIcon } from '@heroicons/react/20/solid';
 import ModalConfirmGift from './ModalConfirmGift';
 import instance from '../service/AxiosInstance';
-import { useNavigate } from "react-router-dom";
 
 export default function ModalItem({ selectedItem, show = false, onClose = () => { }, setApiRes, refreshItems, color1 = "#6366f1", color2 = "#a855f7" }) {
     const cancelButtonRef = useRef(null);
+    const location = useLocation();
     const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage";
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -145,7 +146,20 @@ export default function ModalItem({ selectedItem, show = false, onClose = () => 
                                                 {selectedItem.isOwner ? (
                                                     `"${selectedItem.message || 'Sin mensaje adicional'}" — de ${selectedItem.giver_name}`
                                                 ) : (
-                                                    "Este regalo ya está en camino para hacer feliz a alguien."
+                                                    selectedItem?.isNewGift ? (
+                                                        <span>
+                                                            <Link
+                                                                to="/login"
+                                                                state={{ from: location.pathname + `?highlight=${selectedItem.id}` }}
+                                                                className="underline font-bold hover:text-green-700"
+                                                            >
+                                                                Inicia sesión
+                                                            </Link>
+                                                            {" "}para ver quién hizo este regalo y su mensaje.
+                                                        </span>) : (
+                                                        <span>
+                                                            &quot;Este regalo ya está en camino para hacer feliz a alguien.&quot;
+                                                        </span>)
                                                 )}
                                             </p>
                                         </div>

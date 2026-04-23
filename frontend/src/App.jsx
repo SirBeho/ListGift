@@ -43,18 +43,10 @@ function AppRoutes() {
 }
 
 function App() {
-  const handleRealtimeUpdate = (data) => {
-    // 🚨 Aquí va la lógica para actualizar un estado global
-    // que controla la visibilidad y contenido del modal global.
-    console.log('Recibido evento en tiempo real:', data);
-
-    // Ejemplo: setGlobalModal({ show: true, data: data });
-  };
   return (
     <BrowserRouter>
       <ListProvider>
         <AuthProvider>
-          <PusherListener onUpdateItemStatus={handleRealtimeUpdate} />
           <AppRoutes />
         </AuthProvider>
       </ListProvider>

@@ -5,9 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useAuth } from '../providers/AuthProvider';
-import { Helmet } from 'react-helmet-async';
-
-
 
 const gridVariants = {
   initial: {
@@ -16,8 +13,8 @@ const gridVariants = {
   animate: {
     opacity: 1,
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.4,
+      delayChildren: 0.2,
+      staggerChildren: 0.2,
     },
   },
 };
