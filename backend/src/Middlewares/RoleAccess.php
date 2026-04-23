@@ -2,6 +2,9 @@
 
 namespace App\Middlewares;
 
+use App\Modules\Auth\AuthHelper;
+use App\Modules\List\Model;
+
 class RoleAccess
 {
     public static function admin()
@@ -43,6 +46,32 @@ class RoleAccess
             exit();
         }
     }
+
+    public static function checkOwner(Model $resource) 
+{
+    // Usamos el helper optimizado que busca en Request o Cookie
+    $user = AuthHelper::getCurrentUser();
+
+    if (!$user) {
+        self::error(401, "Inicia sesión para continuar");
+    }
+
+    // El Admin (Role 1) siempre pasa
+    if ($user->role_id === 1) return true;
+
+    // Verificamos si el usuario es el dueño del recurso (lista, regalo, etc.)
+    if (intval($user->id) !== intval($resource->user_id)) {
+        self::error(403, "No tienes permiso para este recurso");
+    }
+
+    return true;
+}
+
+private static function error($code, $msg) {
+    header("HTTP/1.0 $code");
+    echo json_encode(['status' => 'error', 'message' => $msg]);
+    exit;
+}
 
 
 }

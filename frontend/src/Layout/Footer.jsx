@@ -10,11 +10,7 @@ export default function Layout({ full = false }) {
         <footer className="bg-card border-t border-border  pb-2">
             {full && <div className="max-w-7xl mx-auto px-6 pt-5">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-6">
-
-
                     <Logo letra={true} />
-
-
                     <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-muted-foreground">
                         <Link to="/info/about" className="hover:text-primary transition-colors">Sobre el proyecto</Link>
                         <Link to="/info/privacy" className="hover:text-primary transition-colors">Política de Privacidad</Link>

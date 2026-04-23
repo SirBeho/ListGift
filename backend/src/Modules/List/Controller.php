@@ -3,6 +3,7 @@
 namespace App\Modules\List;
 
 use App\Middlewares\RoleAccess; // Considerar si esto debe ser configurable
+use App\Modules\Auth\AuthHelper;
 use App\Modules\List\Model;
 use App\Services\ImageManager;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,12 @@ class Controller
     public function show($id)
     {
         try {
-            $List = Model::findOrFail($id);
+            //admin, owner o public
+             $List = Model::findOrFail($id);
+            if (!$List->is_public) {
+                RoleAccess::checkOwner($List);
+             } 
+
             header("HTTP/1.0 200 OK");
             echo json_encode($List);
         } catch (ModelNotFoundException $th) {
@@ -72,8 +78,8 @@ class Controller
     public function update($id)
     {
         try {
-            RoleAccess::admin(); // Considerar si esto debe ser configurable
             $List = Model::findOrFail($id);
+            RoleAccess::checkOwner($List); 
             $List->update($_POST);
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'message' => 'List updated successfully']);
