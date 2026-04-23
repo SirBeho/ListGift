@@ -136,16 +136,13 @@ class Controller
                 error_log("⚠️ Falló el envío Push pero el ítem se guardó: " . $pushError->getMessage());
             }   
             
-        try{
-            //RealtimeService::PublishPusher($Item);
-           NotificationWS::enviarWhatsApp($Item);
+        /* try{
+            RealtimeService::PublishPusher($Item);
+             NotificationWS::enviarWhatsApp($Item);
         } catch (\Exception $wsError) {
-
-            // Si falla el WS, NO matamos el proceso.
-            // Solo lo anotamos en el log para debuggear.
             error_log("⚠️ Falló el envío WS pero el ítem se guardó: " . $wsError->getMessage());
         }
-            
+             */
             header("HTTP/1.0 200 OK");
             echo json_encode(['status' => 'success', 'message' => 'Regalo realizado con éxito']);
         } catch (ModelNotFoundException $th) {

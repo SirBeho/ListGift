@@ -55,81 +55,84 @@ export default function Navbar({ sidebarController }) {
   // MODO PRIVADO (Usuario Logueado - Tu código original optimizado)
   // ---------------------------------------------------------
   return (
-    <nav className="sticky top-0 z-10 left-0 w-full flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
+    <>
       <Alert apiRes={apiRes} variant="toast" onClose={() => setApiRes(null)} />
 
-      {/* IZQUIERDA: Toggle Sidebar + Breadcrumbs/Logo */}
-      <div className="flex gap-4 items-center">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-200"
-        >
-          <Bars3Icon strokeWidth={2} className="w-6 h-6" />
-        </button>
+      <nav className="sticky top-0 z-10 left-0 w-full flex justify-between px-4 h-14 bg-white dark:bg-gray-800 shadow-sm items-center border-b border-gray-200 dark:border-gray-700">
 
-        {/* Opcional: Mostrar dónde estás o el logo también aquí */}
-        <Link to="/" className="flex items-center gap-2 hover:scale-105">
-          {/* <h1 className="mr-2">HOME </h1> */}
-          {/*   home solido */}
-          <HomeIcon className="w-5 h-5" />
-          <span>HOME</span>
-        </Link>
+        {/* IZQUIERDA: Toggle Sidebar + Breadcrumbs/Logo */}
+        <div className="flex gap-4 items-center">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-200"
+          >
+            <Bars3Icon strokeWidth={2} className="w-6 h-6" />
+          </button>
+
+          {/* Opcional: Mostrar dónde estás o el logo también aquí */}
+          <Link to="/" className="flex items-center gap-2 hover:scale-105">
+            {/* <h1 className="mr-2">HOME </h1> */}
+            {/*   home solido */}
+            <HomeIcon className="w-5 h-5" />
+            <span>HOME</span>
+          </Link>
 
 
-      </div>
+        </div>
 
-      {/* DERECHA: Menú de Usuario */}
-      <div className=" ">
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="flex items-center gap-3 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-200"
-        >
-          <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200">
-            <img className="w-full h-full object-cover" src="https://i.pravatar.cc/300" alt="Avatar" />
-          </div>
-          <span className="hidden md:block font-semibold text-sm text-gray-700 dark:text-gray-200">
-            {user?.name || user?.username || "Usuario"}
-          </span>
-          {/* Flechita pequeña */}
-          <svg className={`w-4 h-4 text-gray-400 transition-transform ${menuOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-
-        {/* Dropdown Menu */}
-        {menuOpen && createPortal(
-          <>
-            {/* Backdrop invisible para cerrar al hacer clic fuera */}
-            <div className="fixed inset-0 z-20  bg-black/10" onClick={() => setMenuOpen(false)}></div>
-
-            <div className="fixed z-20 right-2 top-14 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1  animate-in fade-in zoom-in-95 duration-200">
-              <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                <UserCircleIcon className="w-5 h-5" />
-                Mi Perfil
-              </Link>
-
-              <button
-                onClick={() => { handleSupcribe(); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 text-left"
-              >
-                {/* Icono campana */}
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                Activar Notificaciones
-              </button>
-
-              <div className="h-px bg-gray-100 dark:bg-gray-700 my-1"></div>
-
-              <button
-                onClick={logout}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-left"
-              >
-                <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                Cerrar Sesión
-              </button>
+        {/* DERECHA: Menú de Usuario */}
+        <div className=" ">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex items-center gap-3 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-transparent hover:border-gray-200"
+          >
+            <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200">
+              <img className="w-full h-full object-cover" src="https://i.pravatar.cc/300" alt="Avatar" />
             </div>
-          </>, document.body
-        )}
-      </div>
-    </nav>
+            <span className="hidden md:block font-semibold text-sm text-gray-700 dark:text-gray-200">
+              {user?.name || user?.username || "Usuario"}
+            </span>
+            {/* Flechita pequeña */}
+            <svg className={`w-4 h-4 text-gray-400 transition-transform ${menuOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {/* Dropdown Menu */}
+          {menuOpen && createPortal(
+            <>
+              {/* Backdrop invisible para cerrar al hacer clic fuera */}
+              <div className="fixed inset-0 z-20  bg-black/10" onClick={() => setMenuOpen(false)}></div>
+
+              <div className="fixed z-20 right-2 top-14 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1  animate-in fade-in zoom-in-95 duration-200">
+                <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <UserCircleIcon className="w-5 h-5" />
+                  Mi Perfil
+                </Link>
+
+                <button
+                  onClick={() => { handleSupcribe(); setMenuOpen(false); }}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 text-left"
+                >
+                  {/* Icono campana */}
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                  Activar Notificaciones
+                </button>
+
+                <div className="h-px bg-gray-100 dark:bg-gray-700 my-1"></div>
+
+                <button
+                  onClick={logout}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-left"
+                >
+                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                  Cerrar Sesión
+                </button>
+              </div>
+            </>, document.body
+          )}
+        </div>
+      </nav>
+    </>
   );
 }
