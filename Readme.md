@@ -34,7 +34,7 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 ## 📸 Capturas de Pantalla
 
 <div align="center">
-  <h3>ListGift</h3>
+  <h3>Logo</h3>
   <img src="./frontend/public/pictures/CEO_LOGO.png" width="200" alt="Logo ListGift" />
   <p>Tu plataforma inteligente de gestión de regalos</p>
 </div>
