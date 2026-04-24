@@ -27,7 +27,7 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 > **Backend (PHP)** Gestiona la lógica de negocio, la persistencia de datos de las listas e ítems en la base de datos, y el sistema de autenticación.
 
-> **Base de Datos PostgreSQL/MySQL** Almacena todos los datos relacionados con los usuarios, listas, ítems y roles, asegurando una gestión eficiente y segura de la información.
+> **Base de Datos (MySQL)** Almacena todos los datos relacionados con los usuarios, listas, ítems y roles, asegurando una gestión eficiente y segura de la información.
 
 ---
 
@@ -41,11 +41,11 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 | Galería Principal | Galería Principal (Desktop) | Side Bar |
 | :-: | :-: | :-: |
-| ![Home View](./frontend/public/pictures/img1.png) | ![Home2 View](./frontend/public/pictures/og-home.png) | ![Side Bar](./frontend/public/pictures/img3.png) |
+| <img src="./frontend/public/pictures/img1.png" height="350" /> | <img src="./frontend/public/pictures/og-home.png" height="350" /> | <img src="./frontend/public/pictures/img3.png" height="350" /> |
 
-|                     Dashboard                     |               Articulos de la lista                |
-| :-----------------------------------------------: | :------------------------------------------------: |
-| ![Dashboard](./frontend/public/pictures/img4.png) | ![Itens List](./frontend/public/pictures/img5.png) |
+|                     Dashboard                      |               Articulos de la lista                |
+| :------------------------------------------------: | :------------------------------------------------: |
+| <img src="./frontend/public/pictures/img4.png"  /> | <img src="./frontend/public/pictures/img5.png"  /> |
 
 ## 🎯 Funcionalidades Clave
 
