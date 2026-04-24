@@ -41,7 +41,7 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 
 | Galería Principal | Galería Principal (Desktop) | Side Bar |
 | :-: | :-: | :-: |
-| <img src="./frontend/public/pictures/img1.png" height="350" /> | <img src="./frontend/public/pictures/og-home.png" height="350" /> | <img src="./frontend/public/pictures/img3.png" height="350" /> |
+| <img src="./frontend/public/pictures/img1.png" height="330" /> | <img src="./frontend/public/pictures/og-home.png" height="350" /> | <img src="./frontend/public/pictures/img3.png" height="350" /> |
 
 |                     Dashboard                      |               Articulos de la lista                |
 | :------------------------------------------------: | :------------------------------------------------: |
@@ -65,7 +65,9 @@ El diseño se centra en una arquitectura cliente-servidor, con una clara separac
 ### 3. Utilidades y Almacenamiento
 
 - **API RESTful:** Estructura clara de endpoints usando el router **Bramus/Router**.
-- **Gestión de Archivos:** La lógica de subida (`FileUpload.php`) está configurada para integrarse con **Google Drive**, validando archivos con un límite de 5MB.
+- **Gestión de Archivos:** Procesamiento mediante GD Library (`ImageManager.php`) con conversión automática a WebP y sistema de nombres secuenciales para optimizar el almacenamiento local.
+
+- **Notificaciones Push y Alertas:** Sistema de notificaciones en tiempo real de actualizaciones en las listas, gestionado mediante **Service Workers (PWA)** para asegurar la entrega incluso con la aplicación cerrada.
 
 ---
 
